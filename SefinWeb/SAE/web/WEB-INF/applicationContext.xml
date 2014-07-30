@@ -39,7 +39,7 @@
     </authentication-manager>
    
     <b:bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <b:property name="jndiName" value="jdbc/Siafi"/>
+        <b:property name="jndiName" value="jdbc/siafi_sqt"/>
     </b:bean>
 
 

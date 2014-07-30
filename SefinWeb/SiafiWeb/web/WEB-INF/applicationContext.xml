@@ -39,25 +39,26 @@
     </authentication-manager>
 
     <b:bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <b:property name="jndiName" value="jdbc/Siafi"/>
+        <b:property name="jndiName" value="jdbc/siafi_sqt"/>
     </b:bean>
 
 
     <!--
-<authentication-manager>
-   <authentication-provider>
-       <user-service>
-           <user name="adm" password="123" authorities="ROLE_ADMIN" />
-       </user-service>
-   </authentication-provider>
-    <authentication-provider>
-       <user-service>
-           <user name="ari" password="123" authorities="ROLE_ADMIN" />
-           aiwansxv90*
-       </user-service>
-   </authentication-provider>
-</authentication-manager>
     -->
+<!--    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="adm" password="123" authorities="ROLE_ADMIN" />
+            </user-service>
+        </authentication-provider>
+        <authentication-provider>
+            <user-service>
+                <user name="ari" password="123" authorities="ROLE_ADMIN" />
+          
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>-->
+    
 
 </b:beans>
 

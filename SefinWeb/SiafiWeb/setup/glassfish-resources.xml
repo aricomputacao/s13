@@ -6,7 +6,7 @@
     </jdbc-resource>
 
 
-    <jdbc-resource enabled="true" jndi-name="jdbc/Siafi" object-type="user" pool-name="guardiaoPool">
+    <jdbc-resource enabled="true" jndi-name="jdbc/siafi_sqt" object-type="user" pool-name="guardiao_sqt_pool">
         <description/>
     </jdbc-resource>
 

@@ -31,10 +31,16 @@
                                                                                              and (us.usuario_usu_documento = ?)"
             />
         </authentication-provider>
+         <authentication-provider>
+            <user-service>
+                <user name="0000000" password="123" authorities="ROLE_GRD" />
+            </user-service>
+        </authentication-provider>
     </authentication-manager>
     <b:bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <b:property name="jndiName" value="jdbc/Guardiao"/>
+        <b:property name="jndiName" value="jdbc/guardiao_sqt"/>
     </b:bean>
+   
 </b:beans>
 
 
