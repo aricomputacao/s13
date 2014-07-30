@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <p:dialog widgetVar="addAditivo" showEffect="Fade" width="700" height="300" resizable="false" header="Aditivo" modal="true">
+        <h:form id="faditivo">
+            <p:messages autoUpdate="true" showDetail="true" showSummary="true" for="faditivo"/>
+            <p:panel>
+                <h:panelGrid width="100%">
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:outputText value="Número"/>
+                            <p:inputText value="#{convenioMB.aditivoConvenio.numero}" size="5" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Data de Início"/>
+                            <p:calendar value="#{convenioMB.aditivoConvenio.dataCadastro}" navigator="true" required="true" requiredMessage="Informe a data Início"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Válido até"/>
+                            <p:calendar value="#{convenioMB.aditivoConvenio.dataFinal}" navigator="true" required="true" requiredMessage="Informe a data de validade final."/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid >
+                        <h:panelGrid>
+                            <h:outputText value="Valor"/>
+                            <p:inputText id="adValor" autocomplete="off" onfocus="mascaraInputs();" converter="#{bigDecimalConverter}" value="#{convenioMB.aditivoConvenio.valorRepasse}" style="width: 250px;" styleClass="edtMoeda"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+            </p:panel>
+            <p:panel>
+                <p:commandButton icon="ui-icon-disk" action="#{convenioMB.salvarAditivo()}" value="Salvar" update="faditivo, :frmGeral:tabelaAditivos" rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.cadastro.convenio'])}"/>
+                <p:spacer width="15"/>
+                <p:commandButton icon="ui-icon-plus" action="#{convenioMB.novoAditivo()}" value="Novo" update="faditivo" rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.cadastro.convenio'])}"/>
+                <p:spacer width="15"/>
+                <p:commandButton icon="ui-icon-cancel" value="fechar" immediate="true" onclick="addAditivo.hide();"/>
+            </p:panel>
+        </h:form>
+    </p:dialog>
+</ui:component>

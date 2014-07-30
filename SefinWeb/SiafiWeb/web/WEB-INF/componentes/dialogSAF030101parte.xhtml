@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<ui:fragment xmlns:ui="http://java.sun.com/jsf/facelets"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"
+             xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:panel rendered="#{encaminhamentoMB.encaminhamento.id != null}">
+        <h:panelGrid width="100%">
+            <h:outputText value="Existe um Encaminhamento em aberto para essa solicitação financeiro." style="font-weight: bold;"/>
+            <h:panelGrid columns="3">
+                <h:panelGrid>
+                    <h:outputText value="Solicitação"/>
+                    <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.id}" readonly="true"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputText value="Data de Emissão"/>
+                    <p:inputText value="#{encaminhamentoMB.encaminhamento.dataEncaminhamento}" readonly="true">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </p:inputText>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputText value="Usuario"/>
+                    <p:inputText value="#{encaminhamentoMB.encaminhamento.usuarioEncaminhou.pessoa.nome}" size="30" readonly="true"/>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid>
+                <h:panelGrid>
+                    <h:outputText value="Destino"/>
+                    <p:inputText value="#{encaminhamentoMB.encaminhamento.destino.nome}" readonly="true" size="65"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputText value="Localização atual"/>
+                    <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.local.nome}" readonly="true" size="65"/>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid width="100%">
+                <h:outputText value="Observações"/>
+                <p:inputTextarea value="#{encaminhamentoMB.encaminhamento.observacao}" style="width: 100%;" readonly="true"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </p:panel>
+</ui:fragment>

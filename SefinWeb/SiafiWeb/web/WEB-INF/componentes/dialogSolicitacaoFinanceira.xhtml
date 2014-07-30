@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:scgb="http://sefin.ce.gov.br"
+              xmlns:h="http://java.sun.com/jsf/html">
+
+
+    <p:dialog widgetVar="solicitacao_lista" id="sol" modal="true" header="Listagem de Solicitações" position="top" showEffect="fade">
+        <h:form>
+            <scgb:consultaSolicitacaoFinanceira/>
+        </h:form>
+    </p:dialog>
+
+
+</ui:component>

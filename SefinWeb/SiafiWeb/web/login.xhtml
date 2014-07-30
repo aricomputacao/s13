@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./modelo/frmModLogin.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="corpo" >
+
+
+        <!--        <div  style="text-align:center;opacity: 1; display:block; margin-top: 60px;">
+                    <span style="font-size:12pt;color:#c0c0c0">
+                        Recomendamos <br/>
+                        <a href="http://www.google.com/intl/pt-BR/chrome/" target="_blank"> <img src="http://www.google.com/intl/pt-BR/chrome/assets/common/images/chrome_logo_2x.png" alt="Chrome" width="135" height="50" style="border-style:none;" title="Google Chrome" /></a>
+                        <a href="http://www.mozilla.org/pt-BR/firefox/new/" target="_blank"><img src="http://mozorg.cdn.mozilla.net/media/img/firefox/new/header-firefox.png?2013-06" alt="Firefox" width="95" height="40" style="border-style:none;margin-bottom: 5px;" title="Mozilla Firefox" /></a>
+                    </span>
+                </div>-->
+
+
+        <p:panel header="Menssagem" style="width: 400px;min-height: 100px;margin-top: 00px; margin-bottom: 50px ;background: #FFFFF0; margin-top: 150px;" id="msg">
+            <span style="font-size:12pt;color:#c0c0c0">
+                Esse Navegador não e suportado pelo sistema.
+            </span><br/>
+            <div  style="text-align:center;opacity: 1; display:block; margin-top: 0px;">
+                <span style="font-size:12pt;color:#c0c0c0">
+                    Recomendamos <br/>
+                    <a href="http://www.google.com/intl/pt-BR/chrome/" target="_blank"> <img src="http://www.google.com/intl/pt-BR/chrome/assets/common/images/chrome_logo_2x.png" alt="Chrome" width="135" height="50" style="border-style:none;" title="Google Chrome" /></a>
+                    <a href="http://www.mozilla.org/pt-BR/firefox/new/" target="_blank"><img src="http://mozorg.cdn.mozilla.net/media/img/firefox/new/header-firefox.png?2013-06" alt="Firefox" width="95" height="40" style="border-style:none;margin-bottom: 5px;" title="Mozilla Firefox" /></a>
+                </span>
+            </div>
+        </p:panel>
+        <p:panel rendered="#{usuarioMB.fechadoParaSIM}" header="Menssagem" style="width: 450px;min-height: 100px;margin-top: 00px; margin-bottom: 50px ;background: #FFFFF0; margin-top: 150px;" id="msgSim">
+            <span style="font-size:12pt;color:#666666">
+                O sistema encontra-se desativado para enviar os dados ao TCM.
+            </span>
+
+        </p:panel>
+        <p:panel header="Acesso" rendered="#{not usuarioMB.fechadoParaSIM}"  style="width: 250px;min-height: 100px;margin-top: 00px;  margin-bottom: 50px ;background: #FFFFF0; margin-top: 150px;" id="pnlogin">
+            <h:outputText value="Usuário ou senha incorretos!" rendered="#{param.erro}" style="color: darkred"/>
+            <h:outputText value="Sua sessão expirou" rendered="#{param.logout}" style="color: darkred"/>
+
+            <form action="j_spring_security_check" method="post" >
+                <h:panelGrid columns="2" cellpadding="5">
+                    <p:outputLabel for="j_username" value="Usuário:" />
+                    <p:inputText id="j_username" required="true" onblur="ajustaNumero(this);" style="width: 100px"/>
+                    <p:outputLabel for="j_password" value="Senha:" />
+                    <p:password id="j_password" required="true" style="width: 100px;"/>
+                </h:panelGrid>
+                <h:form>
+                    <p:commandButton icon="ui-icon-power"  ajax="false"  update="pnlogin" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" style="margin-left: 90px;margin-top: 10px ;height: 30px;width: 80px" value="Entrar"/>
+                </h:form>
+            </form>
+        </p:panel>
+        <h:outputScript library="script" name="sonumero.js"/>
+        <h:outputScript library="script" name="navegadores.js"/>
+    </ui:define>
+</ui:composition>
+

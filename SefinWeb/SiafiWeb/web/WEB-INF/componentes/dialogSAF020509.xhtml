@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog widgetVar="itensOrdemCompra" showEffect="Fade" header="Itens da Licitação" modal="true" width="850" height="450">
+        <h:form id="frmItensOrdemCompra">
+            <p:panel>
+                <p:dataTable id="tblLista" paginator="true" paginatorAlwaysVisible="false" rows="8"  emptyMessage="Nenhum registro encontrado" var="item" value="#{ordemCompraMB.itensLista}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                    <f:facet name="header">
+                        <h:outputText value="Itens da Ordem de compra"/>
+                    </f:facet>
+                    <p:column headerText="Código" sortBy="#{item.itemLicitacao.id}">
+                        <h:outputText value="#{item.itemLicitacao.id}"/>
+                    </p:column>
+                    <p:column headerText="Nome" sortBy="#{item.itemLicitacao.item.nome}" style="max-width: 300px;">
+                        <h:outputText value="#{item.itemLicitacao.item.nome}" title="#{item.itemLicitacao.item.nome}"/>
+                    </p:column>
+                    <p:column headerText="Quantidade">
+                        <h:outputText value="#{item.quantidade}">
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Valor" >
+                        <h:outputText value="#{item.valorUnitario}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Total">
+                        <h:outputText value="#{item.valorUnitario * item.quantidade}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog widgetVar="ordemCompraCancel" modal="true" width="400" header="#{label['nome.sistema']}" closable="false"
+              draggable="false" resizable="false" showEffect="Fade">
+        <h:form id="frmOrdemCompraCancel">
+            <h:outputText style="font-size: 15px;font-style: normal" value="Cancelar Ordem de Compra?"/>
+
+            <h:panelGrid style="margin-top: 30px" columns="2">
+                <h:panelGrid width="150"  style="text-align: center;">
+                    <p:commandButton value="Sim" action="#{ordemCompraMB.cancelarSolicitacao()}" icon="ui-icon-check" update=":frmGeral:tblLista" oncomplete="ordemCompraCancel.hide()"/>
+                </h:panelGrid>
+                <h:panelGrid width="150"  style="text-align: center;">
+                    <p:commandButton value="Não" icon="ui-icon-circle-close" onclick="ordemCompraCancel.hide();"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </p:dialog>
+</ui:component>

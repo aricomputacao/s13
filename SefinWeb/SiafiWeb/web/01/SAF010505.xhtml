@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <ui:define name="corpo" >
+
+
+        <h:outputScript name="script/navegacao.js" />
+        <p:panel id="pnlGeral" header="Listagem de Solicitações" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['solicitacao.financeira.listar'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Solicitações"/>
+                <h:outputText value="Página - 010505" style="float: right;"/>
+            </f:facet>
+            <p:panel id="pnlLisSolicitacao">
+                <h:panelGrid width="100%" >
+                    <h:panelGrid columns="3">
+                        <h:panelGrid id="sec">
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Unidade Orçamentária"/>
+                                <p:message for="solUnidade"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:inputText value="#{solicitacaoFinanceiraMB.idUnidade}" size="10" id="cod" maxlength="4">
+                                    <p:ajax listener="#{solicitacaoFinanceiraMB.selecionaSecretaria()}" event="keyup" update="solUnidade" />
+                                </p:inputText>
+
+                                <p:selectOneMenu id="solUnidade" value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.cota.unidadeOrcamentaria}"
+                                                 converter="#{indexConverter}" style="width: 350px;">
+                                    <f:selectItem itemLabel=" -- Selecione -- "/>
+                                    <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="i" itemLabel="#{i.unidadeOrcamentariaPK.idOrgao}#{i.unidadeOrcamentariaPK.id} - #{i.nome}"  itemValue="#{i}"/>
+                                    <p:ajax event="change" update="cod" listener="#{solicitacaoFinanceiraMB.alteraUnidadeOrcamentaria()}" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                        <h:panelGrid >
+                            <h:panelGrid cellspacing="10" columns="3">
+                                <h:panelGrid >
+                                    <h:outputText  value="Data"/>
+                                    <p:selectBooleanCheckbox value="#{solicitacaoFinanceiraMB.filtroData}" immediate="true"  >
+                                        <p:ajax update="panelPesq" global="false" listener="#{solicitacaoFinanceiraMB.setFiltroData(filtroData)}"/>
+                                    </p:selectBooleanCheckbox>
+                                </h:panelGrid>
+
+                                <h:panelGrid>
+                                    <h:outputText value="Situação"/>
+                                    <p:selectBooleanCheckbox value="#{solicitacaoFinanceiraMB.filtroSituacao}" immediate="true"  >
+                                        <p:ajax update="panelPesq" global="false" listener="#{solicitacaoFinanceiraMB.setFiltroSituacao(filtroSituacao)}"/>
+                                    </p:selectBooleanCheckbox>
+                                </h:panelGrid>
+                                <h:panelGrid>
+                                    <h:outputText value="Número"/>
+                                    <p:selectBooleanCheckbox value="#{solicitacaoFinanceiraMB.filtroNumero}" immediate="true"  >
+                                        <p:ajax update="panelPesq" global="false" listener="#{solicitacaoFinanceiraMB.setFiltroNumero(filtroNumero)}"/>
+                                    </p:selectBooleanCheckbox>
+                                </h:panelGrid>
+                            </h:panelGrid>
+
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid id="panelPesq">
+                        <h:panelGrid columns="2">
+                            <h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Credor" title="Credor"/>
+                                    <p:message for="solCred"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:inputText id="solCred" readonly="true" size="53" required="true" requiredMessage="Informe credor" value="#{solicitacaoFinanceiraMB.credor.pessoa.nome}"/>
+                                    <p:commandButton immediate="true"  onclick="credorBusca.show();" icon="ui-icon-circle-zoomout" title="Credor"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                            <h:panelGrid>
+                                <h:outputLabel value="Mês"/>
+                                <p:selectOneMenu value="#{solicitacaoFinanceiraMB.competenciaConsulta}" style="width: 150px;">
+                                    <f:selectItem itemLabel="" itemValue="#{null}"/>
+                                    <f:selectItems value="#{solicitacaoFinanceiraMB.listaMeses}" var="m" itemLabel="#{m}" itemValue="#{m}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid rendered="#{solicitacaoFinanceiraMB.filtroSituacao}">
+                                <h:outputText value="Situação"/>
+
+                                <p:selectCheckboxMenu  value="#{solicitacaoFinanceiraMB.listaSituacaoSolicitacaos}"  label="Selecione"  style="width: 200px;">
+                                    <f:selectItems value="#{solicitacaoFinanceiraMB.situacoesSolicitacao}"/>
+                                </p:selectCheckboxMenu >
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+
+                            <h:panelGrid rendered="#{solicitacaoFinanceiraMB.filtroNumero}">
+                                <h:outputText value="Número"/>
+                                <p:inputText value="#{solicitacaoFinanceiraMB.numero}"/>
+                            </h:panelGrid>
+                            <h:panelGrid rendered="#{solicitacaoFinanceiraMB.filtroNumero}">
+                                <h:outputText value="Empenho"/>
+                                <p:inputText value="#{solicitacaoFinanceiraMB.empenho}"/>
+                            </h:panelGrid>
+                            <h:panelGrid rendered="#{solicitacaoFinanceiraMB.filtroData}">
+                                <h:outputText value="Período"/>
+                                <h:panelGrid columns="3">
+                                    <p:calendar showButtonPanel="true" effect="fade" navigator="true" value="#{solicitacaoFinanceiraMB.dataInicial}" pattern="dd/MM/yyyy"/>
+                                    <p:spacer width="10"/>
+                                    <p:calendar showButtonPanel="true" effect="fade" navigator="true"  value="#{solicitacaoFinanceiraMB.dataFinal}" pattern="dd/MM/yyyy"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="6" style="float: right;">
+                        <p:spacer width="10"/>
+                        <comp:commandButton_consulta update="@form:pnlGeral" acao_butao="#{solicitacaoFinanceiraMB.listarFiltros()}" rendered="#{usuarioMB.permissaoConsultar(navegacao['solicitacao.financeira.listar'])}" />
+                        <p:spacer width="10"/>
+                        <comp:commandButton_novo acao_butao="#{beanNavegacaoMB.redirecionar(navegacao['solicitacao.financeira.emitir'])}" rendered="#{usuarioMB.permissaoIncluir(navegacao['solicitacao.financeira.emitir'])}" />
+                        <p:spacer width="10"/>
+                        <comp:commandButton_imprimir acao_butao="#{solicitacaoFinanceiraMB.impressao()}" block="block" rendered="#{usuarioMB.permissaoConsultar(navegacao['solicitacao.financeira.listar'])}"  />
+                    </h:panelGrid>
+                </h:panelGrid>
+
+            </p:panel>
+
+            <p:separator/>
+            <h:panelGrid width="100%" id="tblSolicitacao">
+
+                <p:dataTable  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{solicitacaoFinanceiraMB.lista}"
+                              rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+
+                    <p:column style="width: 2%;">
+                        <p:rowToggler id="x"/>
+                    </p:column>
+                    <p:column width="5%">
+                        <f:facet name="header" >
+                            <h:outputText value="Número" />
+                        </f:facet>
+                        <comp:outputText value="#{item.id}" />
+                    </p:column>
+                    <p:column width="5%">
+                        <f:facet name="header">
+                            <h:outputText value="Empenho"/>
+                        </f:facet>
+                        <comp:outputText value="#{item.empenho}" />
+                    </p:column>
+                    <p:column sortBy="#{item.credor.pessoa.nome}">
+                        <f:facet name="header">
+                            <h:outputText value="Credor"/>
+                        </f:facet>
+                        <comp:outputText tipo="c" value="#{item.credor.pessoa.nome}"/>
+                    </p:column>
+                    <p:column width="5%" >
+                        <f:facet name="header" >
+                            <h:outputText value="Data de Solicitação"/>
+                        </f:facet>
+                        <comp:outputText tipo="d" value="#{item.dataSolicitacao}"/>
+                    </p:column>
+                    <p:column width="12%">
+                        <f:facet name="header">
+                            <h:outputText value="Valor"/>
+                        </f:facet>
+                        <comp:outputText tipo="c" value="#{item.valor}"/>
+                    </p:column>
+                    <p:column width="3%"  sortBy="#{item.situacaoSolicitacao}" >
+                        <f:facet name="header" >
+                            <h:outputText value="Situação"/>
+                        </f:facet>
+                        <comp:outputText value="#{item.situacaoSolicitacao}"/>
+                    </p:column>
+
+                    <p:column headerText="Ações" width="18%">
+                        <p:commandButton icon="ui-icon-document-b"  update=":frmEdtNota" disabled="#{not solicitacaoFinanceiraMB.liberarEditarNota(item)}"  onclick="edtNota.show();" styleClass="btnTabela"  title="Editar Empenho,Nota Fiscal e Histórico" >
+                            <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.solicitacaoFinanceira}" value="#{item}"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-pencil" update=":frmGeral" disabled="#{solicitacaoFinanceiraMB.liberarEditar(item)}" styleClass="btnTabela"  action="#{beanNavegacaoMB.redirecionar(navegacao['solicitacao.financeira.emitir'], 'solicitacaofinanceira', item)}"
+                                         title="Editar" >
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-circle-close" immediate="true" update=":frmGeral" styleClass="btnTabela" disabled="#{solicitacaoFinanceiraMB.liberarCancelar(item)}" onclick="cancelarSolicitacao.show();"
+                                         title="Cancelar" >
+                            <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.solicitacaoFinanceira}" value="#{item}"/>
+                        </p:commandButton>
+                        <p:commandButton id="btnImpressao2" styleClass="btnTabela" title="Imprimir Capa" rendered="#{usuarioMB.permissaoConsultar(navegacao['solicitacao.financeira.listar'])}" icon="ui-icon-extlink" action="#{solicitacaoFinanceiraMB.impressaoComprovanteEcaminhamento(item)}" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf');" >
+                            <!--                            <f:setPropertyActionListener target="{solicitacaoFinanceiraMB.solicitacaoFinanceira}" value="{item}"/>-->
+                        </p:commandButton>
+                        <p:commandButton onclick="block.show();" styleClass="btnTabela" title="Imprimir Empenho" rendered="#{usuarioMB.permissaoConsultar(navegacao['solicitacao.financeira.listar']) and solicitacaoFinanceiraMB.podeImprimirEmpenho(item)}" icon="ui-icon-print" action="#{solicitacaoFinanceiraMB.impressaoEmpenho(item)}" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf');block.hide();"/>
+                        <p:commandButton id="btnEnc" styleClass="btnTabela" title="Lista de Encaminhamentos" global="false" rendered="#{usuarioMB.permissaoConsultar(navegacao['solicitacao.financeira.listar'])}" update=":frmEncaminhamento" icon="ui-icon-note" action="#{solicitacaoFinanceiraMB.listarEncaminhamentosPorSolicitacao()}" onclick="listaEnc.show();" >
+                            <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.solicitacaoFinanceira}" value="#{item}"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-info" styleClass="btnTabela" disabled="#{solicitacaoFinanceiraMB.renderizarBtnLiquidacao(item)}"
+                                         update=":frmLiquidacoes"  actionListener="#{solicitacaoFinanceiraMB.listarLiquidacoes(item)}"
+                                         oncomplete="listaLiqui.show();" title="Consultar pagamentos" >
+                        </p:commandButton>
+                        <p:commandButton onclick="block.show();" styleClass="btnTabela" oncomplete="block.hide();" title="Exportar Solicitação" rendered="#{usuarioMB.permissaoAdm()}" icon="ui-icon-transferthick-e-w" action="#{solicitacaoFinanceiraMB.exportarSolicitacao(item)}"/>
+                    </p:column>
+                    <p:rowExpansion>
+                        <h:panelGrid frame="none">
+                            <comp:outputText value="Usuário: #{item.usuario.pessoa.nome}"/>
+                            <comp:outputText value="Unidade Orçamentaria: #{item.cota.unidadeOrcamentaria.nome}"/>
+                            <comp:outputText value="Localização: #{item.local.nome}"/>
+                            <comp:outputText value="Vínculo: #{item.vinculo}"/>
+                            <comp:outputText value="Contrato: #{item.contrato.numero}#{item.ordemCompra.contrato.numero}"/>
+                            <comp:outputText value="Ordem de Compra: #{item.ordemCompra.id}"/>
+                            <comp:outputText value="Categoria: #{item.cota.categoria.nome}"/>
+                            <comp:outputText value="Despesa: #{item.cota.despesa.nome} (#{item.cota.despesa.elementoDespesa.nome})" />
+                            <comp:outputText value="PA: #{item.dotacao.projetoAtividade.nome}" />
+                            <comp:outputText value="Competência: #{item.mesCompetencia.asNumero(item.mesCompetencia)}-#{item.anoCompetencia}"/>
+                            <comp:outputText value="Credor: #{item.credor.pessoa.nome}"/>
+                            <comp:outputText value="Autorizado por: #{item.usuarioAutorizou.pessoa.nome}"/>
+                            <comp:outputText tipo="d" value="Data Autorização: #{item.dataAutorizacao}"/>
+                            <comp:outputText value="NotaFiscal: #{item.notaFiscal}"/>
+                            <comp:outputText value="Histórico:"/>
+                            <p:inputTextarea value="#{item.historico}" style="width: 100%;color: #000;" rows="3" readonly="true" autoResize="true" cols="100"/>
+                        </h:panelGrid>
+                    </p:rowExpansion>
+                </p:dataTable>
+            </h:panelGrid>
+        </p:panel>
+
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogEditarNota/>
+        <scgb:dialogSAF010505/>
+        <scgb:dialogConsultaCredor/>
+    </ui:define>
+    <ui:define name="acaoCredor">
+        <p:column headerText="">
+            <p:commandButton style="width: 20px; height: 20px;" icon="ui-icon-check" immediate="true" oncomplete="credorBusca.hide();" update=":frmGeral:solCred">
+                <f:setPropertyActionListener value="#{cred}" target="#{solicitacaoFinanceiraMB.credor}"/>
+            </p:commandButton>
+        </p:column>
+    </ui:define>
+
+</ui:composition>

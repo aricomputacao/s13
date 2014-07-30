@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/modelo/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+    <ui:define name="corpo" >
+        <h:outputScript name="script/maskMoney.js" />
+        <h:outputScript name="script/edtMoeda.js" />
+        <h:outputScript name="script/navegacao.js" />
+        <p:panel id="pnlCota" header="Cadastro de Cotas" styleClass="painelPadrao"  rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.cota'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Cadastro de Cotas"/>
+                <h:outputText value="Página - 010804" style="float: right;"/>
+            </f:facet>
+            <p:blockUI block="pnlCota" trigger="btnImpressao" />
+            <p:panel id="panelGeral" style="border-color: white">
+                <h:panelGrid width="100%" >
+                    <p:panel style="float: left;width: 100%" rendered="#{!cotaMB.renderizarFormCadastro}" >
+                        <h:panelGrid columns="3">
+                            <h:panelGrid columns="4" >
+                                <h:panelGrid rendered="#{!cotaMB.renderizarFormCadastro}">
+                                    <h:panelGrid columns="2">
+                                        <p:outputLabel value="Unidade Orçamentária" for="orgao"/>
+                                        <p:message for="orgao"/>
+                                    </h:panelGrid>
+                                    <p:selectOneMenu id="orgao" value="#{cotaMB.unidadeOrcamentaria}" style="width: 350px" required="true" converter="#{indexConverter}" requiredMessage="Selecione uma secretária">
+                                        <f:selectItem itemValue="#{null}" noSelectionOption="true" itemLabel="Selecione"/>
+                                        <f:selectItems value="#{cotaMB.listaUnidadeOrcamentarias}"  var="u" itemLabel="#{u.unidadeOrcamentariaPK.idOrgao}#{u.unidadeOrcamentariaPK.id} - #{u.nome}" itemValue="#{u}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <h:panelGrid rendered="#{!cotaMB.renderizarFormCadastro}">
+                                    <h:panelGrid columns="2">
+                                        <p:outputLabel value="Categorias" for="categoria"/>
+                                        <p:message for="categoria"/>
+                                    </h:panelGrid>
+                                    <p:selectOneMenu id="categoria" value="#{cotaMB.cota.categoria}" style="width: 260px;" converter="#{indexConverter}">
+                                        <f:selectItem itemValue="#{null}" itemLabel="Selecione"/>
+                                        <f:selectItems value="#{cotaMB.listaCategorias}" var="cat" itemLabel="#{cat.nome}" itemValue="#{cat}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="8" style="float: right" >
+                            <p:spacer width="10" rendered="#{!cotaMB.renderizarFormCadastro}"/>
+                            <p:commandButton value="Incluir" icon="ui-icon-plus"  action="#{cotaMB.novaCota()}" immediate="true" rendered="#{!cotaMB.renderizarFormCadastro}"  update="panelGeral,tblCotaCadastrada"/>
+                            <p:spacer width="10" rendered="#{!cotaMB.renderizarFormCadastro}" />
+                            <p:commandButton value="Listar" icon="ui-icon-search"    action="#{cotaMB.listarCotas()}" rendered="#{!cotaMB.renderizarFormCadastro}"  update="panelGeral"/>
+                            <p:spacer width="10" rendered="#{!cotaMB.renderizarFormCadastro}"/>
+                            <p:commandButton value="Impressão" icon="ui-icon-print" id="btnImpressao" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf')" action="#{cotaMB.impressao()}" rendered="false"/>
+                            <p:spacer width="10" rendered="#{cotaMB.renderizarFormCadastro}"/>
+                        </h:panelGrid>
+                    </p:panel>
+
+                    <h:panelGrid rendered="#{!cotaMB.renderizarFormCadastro}" width="100%">
+
+                        <h:panelGrid width="100%">
+                            <p:dataTable id="tblCota" paginator="true" paginatorAlwaysVisible="false" rows="5" emptyMessage="Nenhuma cota cadastrada" var="cota" value="#{cotaMB.listaCotas}"
+                                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                                <p:column headerText="Id">
+                                    <h:outputText value="#{cota.id}"/>
+                                </p:column>
+                                <p:column headerText="Unidade Orç." sortBy="#{cota.unidadeOrcamentaria.abreviacao}" rendered="false">
+                                    <h:outputText value="#{cota.unidadeOrcamentaria.abreviacao}"/>
+                                </p:column>
+                                <p:column headerText="Categoria">
+                                    <h:outputText value="#{cota.categoria.nome}"/>
+                                </p:column>
+                                <p:column headerText="Nome">
+                                    <h:outputText value="#{cota.despesa.nome}"/>
+                                </p:column>
+                                <p:column headerText="Valor" styleClass="dinheiro">
+                                    <h:outputText value="#{cota.valor}" style="text-align: right;" >
+                                        <f:convertNumber type="currency"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Ativa">
+                                    <h:outputText value="#{cota.ativo?'SIM':'NÃO'}"/>
+                                </p:column>
+                                <p:column headerText="Aut." width="5%">
+                                    <h:outputText value="#{cota.autorizadoAutomatico?'SIM':'NÃO'}"/>
+                                </p:column>
+                                <p:column headerText="Ações">
+                                    <p:commandButton icon="ui-icon-pencil" styleClass="btnTabela" update=":frmGeral:panelGeral" action="#{cotaMB.editar(cota)}" title="Editar">
+                                        <f:setPropertyActionListener target="#{cotaMB.unidadeOrcamentaria}" value="#{cota.unidadeOrcamentaria}"/>
+                                    </p:commandButton>
+                                    <p:commandButton icon="ui-icon-trash"  styleClass="btnTabela" onclick="excluirCota.show();"   title="Excluir">
+                                        <f:setPropertyActionListener target="#{cotaMB.cota}" value="#{cota}"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <p:panel header="Nova Cota" id="panelCadastro"  rendered="#{cotaMB.renderizarFormCadastro}" >
+                        <h:panelGrid columns="3" >
+                            <h:panelGrid >
+                                <h:panelGrid>
+                                    <h:outputLabel value="Unidade Orçamentária"/>
+                                </h:panelGrid>
+                                <p:selectOneMenu value="#{cotaMB.unidadeOrcamentaria}" style="width: 350px" disabled="#{cotaMB.editarCota}"   converter="#{indexConverter}">
+                                    <f:selectItem itemValue="#{null}" itemLabel="Selecione"/>
+                                    <f:selectItems value="#{cotaMB.listaUnidadeOrcamentarias}" var="u" itemLabel="#{u.unidadeOrcamentariaPK.idOrgao}#{u.unidadeOrcamentariaPK.id} - #{u.nome}" itemValue="#{u}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid >
+                                <h:panelGrid  >
+                                    <h:outputLabel value="Categoria"/>
+                                </h:panelGrid>
+                                <p:selectOneMenu value="#{cotaMB.cota.categoria}" disabled="#{cotaMB.editarCota}" style="width: 260px;" converter="#{indexConverter}">
+                                    <f:selectItem itemValue="#{null}" itemLabel="Selecione"/>
+                                    <f:selectItems value="#{cotaMB.listaCategorias}" var="cat" itemLabel="#{cat.nome}" itemValue="#{cat}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Referência"/>
+                                </h:panelGrid>
+                                <p:selectOneMenu id="solMesCompetencia" value="#{cotaMB.competencia}" style="width: 150px;">
+                                    <f:selectItems value="#{cotaMB.listaMeses}" var="m" itemLabel="#{m}" itemValue="#{m}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+                        </h:panelGrid>
+                        <h:panelGrid columns="4"  >
+                            <h:panelGrid >
+                                <h:panelGrid  >
+                                    <h:outputText value="Despesa"/>
+                                    <p:messages for="cotDespesa"/>
+                                </h:panelGrid>
+                                <p:commandButton onclick="centroCusto.show();" icon="ui-icon-circle-zoomout"  immediate="true">
+                                    <p:inputText readonly="true" size="50" id="cotDespesa"  value="#{cotaMB.cota.despesa.nome}"/>
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Valor"/>
+                                    <p:message for="cotValor"/>
+                                </h:panelGrid>
+                                <p:inputText id="cotValor" onkeydown="" onfocus="mascaraInputs();" converter="#{bigDecimalConverter}" converterMessage="Invalido" value="#{cotaMB.cota.valor}" styleClass="edtMoeda" size="25"/>
+                            </h:panelGrid>
+                            <h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Ativo"/>
+                                    <p:message for="cotAtivo"/>
+                                </h:panelGrid>
+                                <p:selectBooleanCheckbox  id="cotAtivo"  value="#{cotaMB.cota.ativo}" />
+                            </h:panelGrid>
+                            <h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Autorizado Automaticamente"/>
+                                    <p:message for="cotAuto"/>
+                                </h:panelGrid>
+                                <p:selectBooleanCheckbox  id="cotAuto"  value="#{cotaMB.cota.autorizadoAutomatico}" />
+                            </h:panelGrid>
+
+                        </h:panelGrid>
+                        <h:panelGrid columns="4" style="float: right">
+                            <p:commandButton value="Salvar" icon="ui-icon-disk"   action="#{cotaMB.salvar()}" rendered="#{cotaMB.renderizarFormCadastro}"  update="panelGeral"/>
+                            <p:spacer width="10"/>
+                            <p:commandButton value="Cancelar" icon="ui-icon-circle-close"  action="#{cotaMB.cancelar()}" rendered="#{cotaMB.renderizarFormCadastro}"  update="panelGeral" immediate="true"/>
+                        </h:panelGrid>
+                        <div style="clear: both;"></div>
+                        <p:dataTable id="tblCotaCadastrada" rendered="#{cotaMB.renderizarFormCadastro}" paginator="true" paginatorAlwaysVisible="false" rows="5" emptyMessage="Nenhuma conta cadastrada" var="cotaCad" value="#{cotaMB.listaCotas}"
+                                     rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                            <p:column headerText="Id">
+                                <h:outputText value="#{cotaCad.id}"/>
+                            </p:column>
+                            <p:column headerText="Categoria">
+                                <h:outputText value="#{cotaCad.categoria.nome}"/>
+                            </p:column>
+                            <p:column headerText="Nome">
+                                <h:outputText value="#{cotaCad.despesa.nome}"/>
+                            </p:column>
+                            <p:column headerText="Valor" styleClass="dinheiro">
+                                <h:outputText value="#{cotaCad.valor}">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Ativa">
+                                <h:outputText value="#{cotaCad.ativo?'SIM':'NÃO'}"/>
+                            </p:column>
+                            <p:column headerText="Aut." width="5%">
+                                <h:outputText value="#{cotaCad.autorizadoAutomatico?'SIM':'NÃO'}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:panelGrid>
+            </p:panel>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogSAF010804/>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <h:panelGrid width="100%">
+        <h:panelGrid columns="6">
+            <h:panelGrid>
+                <h:outputText value="Código"/>
+                <p:inputText value="#{projetoAtividadeMB.tipoAcao}" size="10"/>
+            </h:panelGrid>
+            <h:panelGrid>
+                <h:outputText value="Nome"/>
+                <p:inputText value="#{projetoAtividadeMB.valorBusca}" size="25"/>
+            </h:panelGrid>
+            <h:panelGrid>
+                <h:outputLabel value="Unidade Orçamentária"/>
+                <p:selectOneMenu value="#{projetoAtividadeMB.unidadeOrcamentaria}" converter="#{indexConverter}" style="width: 320px;">
+                    <f:selectItem itemLabel="  " itemValue="#{null}"/>
+                    <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="i" itemLabel="#{i.unidadeOrcamentariaPK} - #{i.abreviacao}"  itemValue="#{i}"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <h:panelGrid>
+                <p:spacer width="10"/>
+                <p:commandButton value="Listar" title="Listar" icon="ui-icon-search" action="#{projetoAtividadeMB.listar()}" update="tabela"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:panelGrid>
+    <p:dataTable id="tabela" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma projeto atividade encontrado" var="item" value="#{projetoAtividadeMB.listaProjetoAtividades}"
+                 rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+        <p:column headerText="Id">
+            <h:outputText value="#{item.tipo}#{item.acao}"/>
+        </p:column>
+        <p:column headerText="Nome" style="max-width: 500px">
+            <h:outputText value="#{item.nome}" title="#{item.nome}"/>
+        </p:column>
+        <p:column headerText="Unidade Orçamentaria" >
+            <h:outputText value="#{item.unidadeOrcamentaria.abreviacao}" title="#{item.unidadeOrcamentaria.nome}"/>
+        </p:column>
+        <p:column headerText="ação">
+            <ui:insert name="acaoProjetoAtividade">
+            </ui:insert>
+        </p:column>
+    </p:dataTable>
+
+</ui:composition>

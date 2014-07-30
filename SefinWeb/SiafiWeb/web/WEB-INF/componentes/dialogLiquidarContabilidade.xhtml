@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <p:dialog widgetVar="liquidar_contabilidade_lista" id="liquidado" modal="true" header="Solicitações a Liquidar" position="top" showEffect="fade">
+        <h:form id="liquidarContabilidadeListaForm">
+             <p:blockUI block="pnlDialog" trigger="btnLiquidarContabil" widgetVar="bui">
+                <p:graphicImage value="/resources/imagens/carregar.gif"/>
+            </p:blockUI>
+            <p:panel id="pnlDialog" >
+                <h:panelGrid columns="3">
+                    <h:panelGrid id="area">
+                        <h:panelGrid columns="2">
+                            <h:outputText value="Destino"/>
+                            <p:message for="dest" />
+                        </h:panelGrid>
+                        <p:selectOneMenu value="#{encaminhamentoMB.areaDestino}" id="dest" converter="#{indexConverter}" required="true" requiredMessage="Selecione o destino" style="width: 350px;">
+                            <f:selectItems value="#{encaminhamentoMB.listAreaAdministrativa}" var="a" itemLabel="#{a.nome}" itemValue="#{a}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid width="100%" rendered="false">
+                    <h:outputText value="Observações"/>
+                    <p:inputTextarea value="#{encaminhamentoMB.encaminhamento.observacao}" style="width: 100%;"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3">
+                    <p:commandButton value="Confirmar" id="btnLiquidarContabil" action="#{encaminhamentoMB.liquidarSolicitacoes()}" oncomplete="liquidar_contabilidade_lista.hide();"  icon="ui-icon-check" update=":frmGeral:pnlGeral"/>
+                    <p:spacer width="15"/>
+                    <p:commandButton value="Sair" icon="ui-icon-circle-close" immediate="true" onclick="liquidar_contabilidade_lista.hide();"/>
+                </h:panelGrid>
+            </p:panel>
+
+            <p:dataTable paginator="true" paginatorAlwaysVisible="false" rows="10" emptyMessage="Nenhuma solicitação selecionada" var="sol" value="#{encaminhamentoMB.solicitacoesList}"
+                         rowStyleClass="#{sol.empenho ne null ? 'even-row' : 'add-row'}" rowIndexVar="rowIx">
+
+                <p:column sortBy="#{sol.id}" headerText="Número">
+                    <h:outputLabel value="#{sol.id}"/>
+                </p:column>
+                <p:column headerText="Nº Empenho" sortBy="#{sol.empenho}">
+                    <h:outputLabel value="#{sol.empenho}"/>
+                </p:column>
+                <p:column sortBy="#{sol.dataSolicitacao}">
+                    <f:facet name="header">
+                        <h:outputText value="Emissão"/>
+                    </f:facet>
+                    <h:outputText value="#{sol.dataSolicitacao}">
+                        <f:convertDateTime pattern="dd/MM/YYYY"/>
+                    </h:outputText>
+                </p:column>
+                <p:column sortBy="#{sol.valor}">
+                    <f:facet name="header">
+                        <h:outputText value="Valor"/>
+                    </f:facet>
+                    <h:outputText value="#{sol.valor}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                </p:column>
+                <p:column sortBy="#{sol.notaFiscal}" rendered="false">
+                    <f:facet name="header">
+                        <h:outputText value="Nota Fiscal" />
+                    </f:facet>
+                    <h:outputText value="#{sol.notaFiscal}"/>
+                </p:column>
+                <p:column sortBy="#{sol.situacaoSolicitacao}">
+                    <f:facet name="header" >
+                        <h:outputText value="Situação" />
+                    </f:facet>
+                    <h:outputText value="#{sol.situacaoSolicitacao}"/>
+                </p:column>
+                <p:column style="max-width: 200px" sortBy="#{sol.credor.pessoa.nome}">
+                    <f:facet name="header">
+                        <h:outputText value="Credor" />
+                    </f:facet>
+                    <h:outputText style="max-width: 200px" value="#{sol.credor.pessoa.nome}" title="#{sol.credor.pessoa.nome}"/>
+                </p:column>
+                <p:column headerText="Ações">
+                    <p:commandButton title="Imprimir Capa" icon="ui-icon-extlink" action="#{solicitacaoFinanceiraMB.impressaoComprovanteEcaminhamento(sol)}" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf');bui.hide();" onclick="bui.show()"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:dialog>
+
+</ui:component>

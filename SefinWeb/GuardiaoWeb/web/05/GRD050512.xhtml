@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:define name="corpo">
+        <h:form id="form">
+            <p:panel header="Consulta de erros do sistema" style="text-align: left;">
+                <p:commandButton icon="ui-icon-search" action="#{logesMB.listar()}" value="Mostrar Erros" update="tabela" />
+                <p:commandButton icon="ui-icon-trash" action="#{logesMB.limpar()}" value="Limpar" update="form" />
+                <p:dataTable value="#{logesMB.logs}" var="f" id="tabela" rows="10" paginatorAlwaysVisible="false" paginator="true"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{f.name}"/>
+                    </p:column>
+                    <p:column headerText="Mostrar" width="10%">
+                        <p:commandButton icon="ui-icon-check" action="#{logesMB.mostraEcecao(f)}" update=":form" style="width: 20px;height: 20px;"/>
+                        <p:commandButton icon="ui-icon-trash" action="#{logesMB.excluirExcecao(f)}" update=":form" style="width: 20px;height: 20px;"/>
+                        <p:commandButton id="downloadLink" ajax="false" icon="ui-icon-arrowthick-1-s" style="width: 20px;height: 20px;">
+                            <p:fileDownload value="#{logesMB.baixar(f)}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <p:panel id="e" rendered="#{logesMB.menssagemLog != null}" style="text-align: left;">
+                    <h:outputText value="#{logesMB.menssagemLog}"/>
+                </p:panel>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+
+</ui:composition>

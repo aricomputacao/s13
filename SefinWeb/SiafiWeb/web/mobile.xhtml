@@ -1,0 +1,133 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition>
+        <h:head>
+            <title>Sefin</title>
+            <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+            <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+            <script src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
+        </h:head>
+        <h:body>
+            <h:form id="form">
+                <p:growl autoUpdate="true"/>
+                <div data-role="page" id="unidade">
+                    <div data-role="header">
+                        <h1>Page Title</h1>
+                    </div>
+                    <div role="main" class="ui-content">
+                        <div class="ui-field-contain">
+                            <h:panelGrid width="100%">
+                                <h:outputLabel value="Unidade Orçamentária" for="unidade"/>
+                                <h:selectOneMenu value="{autorizarSolicitacaoFinanceiraMB.unidadeOrcamentaria}" converter="{convecorUnidadeOrcamentaria}" id="unidade">
+                                    <f:selectItems value="{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                        </div>
+                    </div>
+                    <div data-role="footer">
+                        <a href="#lista" data-transition="flow"> Avançar </a>
+                    </div>
+                </div>
+
+                <div data-role="page" id="lista">
+                    <div data-role="header">
+                        <h1>Solicitaçõae não autorizadas</h1>
+                    </div>
+                    <div role="main" class="ui-content">
+                        <h:panelGrid width="100%">
+                            <p:commandButton action="*{autorizarSolicitacaoFinanceiraMB.listar()}" update="tabela" value="Listar"/>
+                            <p:dataTable value="*{autorizarSolicitacaoFinanceiraMB.listaSolicitacaoFinanceiras}" var="s" id="tabela">
+                                <p:column headerText="Id">
+
+                                    <p:commandLink update=":form:id" value="*{s.id}" oncomplete="location.hash = 'autoriza'">
+                                        <f:setPropertyActionListener value="*{s}" target="*{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira}"/>
+                                    </p:commandLink>
+                                </p:column>
+                                <p:column headerText="Secretaria">
+                                    <h:outputText value="*{s.cota.unidadeOrcamentaria.abreviacao}"/>
+                                </p:column>
+                                <p:column headerText="Data">
+                                    <h:outputText value="*{s.dataSolicitacao}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Credor">
+                                    <h:outputText value="*{s.credor.pessoa.nome}"/>
+                                </p:column>
+                                <p:column headerText="Secretaria" style="text-align: right;">
+                                    <h:outputText value="*{s.valor}" >
+                                        <f:convertNumber type="currency"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </div>
+                    <div data-role="footer">
+                        <a href="#unidade" data-transition="flow"> Voltar </a>
+                    </div>
+                </div>
+                <div data-role="page"  id="autoriza">
+                    <div data-role="header">
+                        <h1>Autoriza</h1>
+                    </div>
+                    <div role="main" class="ui-content">
+                        <h:panelGrid id="id" columns="2">
+                            <h:outputText value="Id:"/>
+                            <h:outputText value="*{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.id}"/>
+                            <h:outputText value="Emissão:"/>
+                            <h:outputText value="*{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.dataSolicitacao}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                            <h:outputText value="Solicitante:"/>
+                            <h:outputText value="*{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.usuario.pessoa.nome}"/>
+                            <h:outputText value="Credor:"/>
+                            <h:outputText value="*{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.credor.pessoa.nome}"/>
+                            <h:outputText value="Categoria:"/>
+                            <h:outputText value="*{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.cota.categoria.nome}"/>
+                            <h:outputText value="Despesa:"/>
+                            <h:outputText value="*{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.cota.despesa.nome}"/>
+                            <h:outputText value="Valor:"/>
+                            <h:outputText value="*{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.valor}"/>
+                        </h:panelGrid>
+                        <h:panelGrid width="100%">
+                            <h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Valor Autorizado"/>
+                                </h:panelGrid>
+                                <p:inputText autocomplete="off" onfocus="mascaraInputs();" converter="*{bigDecimalConverter}" converterMessage="Invalido" value="*{autorizarSolicitacaoFinanceiraMB.valorAutorizado}" styleClass="edtMoeda"/>
+                            </h:panelGrid>
+                            <h:panelGrid width="100%">
+                                <h:outputText value="Justificativa"/>
+                                <p:inputTextarea style="width: 100%" value="*{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.justificativa}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3">
+                            <p:commandButton value="Autorizar" icon="ui-icon-key" action="*{autorizarSolicitacaoFinanceiraMB.salvar()}">
+                                <f:setPropertyActionListener value="Aprovado" target="*{autorizarSolicitacaoFinanceiraMB.situacao}"/>
+                                <f:setPropertyActionListener target="*{autorizarSolicitacaoFinanceiraMB.valorAutorizado}" value="*{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.valor}"/>
+                            </p:commandButton>
+                            <p:commandButton value="Negar" icon="ui-icon-cancel">
+                                <f:setPropertyActionListener value="Negado" target="*{autorizarSolicitacaoFinanceiraMB.situacao}"/>
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" icon="ui-icon-circle-close" >
+                            </p:commandButton>
+                        </h:panelGrid>
+                    </div>
+                    <div data-role="footer" style="float: bottom;" >
+                        <a href="#lista" data-transition="flow"> Voltar </a>
+                    </div>
+                </div>
+            </h:form>
+            <h:outputScript name="script/maskMoney.js" />
+            <h:outputScript name="script/edtMoeda.js" />
+        </h:body>
+
+
+
+    </ui:composition>
+</html>-->

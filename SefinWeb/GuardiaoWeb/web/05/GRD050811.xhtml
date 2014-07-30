@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo">
+        <h:form id="frm01" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.configuracao.cadastro'])}">
+            <p:panel header="Configurações do Sistema">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Configurações dos Sistemas"/>
+                    <h:outputText value="Página - 030811" style="float: right;"/>
+                </f:facet>
+                <h:panelGrid width="100%">
+                    <h:panelGrid columns="4">
+                        <h:panelGrid width="100%">
+                            <h:outputLabel  value="Sistema"/>
+                            <p:selectOneMenu id="sis" value="#{configuracaoMB.sistema}" converter="#{indexConverter}" styleClass="listas" style="width: 250px;" required="true" requiredMessage="Selecione um sistema">
+                                <f:selectItem itemLabel="-- Selecione --" itemValue="#{null}"/>
+                                <f:selectItems value="#{configuracaoMB.sistemasLista}" itemValue="#{sis}" itemLabel="#{sis.nome}" var="sis" />
+                                <p:ajax event="change" listener="#{configuracaoMB.selecionaSistema()}" update="configuracoes"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:spacer width="15"/>
+                            <p:commandButton value="Novo" icon="ui-icon-plus" update=":cadForm" onclick="novo.show();" immediate="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:spacer width="15"/>
+                            <p:commandButton value="Listar" icon="ui-icon-search" update="configuracoes" action="#{configuracaoMB.selecionaSistema()}"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:spacer width="15"/>
+                            <p:commandButton value="Atualizar" icon="ui-icon-refresh" update="configuracoes" action="#{configMB.atualiza()}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid width="100%" id="configuracoes">
+                    <p:dataTable value="#{configuracaoMB.sistemaConfiguracaoLista}" var="con" rows="10" paginatorAlwaysVisible="false" paginator="true"
+                                 rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                        <p:column headerText="Id">
+                            <h:outputText value="#{con.id}"/>
+                        </p:column>
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{con.nome}"/>
+                        </p:column>
+                        <p:column headerText="Tipo">
+                            <h:outputText value="#{con.tipoConfiguracao}"/>
+                        </p:column>
+                        <p:column headerText="Valor">
+                            <h:outputText value="#{con.valor}" rendered="#{con.tipoConfiguracao !='Date'}"/>
+                            <h:outputText value="#{con.valor}" rendered="#{con.tipoConfiguracao =='Date'}">
+                                <f:convertDateTime parent="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Ação" width="50">
+                            <p:commandButton onclick="novo.show()" update=":cadForm" immediate="true" icon="ui-icon-pencil">
+                                <f:setPropertyActionListener value="#{con}" target="#{configuracaoMB.sistemaConfiguracao}"/>
+                            </p:commandButton>
+                            <p:spacer width="15"/>
+                            <p:commandButton onclick="excluir.show()" update=":exForm" immediate="true" icon="ui-icon-trash">
+                                <f:setPropertyActionListener value="#{con}" target="#{configuracaoMB.sistemaConfiguracao}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+
+    </ui:define>
+    <ui:define name="dialogs">
+        <p:dialog widgetVar="novo" closable="true" width="900" showEffect="Fade" height="400" modal="true">
+            <h:form id="cadForm">
+                <p:panel>
+                    <h:panelGrid width="100%">
+                        <h:panelGrid columns="2">
+                            <h:panelGrid>
+                                <h:outputLabel  value="Sistema"/>
+                                <p:selectOneMenu value="#{configuracaoMB.sistemaConfiguracao.sistema}" converter="#{indexConverter}" styleClass="listas" style="width: 250px;" required="true" requiredMessage="Selecione o sistema">
+                                    <f:selectItem itemLabel="-- Selecione --" itemValue="#{null}"/>
+                                    <f:selectItems value="#{configuracaoMB.sistemasLista}" itemValue="#{sis}" itemLabel="#{sis.nome}" var="sis" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid >
+                                <h:outputLabel value="Tipo"/>
+                                <p:selectOneMenu value="#{configuracaoMB.sistemaConfiguracao.tipoConfiguracao}" styleClass="listas" style="width: 300px;" required="true" requiredMessage="Selecione o tipo de configuração">
+                                    <f:selectItem itemLabel="-- Selecione --" itemValue="#{null}"/>
+                                    <f:selectItems value="#{configuracaoMB.tiposConfiguracao}" itemValue="#{t}" itemLabel="#{t}" var="t"/>
+                                    <p:ajax event="change" update="valor" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:panelGrid>
+                                <h:outputText value="Nome"/>
+                                <p:inputText value="#{configuracaoMB.sistemaConfiguracao.nome}" size="30" required="true" requiredMessage="Informe a descrição"/>
+                            </h:panelGrid>
+                            <h:panelGrid id="valor">
+                                <h:outputText value="Valor"/>
+                                <p:inputText value="#{configuracaoMB.sistemaConfiguracao.valor}" required="true" requiredMessage="Informe o valor da configuração" rendered="#{configuracaoMB.sistemaConfiguracao.tipoConfiguracao != 'Date' and configuracaoMB.sistemaConfiguracao.tipoConfiguracao != 'Boolean'}"/>
+                                <p:calendar pattern="dd/MM/yyyy" value="#{configuracaoMB.sistemaConfiguracao.valor}" required="true" requiredMessage="Informe o valor da configuração" rendered="#{configuracaoMB.sistemaConfiguracao.tipoConfiguracao == 'Date'}" navigator="true"/>
+                                <p:selectBooleanCheckbox value="#{configuracaoMB.sistemaConfiguracao.valor}" rendered="#{configuracaoMB.sistemaConfiguracao.tipoConfiguracao == 'Boolean'}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid width="100%">
+                            <h:outputText value="Descrição"/>
+                            <p:inputTextarea value="#{configuracaoMB.sistemaConfiguracao.descricao}" style="width: 100%;"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3" cellspacing="30" cellpadding="10" width="100%">
+                        <p:commandButton icon="ui-icon-disk" action="#{configuracaoMB.salvar()}" value="Salvar" update=":cadForm, :frm01"/>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog widgetVar="excluir" showEffect="Fade" header="Excluir Configuração">
+            <h:form id="exForm">
+                <p:panel>
+                    <h:outputText value="Deseja excluir essa configuração?" style="font-weight: bold;"/>
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Nome: "/>
+                        <h:outputText value="#{configuracaoMB.sistemaConfiguracao.nome}"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton icon="ui-icon-check" action="#{configuracaoMB.excluir()}" oncomplete="excluir.hide();" value="Sim" update=":frm01"/>
+                        <p:commandButton icon="ui-icon-close" value="Não" onclick="excluir.hide();"/>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

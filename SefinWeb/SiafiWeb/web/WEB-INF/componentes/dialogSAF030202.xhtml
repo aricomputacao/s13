@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog header="Autorizar Pagamento de Liquidação" showEffect="Fade" modal="true"  resizable="false" width="800" widgetVar="autoriza">
+
+        <h:panelGrid styleClass="msgAtencao">
+            <h:outputText   value="Atenção esse processo não pode ser revertido!"/>
+        </h:panelGrid>
+        <h:form id="aut_form" >
+            <p:panel rendered="#{autorizarPagamentoLiquidacaoMB.empenhoDetalhe != null}">
+                <h:panelGrid columns="2"  width="100%">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            
+                        </h:panelGrid>
+                        <h:panelGrid columns="1">
+                            <h:panelGrid >
+                                <h:outputText value="Projeto Atividae"/>
+                                <p:inputText value="#{i.solicitacaoFinanceira.dotacao.projetoAtividade.nome}" readonly="true" size="80"/>
+                            </h:panelGrid>
+                            <h:panelGrid >
+                                <h:outputText value="Natureza da Despesa"/>
+                                <p:inputText value="#{i.solicitacaoFinanceira.dotacao.naturezaDespesa.nome}" readonly="true" size="60"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="2" >
+                    <p:commandButton value="Fechar" icon="ui-icon-circle-close"  oncomplete="autoriza.hide();" style="margin-right:  150px"/>
+                    <p:commandButton value="Autorizar" icon="ui-icon-circle-check" update=":frmGeral" oncomplete="autoriza.hide();" action="#{autorizarPagamentoLiquidacaoMB.autorizarPagamento()}"/>
+
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </p:dialog>
+</ui:component>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+    <ui:define name="corpo">
+        <p:panel header="Listagem de Despesas cadastrados" styleClass="painelPadrao" id="pnlGeral" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.conta'])}">
+            <h:outputScript name="script/navegacao.js" />
+            <p:blockUI block="pnlGeral" widgetVar="bui" >
+                <p:graphicImage value="/resources/imagens/carregar.gif"/>
+            </p:blockUI>
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Contas"/>
+                <h:outputText value="Página - 010506" style="float: right;"/>
+            </f:facet>
+            <p:panel >
+                <h:panelGrid columns="6">
+
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="Unidade Orçamentária" for="org"/>
+                            <p:message for="org"/>
+                        </h:panelGrid>
+                        <p:selectOneMenu value="#{contaMB.unidadeOrcamentaria}"  converter="#{indexConverter}" style="width: 400px;" id="org" required="true" requiredMessage="Selecione uma Unidade Orçamentária">
+                            <f:selectItem itemValue="#{null}"  itemLabel="----------------- Selecione ---------------------"/>
+                            <f:selectItems value="#{contaMB.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.orgao.id.id}#{orc.unidadeOrcamentariaPK.id} - #{orc.nome}" itemValue="#{orc}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid >
+                            <h:outputText value="Número"/>
+                        </h:panelGrid>
+                        <p:inputText value="#{contaMB.numero}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Listar" title="Listar" onclick="bui.show();" oncomplete="bui.hide();" icon="ui-icon-search" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.conta'])}" action="#{contaMB.listarContas()}" update="frmGeral"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton id="btnImpressao" immediate="true" value="Imprimir" title="Imprimir relatório" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.conta'])}" icon="ui-icon-print"  action="#{contaMB.imprimir()}" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf');bui.hide();"  onclick="bui.show();"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <p:dataTable id="tblConta"  paginator="true" paginatorAlwaysVisible="false" rows="10" emptyMessage="Nenhuma conta encontrada" var="item" value="#{contaMB.listaContas}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                <p:column sortBy="#{item.id}">
+                    <f:facet name="header">
+                        <h:outputText value="Id"/>
+                    </f:facet>
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+                <p:column sortBy="#{item.numero}">
+                    <f:facet name="header">
+                        <h:outputText value="Número"/>
+                    </f:facet>
+                    <h:outputText value="#{item.numero}"/>
+                </p:column>
+                <p:column sortBy="#{item.nomeclatura}">
+                    <f:facet name="header">
+                        <h:outputText value="Nome"/>
+                    </f:facet>
+                    <h:outputText value="#{item.nomeclatura}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.unidadeOrcamentaria.abreviacao}">
+                    <f:facet name="header">
+                        <h:outputText value="Unidade Orçamentaria"/>
+                    </f:facet>
+                    <h:outputText value="#{item.unidadeOrcamentaria.abreviacao}"/>
+                </p:column>
+                <p:column sortBy="#{item.unidadeOrcamentaria.abreviacao}" styleClass="dinheiro">
+                    <f:facet name="header">
+                        <h:outputText value="Saldo"/>
+                    </f:facet>
+                    <h:outputText value="#{item.saldo}">
+                        <f:convertNumber type="currency" currencySymbol="R$"/>
+                    </h:outputText>
+                </p:column>
+
+            </p:dataTable>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

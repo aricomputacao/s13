@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/maskMoney.js" />
+        <h:outputScript name="script/edtMoeda.js" />
+        <p:panel id="pnlGeral" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.autorizarPagamento'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Autorizar Pagamento de Liquidações"/>
+                <h:outputText value="Página - 030203" style="float: right;"/>
+            </f:facet>
+
+            <h:panelGrid width="100%">
+                <p:dataTable var="i" value="#{autorizarRpLiquidacaoMB.listaLiquidacaos}" emptyMessage="Nenhum resultado encontrado" 
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                    <f:facet name="header">
+                        <h:outputText value="Pagamentos Pendentes"/>
+                    </f:facet>
+                    <p:column style="width: 2%;">
+                        <f:facet name="header">
+
+                        </f:facet>
+                        <p:rowToggler id="x"/>
+                    </p:column>
+                    <p:column   headerText="Unidade Orc">
+                        <h:outputText title="#{i.rpEmpenho.historico}" value="#{i.rpEmpenho.unidadeOrcamentariaAtual.unidadeOrcamentariaPK.idOrgao}#{i.rpEmpenho.unidadeOrcamentariaAtual.unidadeOrcamentariaPK.id} - #{i.rpEmpenho.unidadeOrcamentariaAtual.nome}"/>
+                    </p:column>
+                    <p:column headerText="Empenho" filterBy="#{i.rpEmpenho.numero}"   filterValue="#{i.rpEmpenho.numero}">
+                        <h:outputText value="#{i.rpEmpenho.numero}"  />
+
+                    </p:column>
+                    <p:column headerText="Valor">
+                        <h:outputText value="#{i.valor}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Data de Liquidação">
+                        <h:outputText value="#{i.dataLiquidacao}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:rowExpansion>
+                        <h:panelGrid frame="none">
+                            <p:inputTextarea cols="160" rows="10" readonly="true"  value="#{i.rpEmpenho.historico}"/>
+                        </h:panelGrid>
+
+                    </p:rowExpansion>
+                    <p:column headerText="Sel.">
+                        <p:commandButton icon="ui-icon-circle-check" title="selecionar" oncomplete="autoriza.show();" update=":aut_form" rendered="#{!i.liberado}" >
+                            <f:setPropertyActionListener target="#{autorizarRpLiquidacaoMB.liquidacao}" value="#{i}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogSAF030203/>
+    </ui:define>
+
+</ui:composition>

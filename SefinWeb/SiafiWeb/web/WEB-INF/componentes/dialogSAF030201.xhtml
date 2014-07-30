@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog header="#{label['nome.sistema']}" showEffect="Fade" resizable="false" modal="true" width="440" height="150" id="confirmaDialog" widgetVar="confirma">
+        <h:form>
+            <p:panel>
+
+                <h:panelGrid >
+                    <h:panelGrid >
+                        <h:outputText style="font-weight: bold  " value="Tem certeza que deseja receber esse processo?"/>
+                    </h:panelGrid>
+                    <p:separator style="margin-top: 30px"/>
+                    <h:panelGrid columns="2" width="100%" >
+                        <p:commandButton style="width: 100px;margin-right: 150px"  icon="ui-icon-circle-close" value="Não" immediate="true" oncomplete="confirma.hide();" />
+                        <p:commandButton style="width: 100px" action="#{receberEncaminhamentoMB.salvar()}" icon="ui-icon-disk" value="Sim" immediate="true" oncomplete="confirma.hide();" update=":frmGeral:tblRecebimento"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+            </p:panel>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="#{label['nome.sistema']}" showEffect="Fade" resizable="false" modal="true" width="440" height="150" widgetVar="confirmaTodos">
+        <h:form>
+            <p:panel>
+
+                <h:panelGrid >
+                    <h:panelGrid >
+                        <h:outputText style="font-weight: bold  " value="Tem certeza que deseja receber todos os processos?"/>
+                    </h:panelGrid>
+                    <p:separator style="margin-top: 30px"/>
+                    <h:panelGrid columns="2" width="100%" >
+                        <p:commandButton style="width: 100px;margin-right: 150px"  icon="ui-icon-circle-close" value="Não" immediate="true" oncomplete="confirmaTodos.hide();" />
+                        <p:commandButton style="width: 100px" action="#{receberEncaminhamentoMB.salvarSelecionados()}" icon="ui-icon-disk" value="Sim" oncomplete="confirmaTodos.hide();" update=":frmGeral:tblRecebimento"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+            </p:panel>
+        </h:form>
+    </p:dialog>
+
+</ui:component>

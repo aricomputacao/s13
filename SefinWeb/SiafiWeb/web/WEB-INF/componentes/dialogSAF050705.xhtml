@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog header="#{label['nome.sistema']}" showEffect="Fade" resizable="false" modal="true" width="1260" height="700" id="solDialog" closable="true" widgetVar="solicitacao">
+        <h:form id="frmSolicitacao">
+            <center>
+                <p:panel header="Processos Financeiros">
+                    <p:barChart seriesColors="#{relatorioCentroCustoMB.cores}" id="grfUnd" value="#{relatorioCentroCustoMB.graficoUnidadeOrcamentariaCentroCusto}" legendPosition="ne" animate="true" legendRows="10"
+                                   min="1000"  >
+                        <p:ajax event="itemSelect" listener="#{relatorioCentroCustoMB.listarFinanceiraUnidadeOrc}"  update="tblSolicitacao" />
+
+                    </p:barChart>
+
+                    <h:panelGrid width="100%" id="tblSolicitacao">
+                        <p:dataTable paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{relatorioCentroCustoMB.financeirasDespesa}"
+                                     rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+                            <p:column style="width: 2%;">
+                                <f:facet name="header">
+
+                                </f:facet>
+                                <p:rowToggler id="x"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Número"/>
+                                </f:facet>
+                                <h:outputLabel value="#{item.id}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Data de Solicitação"/>
+                                </f:facet>
+                                <h:outputText value="#{item.dataSolicitacao}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Valor"/>
+                                </f:facet>
+                                <h:outputText value="#{item.valor}">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Situação"/>
+                                </f:facet>
+                                <h:outputText value="#{item.situacaoSolicitacao}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Cota"/>
+                                </f:facet>
+                                <h:outputText value="#{item.cota.despesa.nome}"/>
+                            </p:column>
+
+                            <p:rowExpansion>
+                                <h:panelGrid frame="none">
+                                    <h:outputText value="Usuário: #{item.usuario.pessoa.nome}"/>
+                                    <h:outputText value="Unidade Orçamentaria: #{item.cota.unidadeOrcamentaria.nome}"/>
+                                    <h:outputText value="Localização: #{item.local.nome}"/>
+                                    <h:outputText value="Categoria: #{item.cota.categoria.nome}"/>
+                                    <h:outputText value="Despesa: #{item.cota.despesa.nome}"/>
+                                    <h:outputText value="Competência: #{item.mesCompetencia.asNumero(item.mesCompetencia)}#{item.anoCompetencia}"/>
+                                    <h:outputText value="Credor: #{item.credor.pessoa.nome}"/>
+
+                                    <h:outputText value="Autorizado por: #{item.usuarioAutorizou.pessoa.nome}"/>
+                                    <h:outputLabel value="Data Autorização: ">
+                                        <h:outputText value="#{item.dataAutorizacao}">
+                                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                        </h:outputText>
+                                    </h:outputLabel>
+                                    <h:outputText value="Histórico: #{item.historico}"/>
+                                </h:panelGrid>
+
+                            </p:rowExpansion>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+            </center>
+
+        </h:form>
+    </p:dialog>
+    <p:dialog header="#{label['nome.sistema']}" showEffect="Fade" resizable="false" modal="true" width="1260" height="600" id="solDialog2" closable="true" widgetVar="solicitacao2">
+        <h:form id="frmSolicitacao2">
+            <center>
+                <p:panel header="Processos Financeiros">
+                    <p:barChart id="grfCen" seriesColors="#{relatorioCentroCustoMB.cores}" value="#{relatorioCentroCustoMB.graficoCentroCustoUnidadeOrcamentaria}" legendPosition="ne" animate="true" legendRows="10" legendCols="2"
+                                min="1000"  >
+                        <p:ajax event="itemSelect" listener="#{relatorioCentroCustoMB.listarFinanceiraDespesa}"  update="tblSolicitacao" />
+
+                    </p:barChart>
+                    <h:panelGrid width="100%" id="tblSolicitacao">
+                        <p:dataTable paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{relatorioCentroCustoMB.financeirasDespesa}"
+                                     rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+                            <p:column style="width: 2%;">
+                                <f:facet name="header">
+
+                                </f:facet>
+                                <p:rowToggler id="x"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Número"/>
+                                </f:facet>
+                                <h:outputLabel value="#{item.id}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Data de Solicitação"/>
+                                </f:facet>
+                                <h:outputText value="#{item.dataSolicitacao}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Valor"/>
+                                </f:facet>
+                                <h:outputText value="#{item.valor}">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Situação"/>
+                                </f:facet>
+                                <h:outputText value="#{item.situacaoSolicitacao}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Cota"/>
+                                </f:facet>
+                                <h:outputText value="#{item.cota.despesa.nome}"/>
+                            </p:column>
+
+                            <p:rowExpansion>
+                                <h:panelGrid frame="none">
+                                    <h:outputText value="Usuário: #{item.usuario.pessoa.nome}"/>
+                                    <h:outputText value="Unidade Orçamentaria: #{item.cota.unidadeOrcamentaria.nome}"/>
+                                    <h:outputText value="Localização: #{item.local.nome}"/>
+                                    <h:outputText value="Categoria: #{item.cota.categoria.nome}"/>
+                                    <h:outputText value="Despesa: #{item.cota.despesa.nome}"/>
+                                    <h:outputText value="Competência: #{item.mesCompetencia.asNumero(item.mesCompetencia)}#{item.anoCompetencia}"/>
+                                    <h:outputText value="Credor: #{item.credor.pessoa.nome}"/>
+
+                                    <h:outputText value="Autorizado por: #{item.usuarioAutorizou.pessoa.nome}"/>
+                                    <h:outputLabel value="Data Autorização: ">
+                                        <h:outputText value="#{item.dataAutorizacao}">
+                                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                        </h:outputText>
+                                    </h:outputLabel>
+                                    <h:outputText value="Histórico: #{item.historico}"/>
+                                </h:panelGrid>
+
+                            </p:rowExpansion>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+            </center>
+
+        </h:form>
+    </p:dialog>
+</ui:component>

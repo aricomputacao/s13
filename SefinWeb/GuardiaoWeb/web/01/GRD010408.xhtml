@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel id="pnlArea" header="Cadastro de Área Administrativa" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.area_adm'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Cadastro de Área Administrativa"/>
+                    <h:outputText value="Página - 010408" style="float: right;"/>
+                </f:facet>
+                <p:focus/>
+                <h:panelGrid width="100%">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="org" value="Órgão"/>
+                            <p:message for="org"/>
+                        </h:panelGrid>
+                        <p:selectOneMenu id="org" value="#{areaAdministrativaMB.areaAdministrativaSele.orgao}" converter="#{indexConverter}" styleClass="listas" style="width: 300px;" required="true" requiredMessage="Selecione um orgão" >
+                            <f:selectItem itemLabel="" />
+                            <f:selectItems value="#{areaAdministrativaMB.listaOrgao}" itemValue="#{orgao}" itemLabel="#{orgao.id.id}-#{orgao.nome}" var="orgao" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="nomeArea" value="Nome"/>
+                                <p:message for="nomeArea"/>
+                            </h:panelGrid>
+                            <p:inputText id="nomeArea" size="40" value="#{areaAdministrativaMB.areaAdministrativaSele.nome}" required="true" requiredMessage="Preencher campo nome!"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Tipo de Área"/>
+                        </h:panelGrid>
+                        <p:selectOneMenu value="#{areaAdministrativaMB.areaAdministrativaSele.tipoAreaAdm}" required="true" style="width: 270px;" requiredMessage="Selecione o tipo de area administrativa">
+                            <f:selectItem itemValue="#{null}" itemLabel="-- Selecione --" />
+                            <f:selectItems value="#{areaAdministrativaMB.tipoAreaAdmList}" itemValue="#{i}" var="i" itemLabel="#{i}" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Acesso as Unidades Orçamentárias"/>
+                            <p:message for="acesso"/>
+                        </h:panelGrid>
+                        <p:selectOneRadio id="acesso" value="#{areaAdministrativaMB.areaAdministrativaSele.acessoUnidadeOrcamentaria}">
+                            <f:selectItem itemLabel="Sim" itemValue="#{true}"/>
+                            <f:selectItem itemLabel="Não"  itemValue="#{false}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellspacing="10" cellpadding="10">
+                    <p:commandButton icon="ui-icon-disk" action="#{areaAdministrativaMB.salvar()}" value="Salvar" update="pnlArea" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.sistema'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.area_adm'])}" value="Listar" immediate="true" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.unidade_orc'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" type="reset" ajax="false" value="Limpar"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

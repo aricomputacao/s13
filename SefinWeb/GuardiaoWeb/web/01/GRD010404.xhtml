@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel id="pnlSis" header="Cadastro de Unidade Administrativa" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.unidade_adm'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Cadastro de Unidade Administrativa"/>
+                    <h:outputText value="Página - 010404" style="float: right;"/>
+                </f:facet>
+                <p:focus/>
+                <h:panelGrid cellspacing="5" width="100%">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="codUnd" value="Código"/>
+                            <p:message for="codUnd"/>
+                        </h:panelGrid>
+                        <p:inputText  id="codUnd" size="3" maxlength="2" required="true" requiredMessage="Preencher o campo código!" value="#{unidadeAdministrativaMB.unidadeAdministrativaSelecionada.id}" disabled="#{unidadeAdministrativaMB.unidadeAdministrativaSelecionada.id != null}" validator="#{unidadeAdministrativaMB.validaId}"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="nomeUnd" value="Nome"/>
+                            <p:message for="nomeUnd"/>
+                        </h:panelGrid>
+                        <p:inputText id="nomeUnd" size="50" value="#{unidadeAdministrativaMB.unidadeAdministrativaSelecionada.nome}" required="true" requiredMessage="Preencher campo nome!"/>
+                    </h:panelGrid>
+                    <p:dataTable id="tblOrg" emptyMessage="Órgãos não encontrados" var="item" paginator="true" paginatorAlwaysVisible="false"
+                                 rendered="#{unidadeAdministrativaMB.unidadeAdministrativaSelecionada.orgaos.size() > 0}"
+                                 value="#{unidadeAdministrativaMB.unidadeAdministrativaSelecionada.orgaos}"
+                                 rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                        <p:column>
+                            <f:facet name="header">
+                                Id
+                            </f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nome"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nome}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Abreviação"/>
+                            </f:facet>
+                            <h:outputText value="#{item.abreviacao}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Ativo"/>
+                            </f:facet>
+                            <h:outputText rendered="#{item.ativo}" value="Sim"/>
+                            <h:outputText rendered="#{!item.ativo}" value="Não"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                Ações
+                            </f:facet>
+                            <p:commandButton id="btnEditOrgao" icon="ui-icon-trash"  ajax="true" onclick="confirmationDelOrg.show();" action="#{unidadeAdministrativaMB.delOrg()}"
+                                             title="Excluir" >
+                                <f:setPropertyActionListener target="#{unidadeAdministrativaMB.orgao}" value="#{item}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellspacing="30" cellpadding="10">
+                    <p:commandButton icon="ui-icon-disk" action="#{unidadeAdministrativaMB.salvar()}" value="Salvar" update="pnlSis" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.unidade_adm'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.unidade_adm'])}" value="Listar" immediate="true" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.unidade_adm'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" type="reset" ajax="false" value="Limpar"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

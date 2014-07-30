@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/modelo/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+    <ui:define name="corpo">
+        <p:panel id="pnlORcamento" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.orcamento'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Cadastro de Orçamento"/>
+                <h:outputText value="Página - 040414" style="float: right;"/>
+            </f:facet>
+            <p:focus/>
+            <h:panelGrid width="100%">
+                <h:panelGrid columns="1">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Exercício" title="Exercício do orçamento"/>
+                            <p:message for="orcExe"/>
+                        </h:panelGrid>
+                        <p:selectOneMenu id="orcExe" value="#{orcamentoMB.orcamentoSelecionado.exercicio}" converter="#{indexConverter}" style="width: 220px"
+                                         effect="fade" required="true" requiredMessage="Informe o exercício.">
+                            <f:selectItems  value="#{orcamentoMB.listExercicios}" var="e" itemLabel="#{e.descricao}" itemValue="#{e}"  />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Descrição" title="Descrição do orçamento"/>
+                            <p:message for="orcDes"/>
+                        </h:panelGrid>
+                        <p:inputText id="orcDes" size="50"  value="#{orcamentoMB.orcamentoSelecionado.descricao}" required="true" requiredMessage="Informe a descrição!" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid columns="3" cellspacing="30" cellpadding="10">
+                <comp:commandButton_salvar acao_butao="#{orcamentoMB.salvar()}" rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.orcamento'])}"/> 
+                <comp:commandbutton_navegar_consulta acao_butao="#{beanNavegacaoMB.redirecionar(navegacao['listar.orcamento'])}" />
+                <comp:commandButton_limpar />
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+</ui:composition>

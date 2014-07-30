@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <h:panelGrid width="100%">
+        <h:panelGrid columns="6">
+            <h:panelGrid>
+                <h:outputLabel value="Buscar Em"/>
+                <p:selectOneMenu value="#{naturezaDespesaMB.campoBusca}" converter="#{indexConverter}" style="width: 200px;">
+                    <f:selectItem itemLabel="Nome" itemValue="nome"/>
+                    <f:selectItem itemLabel="Numero" itemValue="id"/>
+                    <f:selectItem itemLabel="Categoria" itemValue="categoriaDespesa.nome"/>
+                    <f:selectItem itemLabel="Modalidade" itemValue="modalidadeAplicacaoDespesa.nome"/>
+                    <f:selectItem itemLabel="Grupo" itemValue="grupoNaturezaDespesa.nome"/>
+                    <f:selectItem itemLabel="Elemento" itemValue="elementoDespesa.nome"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <h:panelGrid>
+                <p:outputLabel value="Valor"/>
+                <p:inputText value="#{naturezaDespesaMB.valorBusca}"/>
+            </h:panelGrid>
+
+            <h:panelGrid>
+                <p:spacer width="10"/>
+                <p:commandButton value="Listar" title="Listar" icon="ui-icon-search" action="#{naturezaDespesaMB.listar()}" update="tabela"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:panelGrid>
+    <p:dataTable id="tabela" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="nad" value="#{naturezaDespesaMB.listaNaturezaDespesas}"
+                 rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+        <p:column headerText="Id">
+            <h:outputText value="#{nad.id}"/>
+        </p:column>
+        <p:column headerText="Categoria" rendered="false">
+            <h:outputText value="#{nad.categoriaDespesa.nome}"/>
+        </p:column>
+        <p:column headerText="Modalidade" rendered="false" >
+            <h:outputText value="#{nad.modalidadeAplicacaoDespesa.nome}"/>
+        </p:column>
+        <p:column headerText="Grupo" rendered="false">
+            <h:outputText value="#{nad.grupoNaturezaDespesa.nome}"/>
+        </p:column>
+        <p:column headerText="Elemento" >
+            <h:outputText value="#{nad.elementoDespesa.nome}"/>
+        </p:column>
+        <p:column headerText="Nome" >
+            <h:outputText value="#{nad.nome}" title="#{nad.nome}" />
+        </p:column>
+
+        <p:column headerText="ação">
+            <ui:insert name="acaoNaturezaDespesa">
+            </ui:insert>
+        </p:column>
+    </p:dataTable>
+
+
+</ui:composition>

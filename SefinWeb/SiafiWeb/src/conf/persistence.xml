@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="GuardiaoPU" transaction-type="JTA">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <jta-data-source>jdbc/Siafi</jta-data-source>
+    <class>br.com.guardiao.modelo.AreaAdministrativa</class>
+    <class>br.com.guardiao.modelo.Cargo</class>
+    <class>br.com.guardiao.modelo.Exercicio</class>
+    <class>br.com.guardiao.modelo.Modulo</class>
+    <class>br.com.guardiao.modelo.Orgao</class>
+    <class>br.com.guardiao.modelo.Permissao</class>
+    <class>br.com.guardiao.modelo.Sistema</class>
+    <class>br.com.guardiao.modelo.SistemaConfiguracao</class>
+    <class>br.com.guardiao.modelo.Tarefa</class>
+    <class>br.com.guardiao.modelo.UnidadeAdministrativa</class>
+    <class>br.com.guardiao.modelo.UnidadeOrcamentaria</class>
+    <class>br.com.guardiao.modelo.Usuario</class>
+    <class>br.com.sefin.auditoria.modelo.EntidadeRevisional</class>
+    <class>br.com.sefin.view.ItemOrdemCompraView</class>
+    <class>br.com.siafi.auditoria.modelo.SolicitacaoFinanceiraAud</class>
+    <class>br.com.siafi.modelo.Aditivo</class>
+    <class>br.com.siafi.modelo.AditivoConvenio</class>
+    <class>br.com.siafi.modelo.Categoria</class>
+    <class>br.com.siafi.modelo.CategoriaDespesa</class>
+    <class>br.com.siafi.modelo.CentroCusto</class>
+    <class>br.com.siafi.modelo.Conta</class>
+    <class>br.com.siafi.modelo.Contrato</class>
+    <class>br.com.siafi.modelo.Convenio</class>
+    <class>br.com.siafi.modelo.Cota</class>
+    <class>br.com.siafi.modelo.CotaControle</class>
+    <class>br.com.siafi.modelo.CreditoAdicional</class>
+    <class>br.com.siafi.modelo.CreditoAdicionalDetalhe</class>
+    <class>br.com.siafi.modelo.Credor</class>
+    <class>br.com.siafi.modelo.Dotacao</class>
+    <class>br.com.siafi.modelo.ElementoDespesa</class>
+    <class>br.com.siafi.modelo.EmpenhoDetalhe</class>
+    <class>br.com.siafi.modelo.Encaminhamento</class>
+    <class>br.com.siafi.modelo.FonteRecurso</class>
+    <class>br.com.siafi.modelo.Funcao</class>
+    <class>br.com.siafi.modelo.GrupoItem</class>
+    <class>br.com.siafi.modelo.GrupoNaturezaDespesa</class>
+    <class>br.com.siafi.modelo.HistoricoPadrao</class>
+    <class>br.com.siafi.modelo.Item</class>
+    <class>br.com.siafi.modelo.ItemLicitacao</class>
+    <class>br.com.siafi.modelo.ItemOrdemCompra</class>
+    <class>br.com.siafi.modelo.Licitacao</class>
+    <class>br.com.siafi.modelo.LicitacaoDotacao</class>
+    <class>br.com.siafi.modelo.LicitacaoUnidadeOrcamentaria</class>
+    <class>br.com.siafi.modelo.ModalidadeAplicacaoDespesa</class>
+    <class>br.com.siafi.modelo.ModalidadeLicitacao</class>
+    <class>br.com.siafi.modelo.NaturezaDespesa</class>
+    <class>br.com.siafi.modelo.Orcamento</class>
+    <class>br.com.siafi.modelo.OrdemCompra</class>
+    <class>br.com.siafi.modelo.Pendencia</class>
+    <class>br.com.siafi.modelo.Programa</class>
+    <class>br.com.siafi.modelo.ProjetoAtividade</class>
+    <class>br.com.siafi.modelo.RpEmpenho</class>
+    <class>br.com.siafi.modelo.RpLiquidacao</class>
+    <class>br.com.siafi.modelo.RpOrgao</class>
+    <class>br.com.siafi.modelo.RpProjetoAtividade</class>
+    <class>br.com.siafi.modelo.RpUnidadeOrcamentaria</class>
+    <class>br.com.siafi.modelo.SolicitacaoFinanceira</class>
+    <class>br.com.siafi.modelo.SubElementoDespesa</class>
+    <class>br.com.siafi.modelo.Subfuncao</class>
+    <class>br.com.siafi.modelo.TipoCredor</class>
+    <class>br.com.siafi.modelo.TipoFonteRecurso</class>
+    <class>br.com.siafi.modelo.TipoLicitacao</class>
+    <class>br.com.siafi.modelo.UnidadeMedida</class>
+    <class>br.com.siafi.modelo.SolicitacaoLiquidacao</class>
+    <class>br.com.siafi.modelo.EncaminhamentoLiquidacao</class>
+    <class>br.com.siafi.modelo.MovimentacaoBanco</class>
+    <class>br.com.siafi.modelo.CredorUnidadeOrcamentaria</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <!--<property name="hibernate.show_sql" value="true"/>-->
+      <!--<property name="hibernate.format_sql" value="true"/>-->
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+      <!-- EHCACHE -->
+      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.ehcache.EhCacheProvider"/>
+      <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
+      <property name="hibernate.cache.use_second_level_cache" value="true"/>
+      <!-- Query Cache -->
+      <property name="hibernate.cache.use_query_cache" value="true"/>
+      <!-- Query Cache -->
+    </properties>
+  </persistence-unit>
+</persistence>

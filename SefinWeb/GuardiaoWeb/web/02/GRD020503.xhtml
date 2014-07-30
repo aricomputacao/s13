@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel header="Listagem de Tarefas" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.tarefa'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Listagem de Tarefas"/>
+                    <h:outputText value="Página - 020503" style="float: right;"/>
+                </f:facet>
+                <h:panelGrid columns="7">
+                    <h:panelGrid>
+                        <h:outputText value="Ordenar"/>
+                        <p:selectOneMenu value="#{tarefaMB.campoOrdem}" style="width: 190px">
+                            <f:selectItems value="#{tarefaMB.campos}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Campo"/>
+                        <p:selectOneMenu value="#{tarefaMB.campoBusca}" style="width: 190px">
+                            <f:selectItems value="#{tarefaMB.camposString}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:outputLabel value="Sistema"/>
+                        <p:selectOneMenu value="#{tarefaMB.sistema}" converter="#{indexConverter}" styleClass="listas" style="width: 300px">
+                            <f:selectItem itemLabel="" />
+                            <f:selectItems value="#{moduloMB.lstSistemas()}" itemValue="#{sis}" itemLabel="#{sis.nome}" var="sis"/>
+                            <p:ajax event="change" update="modulo"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid id="modulo">
+                        <p:outputLabel value="Módulo"/>
+                        <p:selectOneMenu value="#{tarefaMB.modulo}" converter="#{indexConverter}" styleClass="listas" style="width: 300px">
+                            <f:selectItem itemLabel="" />
+                            <f:selectItems value="#{tarefaMB.listarModulos(tarefaMB.sistema)}" itemValue="#{modu}" itemLabel="#{modu.nome}" var="modu" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Pesquisar por"/>
+                        <p:inputText value="#{tarefaMB.valorBusca}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Pesquisar" icon="ui-icon-circle-zoomin" update="tblTarefas" action="#{tarefaMB.listar()}"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Novo" icon="ui-icon-plus" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.tarefa'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.tarefa'])}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <p:dataTable id="tblTarefas" rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Tarefas não encontrados" var="item" value="#{tarefaMB.tarefas}">
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{item.nome}"/>
+                    </p:column>
+                    <p:column headerText="Mnemonico">
+                        <h:outputText value="#{item.mnemonico}"/>
+                    </p:column>
+                    <p:column headerText="Nome do Módulo">
+                        <h:outputText value="#{item.modulo.nome}"/>
+                    </p:column>
+                    <p:column headerText="Nome do Sistema">
+                        <h:outputText value="#{item.modulo.sistema.nome}"/>
+                    </p:column>
+                    <p:column headerText="Ações">
+                        <p:commandButton id="btnEditTarefa" icon="ui-icon-pencil" title="Editar" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.tarefa'],'tarefa',item)}" rendered="#{usuarioLogadoMB.permissaoEditar(navegacao['cadastro.tarefa'])}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition template="/modelo/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <ui:define name="corpo" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.consulta_movimentacao_bancaria'])}" >
+        <h:outputScript name="script/maskMoney.js" />
+        <h:outputScript name="script/edtMoeda.js" />
+        <h:outputScript name="script/navegacao.js" />
+
+        <p:panel id="pnlSolicitacao" styleClass="painelPadrao" >
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Consultar Movimentação Bancaria"/>
+                <h:outputText value="Página - 030405" style="float: right;"/>
+            </f:facet>
+            <p:focus/>
+            <h:panelGrid width="100%">
+                <p:fieldset>
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <p:outputLabel value="Data Inicial"/>
+                            <p:calendar effect="fade" navigator="true" required="true" value="#{movimentacaoBancoMB.dataIni}" />
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:outputLabel value="Data Final"/>
+                            <p:calendar effect="fade" navigator="true" required="true" value="#{movimentacaoBancoMB.dataFim}" />
+                        </h:panelGrid>
+                        <h:panelGrid columns="3">
+                            <p:spacer width="15"/>
+                            <p:spacer width="15"/>
+                            <p:spacer width="15"/>                            
+
+                            <comp:commandButton_consulta acao_butao="#{movimentacaoBancoMB.listarPorData()}" immediate="false" update="@form:tbl"/>
+                            <comp:commandButton_imprimir acao_butao="#{movimentacaoBancoMB.impressao()}" immediate="false"  block="block"/>
+                            <p:commandButton icon="ui-icon-transferthick-e-w" actionListener="#{importarOrcamentoMB.importarMovimentacaoBanco()}" value="Importar" onclick="block.show()" oncomplete="block.hide()"/>
+
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>
+                <p:dataTable rowKey="#{item.id}" id="tbl"  scrollHeight="350" scrollable="true"  emptyMessage="Nenhum encaminhamento encontrado" var="item" value="#{movimentacaoBancoMB.movimentacaoBancoDataList}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx"  selection="#{movimentacaoBancoMB.listaMovimentacaoBanco}">
+
+                    <p:column selectionMode="multiple" headerText="Sel" width="5%"  >
+                    </p:column>
+                    <p:column headerText="Ofício" width="7%" sortBy="#{item.oficio}" >
+                        <comp:outputText value="#{item.oficio}"  /> 
+                    </p:column>
+                    <p:column headerText="Origem"  >
+                        <comp:outputText value="#{item.contaDestino.nomeclatura}" /> 
+
+                    </p:column>
+                    <p:column headerText="Destino"  >
+                        <comp:outputText  value="#{item.contaOrigem.nomeclatura}"/>
+
+                    </p:column>
+                    <p:column headerText="Data" width="10%" >
+                        <comp:outputText value="#{item.data}"  tipo="d" /> 
+                    </p:column>
+                    <p:column headerText="Valor" width="15%" >
+                        <comp:outputText value="#{item.valor}" tipo="c" /> 
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+
+    <ui:define name="renderFiltros">      
+        <h:panelGrid columns="1" >
+            <h:outputText value="Número"/>
+            <p:inputText value="#{solicitacaoFinanceiraMB.numero}"/>
+        </h:panelGrid>
+    </ui:define>
+
+    <ui:define name="btnConsultaSolicitacao">
+        <p:commandButton value="Listar" id="btnListar" style="margin-top: 15px" rendered="#{usuarioMB.permissaoConsultar(navegacao['solicitacao.financeira.listar'])}" title="Listar" icon="ui-icon-search" action="#{solicitacaoFinanceiraMB.listarSolictacoesLiquidadas()}" update="tblSolicitacao,:frmGeral"/>
+    </ui:define>
+    <ui:define name="acaoConsultaSolicitacao">
+        <p:column headerText="Ações">
+            <p:commandButton icon="ui-icon-check" styleClass="btnTabela" update=":frmGeral:pnlSolicitacao"   oncomplete="solicitacao_lista.hide();"
+                             title="Selecionar" >
+                <f:setPropertyActionListener target="#{solicitacaiLiquidacaoMB.solicitacaoLiquidacao.solicitacaoFinanceira}" value="#{item}"/>
+            </p:commandButton>
+        </p:column>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogConsultaCredor/>
+        <scgb:dialogSolicitacaoFinanceira/>
+    </ui:define>
+    <ui:define name="acaoCredor">
+        <p:column headerText="Ação">
+            <p:commandButton styleClass="btnTabela" icon="ui-icon-check" immediate="true" oncomplete="credorBusca.hide();" update=":frmGeral:solCred,:frmGeral:solContrato, :frmOrdemCompra">
+                <f:setPropertyActionListener value="#{cred}" target="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.credor}"/>
+            </p:commandButton>
+        </p:column>
+    </ui:define>
+</ui:composition>

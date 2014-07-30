@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition template="/modelo/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/maskMoney.js" />
+        <h:outputScript name="script/edtMoeda.js" />
+        <h:outputScript name="script/navegacao.js" />
+        <p:panel id="pnlSolicitacao" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.cadastro_solicitacao_liquidacao'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Emitir Solicitação de Liquidação"/>
+                <h:outputText value="Página - 030404" style="float: right;"/>
+            </f:facet>
+            <p:focus/>
+            <h:panelGrid width="100%">
+                <h:panelGrid  columns="1">
+                    <h:panelGrid columns="2">
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Código"/>
+                            </h:panelGrid>
+                            <p:inputText value="#{solicitacaiLiquidacaoMB.solicitacaoLiquidacao.id}"  readonly="true" size="5"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Solicitação"/>
+                            </h:panelGrid>
+                            <p:commandButton onclick="solicitacao_lista.show()" icon="ui-icon-search" >
+                                <p:inputText value="#{solicitacaiLiquidacaoMB.solicitacaoLiquidacao.solicitacaoFinanceira.id}" readonly="true"  size="15"/>
+                            </p:commandButton>
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Credor"/>
+                        </h:panelGrid>
+                        <p:inputText value="#{solicitacaiLiquidacaoMB.solicitacaoLiquidacao.solicitacaoFinanceira.credor.pessoa.nome}"  readonly="true" size="80"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Nota Fiscal"/>
+                            </h:panelGrid>
+                            <p:inputText value="#{solicitacaiLiquidacaoMB.solicitacaoLiquidacao.documento}"   size="20"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Valor"/>
+                            </h:panelGrid>
+                            <p:inputText value="#{solicitacaiLiquidacaoMB.solicitacaoLiquidacao.valor}" styleClass="edtMoeda" onfocus="mascaraInputs();"   size="10">
+                                <f:convertNumber type="currency" maxFractionDigits="2" minFractionDigits="2" minIntegerDigits="1" locale="pt_BR" currencyCode="BRL" />
+                            </p:inputText>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="3"  cellspacing="30" >
+                    <comp:commandButton_salvar acao_butao="#{solicitacaiLiquidacaoMB.salvar()}" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.cadastro_solicitacao_liquidacao'])}"/> 
+                    <comp:commandbutton_navegar_consulta acao_butao="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.listar_solicitacao_liquidacao'])}" />
+                    <comp:commandButton_limpar />
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+
+    <ui:define name="renderFiltros">      
+        <h:panelGrid columns="1" >
+            <h:outputText value="Número"/>
+            <p:inputText value="#{solicitacaoFinanceiraMB.numero}"/>
+        </h:panelGrid>
+    </ui:define>
+
+    <ui:define name="btnConsultaSolicitacao">
+        <p:commandButton value="Listar" id="btnListar" style="margin-top: 15px" rendered="#{usuarioMB.permissaoConsultar(navegacao['solicitacao.financeira.listar'])}" title="Listar" icon="ui-icon-search" action="#{solicitacaoFinanceiraMB.listarSolictacoesLiquidadas()}" update="tblSolicitacao,:frmGeral"/>
+    </ui:define>
+    <ui:define name="acaoConsultaSolicitacao">
+        <p:column headerText="Ações">
+            <p:commandButton icon="ui-icon-circle-check" styleClass="btnTabela" update=":frmGeral:pnlSolicitacao"   oncomplete="solicitacao_lista.hide();"
+                             title="Selecionar" >
+                <f:setPropertyActionListener target="#{solicitacaiLiquidacaoMB.solicitacaoLiquidacao.solicitacaoFinanceira}" value="#{item}"/>
+            </p:commandButton>
+        </p:column>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogConsultaCredor/>
+        <scgb:dialogSolicitacaoFinanceira/>
+    </ui:define>
+    <ui:define name="acaoCredor">
+        <p:column headerText="Ação">
+            <p:commandButton styleClass="btnTabela" icon="ui-icon-circle-check" immediate="true" oncomplete="credorBusca.hide();" update=":frmGeral:solCred,:frmGeral:solContrato, :frmOrdemCompra">
+                <f:setPropertyActionListener value="#{cred}" target="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.credor}"/>
+            </p:commandButton>
+        </p:column>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="corpo" >
+        <p:panel styleClass="painelPadrao" id="pnlGeral" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.item'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Item"/>
+                <h:outputText value="Página - 020503" style="float: right;"/>
+            </f:facet>
+            <p:panel>
+                <p:blockUI block="pnlGeral" trigger="btnListar"  >
+                    <p:graphicImage value="/resources/imagens/carregar.gif"/>
+                </p:blockUI>
+                <h:panelGrid columns="6">
+                    <h:panelGrid>
+                        <h:outputText value="Ordenar"/>
+                        <p:selectOneMenu value="#{itemMB.campoOrdem}" style="width: 190px">
+                            <f:selectItems value="#{itemMB.campos}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Campo"/>
+                        <p:selectOneMenu value="#{itemMB.campoBusca}" style="width: 190px">
+                            <f:selectItems value="#{itemMB.camposString}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Pesquisar por"/>
+                        <p:inputText value="#{itemMB.valorBusca}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Listar" title="Listar" id="btnListar" icon="ui-icon-search" action="#{itemMB.listar()}" update="tblLista" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.item'])}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <p:dataTable id="tblLista"  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="item" value="#{itemMB.lista}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                <p:column headerText="Id" sortBy="#{item.id}">
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+                <p:column headerText="Nome" style="max-width: 400px"   sortBy="#{item.nome}">
+                    <h:outputText value="#{item.nome}"  title="#{item.nome}"  />
+                </p:column>
+                <p:column headerText="Grupo" sortBy="#{item.grupoItem.nome}">
+                    <h:outputText value="#{item.grupoItem.nome}"/>
+                </p:column>
+                <p:column headerText="Unidade Medida" sortBy="#{item.unidadeMedida.abreviacao}">
+                    <h:outputText value="#{item.unidadeMedida.abreviacao}"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cabecalho_paisagem" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="97a582d7-048a-499a-be31-5bcf9510ebad">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="img" class="java.lang.String"/>
+	<parameter name="relatorio" class="java.lang.String"/>
+	<noData>
+		<band height="65">
+			<frame>
+				<reportElement uuid="e0b661fd-60b0-4cf6-8935-b9d52aef1dbb" mode="Opaque" x="0" y="0" width="802" height="65" forecolor="#FFFFFF" backcolor="#FFFFFF"/>
+				<staticText>
+					<reportElement uuid="a4cb7b17-0584-4f16-ab4f-004cad64dc84" x="67" y="2" width="425" height="43" forecolor="#333333" backcolor="#000000"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="SansSerif" size="14" isBold="false" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Governo Municipal de Caucaia
+Secretaria de Finanças, Planejamento e Orçamento]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="d7ca42c7-7454-4c89-a2ae-2196bf22d719" x="67" y="43" width="608" height="20" backcolor="#000000"/>
+					<textElement>
+						<font size="14" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{relatorio}]]></textFieldExpression>
+				</textField>
+				<image>
+					<reportElement uuid="55f03c54-d753-4578-a3b4-a7f1e13dffc3" x="3" y="2" width="62" height="61"/>
+					<imageExpression><![CDATA[$P{img}]]></imageExpression>
+				</image>
+				<line>
+					<reportElement uuid="fe1053c7-c914-4914-b43f-dece3bf6cccb" x="0" y="63" width="802" height="1"/>
+				</line>
+				<line>
+					<reportElement uuid="c2b2c375-38eb-45b2-802e-858fc136ff09" x="0" y="1" width="802" height="1"/>
+				</line>
+				<line>
+					<reportElement uuid="04f106eb-d211-4d55-bc2b-78b5c3fbe0c0" x="801" y="2" width="1" height="61"/>
+				</line>
+				<line>
+					<reportElement uuid="a8487438-1105-43e5-bccd-888ff06a0bda" x="0" y="2" width="1" height="61"/>
+				</line>
+			</frame>
+		</band>
+	</noData>
+</jasperReport>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cabecalho_paisagem" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="97a582d7-048a-499a-be31-5bcf9510ebad">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="img" class="java.lang.String"/>
+	<noData>
+		<band height="50">
+			<frame>
+				<reportElement uuid="e0b661fd-60b0-4cf6-8935-b9d52aef1dbb" mode="Opaque" x="0" y="0" width="802" height="50" forecolor="#D9D9D9" backcolor="#D9D9D9"/>
+				<staticText>
+					<reportElement uuid="a4cb7b17-0584-4f16-ab4f-004cad64dc84" x="0" y="0" width="802" height="50" forecolor="#333333" backcolor="#000000"/>
+					<box leftPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="14" isBold="false" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Governo Municipal de Caucaia]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</noData>
+</jasperReport>

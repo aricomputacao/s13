@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+    <ui:define name="corpo">
+        <p:panel header="Listagem de Despesas cadastrados" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.despesa'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Despesas cadastrados"/>
+                <h:outputText value="Página - 010503" style="float: right;"/>
+            </f:facet>
+            <p:panel>
+                <h:panelGrid columns="6">
+                    <h:panelGrid>
+                        <h:outputText value="Ordenar"/>
+                        <p:selectOneMenu value="#{despesaMB.campoOrdem}" style="width: 190px">
+                            <f:selectItems value="#{despesaMB.campos}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Campo"/>
+                        <p:selectOneMenu value="#{despesaMB.campoBusca}" style="width: 190px">
+                            <f:selectItems value="#{despesaMB.camposString}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Pesquisar por"/>
+                        <p:inputText value="#{despesaMB.valorBusca}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <comp:commandButton_consulta acao_butao="#{despesaMB.listar()}" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <p:dataTable id="tblDespesa" paginator="true" paginatorAlwaysVisible="false" rows="10" emptyMessage="Nenhuma despesa encontrado" var="item" value="#{despesaMB.listaDespesa}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Id"/>
+                    </f:facet>
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nome"/>
+                    </f:facet>
+                    <h:outputText value="#{item.nome}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Ações"/>
+                    </f:facet>
+                    <comp:commandButton_excluir acao_butao="#{despesaMB.excluir(item)}" classe="despesa"  form_to_update="@form:tblDespesa"  />
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialog">
+        <scgb:dialogSAF010503/>
+    </ui:define>
+</ui:composition>

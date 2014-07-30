@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/navegacao.js" />
+        <p:panel header="Consulta de Coras" styleClass="painelPadrao" id="panelGeral" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.cota_analitico'])}">
+            <p:blockUI block="panelGeral" widgetVar="bui" trigger="btnImpressao,btnConsulta">
+                <p:graphicImage value="/resources/imagens/carregar.gif"/>
+            </p:blockUI>
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Cotas"/>
+                <h:outputText value="Página - 050704" style="float: right;"/>
+            </f:facet>
+            <h:panelGrid width="100%">
+                <h:panelGrid columns="4">
+                    <h:panelGrid>
+                        <h:outputText value="Unidade Orçamentária"/>
+                        <p:selectOneMenu value="#{cotaMB.unidadeOrcamentaria}"  converter="#{indexConverter}"
+                                         style="width: 400px;">
+                            <f:selectItem itemValue="#{null}"  itemLabel="----------------- Selecione ---------------------"/>
+                            <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.orgao.id.id}#{orc.unidadeOrcamentariaPK.id} - #{orc.nome}" itemValue="#{orc}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Mês"/>
+                            <p:message for="solMesCompetencia"/>
+                        </h:panelGrid>
+                        <p:selectOneMenu id="solMesCompetencia" value="#{cotaMB.competencia}" style="width: 150px;">
+                            <f:selectItems value="#{cotaMB.listaMeses}" var="m" itemLabel="#{m}" itemValue="#{m}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+
+                    <h:panelGrid>
+                        <p:spacer width="15"/>
+                        <p:commandButton value="Pesquisar" action="#{cotaMB.consultaAnalitica()}" id="btnConsulta" update="tblSolicitacao" icon="ui-icon-search" />
+                    </h:panelGrid>
+                    <h:panelGrid id="imp">
+                        <p:spacer width="15"/>
+                        <p:commandButton action="#{cotaMB.impressaoCotaAnalitica()}" id="btnImpressao"  value="Imprimir" icon="ui-icon-print" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf')"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid width="100%" id="tblSolicitacao">
+                    <p:dataTable  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{cotaMB.cotaAnaliticoDtos}"
+                                  rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+
+                        <p:column style="width: 2%;">
+                            <f:facet name="header">
+
+                            </f:facet>
+                            <p:rowToggler id="x"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Categoria"/>
+                            </f:facet>
+                            <h:outputLabel value="#{item.cota.categoria.nome}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Despesa"/>
+                            </f:facet>
+                            <h:outputLabel value="#{item.cota.despesa.nome}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Valor"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cota.valor}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Saldo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.saldo}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:rowExpansion>
+                            <h:panelGrid frame="none">
+                                <p:dataTable  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma solicitação encontrada" var="sol" value="#{item.solicitacaoFinanceiras}"
+                                              rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Número"/>
+                                        </f:facet>
+                                        <h:outputLabel value="#{sol.id}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Data de Solicitação"/>
+                                        </f:facet>
+                                        <h:outputText value="#{sol.dataSolicitacao}">
+                                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Credor"/>
+                                        </f:facet>
+                                        <h:outputText value="#{sol.credor.pessoa.nome}"/>
+
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Valor"/>
+                                        </f:facet>
+                                        <h:outputText value="#{sol.valor}">
+                                            <f:convertNumber type="currency"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Situação"/>
+                                        </f:facet>
+                                        <h:outputText value="#{sol.situacaoSolicitacao}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+
+                        </p:rowExpansion>
+
+                    </p:dataTable>
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+</ui:composition>

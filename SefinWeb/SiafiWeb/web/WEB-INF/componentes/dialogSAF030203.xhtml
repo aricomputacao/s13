@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog header="Autorizar Pagamento de Liquidaçao" showEffect="Fade" modal="true"  resizable="false" width="400" widgetVar="autoriza">
+        <h:panelGrid>
+            <h:panelGrid style="width: 380px" styleClass="msgAtencao">
+                <h:outputText   value="Atenção esse processo não pode ser revertido!"/>
+            </h:panelGrid>
+            <h:form id="aut_form" >
+                <p:panel rendered="#{autorizarRpLiquidacaoMB.liquidacao != null}">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2"  width="100%">
+                            <p:commandButton value="Fechar" icon="ui-icon-circle-close"  oncomplete="autoriza.hide();" style="margin-right:  150px"/>
+                            <p:commandButton value="Autorizar" icon="ui-icon-circle-check" update=":frmGeral" oncomplete="autoriza.hide();" action="#{autorizarRpLiquidacaoMB.autorizarLiquidacao()}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+        </h:panelGrid>
+    </p:dialog>
+</ui:component>

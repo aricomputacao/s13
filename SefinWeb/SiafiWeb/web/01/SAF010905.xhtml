@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/maskMoney.js" />
+        <h:outputScript name="script/edtMoeda.js" />
+        <h:outputScript name="script/navegacao.js" />
+        <p:panel header="Autorizar Solicitação Financeira" id="painalAutorizar" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoIncluir(navegacao['solicitacao.financeira.autorizar'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Solicitações Pendentes"/>
+                <h:outputText value="Página - 010905" style="float: right;"/>
+            </f:facet>
+            <p:panel rendered="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.id == null}">
+                <h:panelGrid  width="100%">
+                    <h:panelGrid columns="6">
+                        <h:panelGrid>
+                            <h:outputLabel value="Unidade Orçamentária"/>
+                            <p:selectOneMenu value="#{autorizarSolicitacaoFinanceiraMB.unidadeOrcamentaria}" style="width: 400px" converter="#{indexConverter}">
+                                <f:selectItem itemValue="#{null}"  itemLabel="----------------- Selecione ---------------------"/>
+                                <f:selectItems value="#{autorizarSolicitacaoFinanceiraMB.listaUnidadeOrcamentarias}" var="u" itemLabel="#{u.unidadeOrcamentariaPK}-#{u.nome}" itemValue="#{u}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Código"/>
+                            <p:inputText value="#{autorizarSolicitacaoFinanceiraMB.valorBusca}" size="25"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid style="float: right;">
+                        <p:commandButton value="Listar" title="Listar" icon="ui-icon-search" action="#{autorizarSolicitacaoFinanceiraMB.listar()}" update="tblSolicitacao"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <p:panel rendered="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.id != null}" header="Autorizar Solicitação Financeira">
+                <h:panelGrid width="100%">
+                    <h:panelGrid columns="5">
+                        <h:panelGrid>
+                            <h:outputLabel value="Código"/>
+                            <p:inputText value="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.id}" readonly="true" size="12"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="Data de emissão"/>
+                            <p:inputText value="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.dataSolicitacao}"  readonly="true" size="15">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="Usuário"/>
+                            <p:inputText value="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.usuario.pessoa.nome}" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="Credor"/>
+                            <p:inputText value="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.credor.pessoa.nome}" size="45" readonly="true"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="5">
+                        <h:panelGrid>
+                            <h:outputLabel value="Categoria" title="Categoria"/>
+                            <p:inputText value="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.cota.categoria.nome}" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="Despesa" title="Despesa"/>
+                            <p:inputText readonly="true" size="45" value="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.cota.despesa.nome}"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="Situação"/>
+                            <p:inputText readonly="true" value="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.situacaoSolicitacao}"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="Valor solicitado"/>
+                            <p:inputText value="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.valor}" readonly="true">
+                                <f:convertNumber type="currency" currencySymbol="R$ "/>
+                            </p:inputText>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid width="100%">
+                        <h:outputText value="Objetivo"/>
+                        <p:inputTextarea readonly="true" style="width: 100%" cols="180" value="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.historico}"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="pnSituacao" width="100%">
+                        <p:panel rendered="#{autorizarSolicitacaoFinanceiraMB.situacao != 'Pendente'}">
+                            <f:facet name="header">
+                                <h:outputText value="Autorizar Solicitação Financeira" rendered="#{autorizarSolicitacaoFinanceiraMB.situacao == 'Aprovado'}"/>
+                                <h:outputText value="Negar Solicitação Financeira" rendered="#{autorizarSolicitacaoFinanceiraMB.situacao == 'Negado'}"/>
+                            </f:facet>
+                            <h:panelGrid rendered="#{autorizarSolicitacaoFinanceiraMB.situacao == 'Aprovado'}">
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Valor Autorizado"/>
+                                </h:panelGrid>
+                                <p:inputText autocomplete="off" onfocus="mascaraInputs();" converter="#{bigDecimalConverter}" converterMessage="Invalido" value="#{autorizarSolicitacaoFinanceiraMB.valorAutorizado}" styleClass="edtMoeda"/>
+                            </h:panelGrid>
+                            <h:panelGrid width="100%" rendered="#{autorizarSolicitacaoFinanceiraMB.situacao != 'Pendente' }">
+                                <h:outputText value="Justificativa"/>
+                                <p:inputTextarea style="width: 100%" value="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.justificativa}" cols="180"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="5" id="pnlBotoes">
+                        <p:commandButton value="Autorizar" title="Autorizar" update="painalAutorizar" icon="ui-icon-key" rendered="#{autorizarSolicitacaoFinanceiraMB.situacao == 'Pendente'}">
+                            <f:setPropertyActionListener value="Aprovado" target="#{autorizarSolicitacaoFinanceiraMB.situacao}"/>
+                            <f:setPropertyActionListener target="#{autorizarSolicitacaoFinanceiraMB.valorAutorizado}" value="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.valor}"/>
+                        </p:commandButton>
+                        <p:commandButton value="Confirmar" title="Confirmar" update="painalAutorizar" action="#{autorizarSolicitacaoFinanceiraMB.salvar()}" icon="ui-icon-check" rendered="#{autorizarSolicitacaoFinanceiraMB.situacao != 'Pendente'}"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Devolver" title="Não autorizar" update="painalAutorizar" icon="ui-icon-arrowrefresh-1-e" rendered="#{autorizarSolicitacaoFinanceiraMB.situacao == 'Pendente'}">
+                            <f:setPropertyActionListener value="Negado" target="#{autorizarSolicitacaoFinanceiraMB.situacao}"/>
+                        </p:commandButton>
+
+                        <p:commandButton value="Cancelar" title="cancelar ação atual" update="painalAutorizar" icon="ui-icon-circle-close" rendered="#{autorizarSolicitacaoFinanceiraMB.situacao != 'Pendente'}">
+                            <f:setPropertyActionListener value="Pendente" target="#{autorizarSolicitacaoFinanceiraMB.situacao}"/>
+                        </p:commandButton>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Cancelar" title="cancelar ação atual" action="#{autorizarSolicitacaoFinanceiraMB.novo()}" update="painalAutorizar" icon="ui-icon-circle-close" rendered="#{autorizarSolicitacaoFinanceiraMB.situacao == 'Pendente'}"/>
+
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <h:panelGrid width="100%" id="tblSolicitacao" rendered="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira.id == null}">
+                <p:dataTable  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{autorizarSolicitacaoFinanceiraMB.listaSolicitacaoFinanceiras}"
+                              rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                    <p:column style="width: 2%;">
+                        <p:rowToggler id="x"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Id"/>
+                        </f:facet>
+                        <h:outputLabel value="#{item.id}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Secretaria"/>
+                        </f:facet>
+                        <h:outputLabel value=" #{item.cota.unidadeOrcamentaria.unidadeOrcamentariaPK.idOrgao}#{item.cota.unidadeOrcamentaria.unidadeOrcamentariaPK.id} - #{item.cota.unidadeOrcamentaria.abreviacao}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Data "/>
+                        </f:facet>
+                        <h:outputText value="#{item.dataSolicitacao}">
+                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Valor"/>
+                        </f:facet>
+                        <h:outputText value="#{item.valor}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Credor"/>
+                        </f:facet>
+                        <h:outputText value="#{item.credor.pessoa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Ações">
+                        <p:commandButton icon="ui-icon-check" title="Selecionar" update=":frmGeral:painalAutorizar">
+                            <f:setPropertyActionListener value="#{item}" target="#{autorizarSolicitacaoFinanceiraMB.solicitacaoFinanceira}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:rowExpansion>
+                        <h:panelGrid frame="none">
+                            <h:outputText value="Categoria: #{item.cota.categoria.nome}"/>
+                            <h:outputText value="Despesa: #{item.cota.despesa.nome}"/>
+                            <h:outputText value="Vínculo: #{item.vinculo}"/>
+                            <h:outputText value="Competência: #{item.mesCompetencia.asNumero(item.mesCompetencia)}-#{item.anoCompetencia}"/>
+                            <p:inputTextarea value="Histórico: #{item.historico}" style="width: 100%;color: #000;" rows="3" readonly="true" autoResize="true" cols="180"/>
+                        </h:panelGrid>
+                    </p:rowExpansion>
+                </p:dataTable>
+            </h:panelGrid>
+        </p:panel>
+
+    </ui:define>
+</ui:composition>

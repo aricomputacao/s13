@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:composite="http://java.sun.com/jsf/composite"
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <composite:interface>
+        <composite:attribute name="var" required="true"  />
+        <composite:attribute name="header" required="true"/>
+        <composite:attribute name="width" default="900"/>
+
+
+
+
+    </composite:interface>
+    <composite:implementation>
+       
+            <p:dialog widgetVar="#{cc.attrs.var}" width="#{cc.attrs.width}"  showEffect="fade" modal="true" header="#{cc.attrs.header}"   position="top">
+                <composite:insertChildren/>
+            </p:dialog>
+       
+    </composite:implementation>
+</ui:composition>

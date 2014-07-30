@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel id="pnSis" header="Unidade Orçamentarias do usuário" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.usuario.unidade_orcamentaria'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Unidades Orçamentarias do usuário"/>
+                    <h:outputText value="Página - 030209" style="float: right;"/>
+                </f:facet>
+                <p:panel id="pnlDefiniUsuario">
+                    <h:panelGrid width="100%">
+                        <p:commandButton value="Selecionar Usuário" icon="ui-icon-person" update=":frmConsultaUsuario" onclick="consultaUsuario.show();"/>
+                        <h:panelGrid columns="4" width="100%">
+                            <h:panelGrid columns="2" >
+                                <h:outputText value="Documento:"/>
+                                <h:outputText value="#{usuarioUnidadeOrcamentariaMB.usuario.documento}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" >
+                                <h:outputText value="Usuario:"/>
+                                <h:outputText value="#{usuarioUnidadeOrcamentariaMB.usuario.pessoa.nome}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" >
+                                <h:outputText value="Email:"/>
+                                <h:outputText value="#{usuarioUnidadeOrcamentariaMB.usuario.pessoa.email}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel rendered="#{usuarioUnidadeOrcamentariaMB.usuario.documento != null}">
+                    <h:panelGrid width="100%">
+                        <h:panelGrid columns="2">
+                            <h:outputText value="Usuário:"/>
+                            <h:outputText value="#{usuarioUnidadeOrcamentariaMB.usuario.pessoa.nome}"/>
+                            <h:outputText value="Orgão:"/>
+                            <h:outputText value="#{usuarioUnidadeOrcamentariaMB.usuario.orgao.nome}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:panel>
+                <h:panelGrid width="100%" rendered="#{usuarioUnidadeOrcamentariaMB.usuario.documento != null}">
+                    <p:commandButton value="Salvar alterações" icon="ui-icon-disk" action="#{usuarioUnidadeOrcamentariaMB.atualizaUnidadesOrcamentarias()}" update="pnSis" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.usuario.unidade_orcamentaria'])}"/>
+                </h:panelGrid>
+                <p:dataTable id="tblUnidadesDisponiveis" scrollable="true" scrollHeight="200" emptyMessage="Não há unidades orçamentárias" rowKey="#{unidade}" var="unidade" value="#{usuarioUnidadeOrcamentariaMB.unidadeOrcamentariDataList}"
+                             selection="#{usuarioUnidadeOrcamentariaMB.usuario.unidadeOrcamentarias}" rendered="#{usuarioUnidadeOrcamentariaMB.usuario.documento != null}" rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                    <p:column selectionMode="multiple" headerText="Marcar Todos" width="8%">
+                    </p:column>
+                    <p:column headerText="Nome" sortBy="#{unidade}">
+                        <h:outputText value="#{unidade}"/>
+                    </p:column>
+                    <p:column headerText="Orgão" sortBy="#{unidade.orgao.id.id}">
+                        <h:outputText value="#{unidade.orgao.id.id}-#{unidade.orgao.nome}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <ui:include src="/WEB-INF/componentes/dialogConsultaUsuario.xhtml"/>
+    </ui:define>
+    <ui:define name="acaoUsuario">
+        <p:column headerText="Acão">
+            <p:commandButton action="#{usuarioUnidadeOrcamentariaMB.selecionaUsuario(u)}" update=":frm01:pnSis" icon="ui-icon-check" style="width: 20px;height: 20px;" oncomplete="consultaUsuario.hide();"/>
+        </p:column>
+    </ui:define>
+</ui:composition>

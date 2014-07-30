@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_pagamentos" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1691a819-09ec-4d7f-b148-e16bb88aec10">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="199"/>
+	<property name="ireport.y" value="0"/>
+	<style name="zebra">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean( $V{REPORT_COUNT}.intValue() % 2 == 0 )]]></conditionExpression>
+			<style forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Projetos\\SefinWeb\\SiafiWeb\\web\\WEB-INF\\relatorios\\sub_relatorios\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="relatorio" class="java.lang.String"/>
+	<parameter name="img" class="java.lang.String"/>
+	<parameter name="rodapeEmail" class="java.lang.String"/>
+	<parameter name="img1" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="documentoPagamento" class="java.lang.String">
+		<fieldDescription><![CDATA[documentoPagamento]]></fieldDescription>
+	</field>
+	<field name="valor" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[valor]]></fieldDescription>
+	</field>
+	<field name="conta" class="br.com.siafi.modelo.Conta">
+		<fieldDescription><![CDATA[conta]]></fieldDescription>
+	</field>
+	<field name="empenho" class="java.lang.String">
+		<fieldDescription><![CDATA[empenho]]></fieldDescription>
+	</field>
+	<field name="dataAutorizacao" class="java.util.Date">
+		<fieldDescription><![CDATA[dataAutorizacao]]></fieldDescription>
+	</field>
+	<field name="dataPagamento" class="java.util.Date">
+		<fieldDescription><![CDATA[dataPagamento]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="solicitacaoFinanceira" class="br.com.siafi.modelo.SolicitacaoFinanceira">
+		<fieldDescription><![CDATA[solicitacaoFinanceira]]></fieldDescription>
+	</field>
+	<variable name="totalPago" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{solicitacaoFinanceira}.getValor()]]></variableExpression>
+	</variable>
+	<variable name="valor_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<variable name="valor_2" class="java.math.BigDecimal" resetType="Group" resetGroup="UnidadeOrcamentaria" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<group name="UnidadeOrcamentaria" keepTogether="true">
+		<groupExpression><![CDATA[$F{solicitacaoFinanceira}.getCota().getUnidadeOrcamentaria()]]></groupExpression>
+		<groupHeader>
+			<band height="45">
+				<textField>
+					<reportElement uuid="ffd93aff-f937-4e1c-a029-beea5a984edb" x="193" y="5" width="609" height="20"/>
+					<box leftPadding="2">
+						<pen lineWidth="0.75"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{solicitacaoFinanceira}.getCota().getUnidadeOrcamentaria().getUnidadeOrcamentariaPK().toString()+" - "+ $F{solicitacaoFinanceira}.getCota().getUnidadeOrcamentaria().getNome()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="b967f559-c008-4b72-bc81-4d8f7a39f3c7" x="1" y="5" width="192" height="20"/>
+					<box leftPadding="2">
+						<pen lineWidth="0.75"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Unidade Orçamentária:]]></text>
+				</staticText>
+				<frame>
+					<reportElement uuid="de940083-1783-40d1-b7d1-8f37b3e4ed43" mode="Opaque" x="0" y="25" width="802" height="20" forecolor="#FFFFFF" backcolor="#FFFFFF"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#010101"/>
+						<topPen lineWidth="1.0" lineColor="#010101"/>
+						<leftPen lineWidth="1.0" lineColor="#010101"/>
+						<bottomPen lineWidth="1.0" lineColor="#010101"/>
+						<rightPen lineWidth="1.0" lineColor="#010101"/>
+					</box>
+					<staticText>
+						<reportElement uuid="59ad344e-712a-4fcc-9d1c-33d6efe525df" x="0" y="0" width="58" height="20"/>
+						<box leftPadding="3"/>
+						<textElement verticalAlignment="Middle">
+							<font size="11" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Número]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="fcc7df3b-6472-4f04-b9d4-eab5ba98515b" x="123" y="0" width="306" height="20"/>
+						<box leftPadding="3"/>
+						<textElement verticalAlignment="Middle">
+							<font size="11" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Credor]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="e5ce48ec-0d75-40c6-920b-99c163a7ae3b" x="58" y="0" width="65" height="20"/>
+						<box leftPadding="0"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font size="11" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Empenho]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="993ba2fd-6842-4a40-aeb4-2d97f0fbe894" x="429" y="0" width="104" height="20"/>
+						<box leftPadding="3"/>
+						<textElement verticalAlignment="Middle">
+							<font size="11" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Dt. Pagamento]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="ac736237-6d54-490e-b045-518116d96ae6" x="533" y="0" width="144" height="20"/>
+						<box leftPadding="3"/>
+						<textElement verticalAlignment="Middle">
+							<font size="11" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Nota]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="6dc0fd8a-7bda-44ee-a8c9-116909b15ff4" x="677" y="0" width="125" height="20"/>
+						<box rightPadding="3"/>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="11" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Pago]]></text>
+					</staticText>
+				</frame>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="25">
+				<staticText>
+					<reportElement uuid="14ce04a7-dc67-467c-a842-df25551171de" x="1" y="0" width="576" height="20"/>
+					<box rightPadding="2">
+						<pen lineWidth="0.75"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<text><![CDATA[Total:]]></text>
+				</staticText>
+				<textField pattern="¤ #,##0.00">
+					<reportElement uuid="bbd17dfd-2f0a-45b9-abed-eb35c57f6781" x="577" y="0" width="225" height="20"/>
+					<box rightPadding="2">
+						<pen lineWidth="0.75"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{valor_2}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="84808450-d9b2-4f96-8230-248dd2e9a825" x="0" y="0" width="802" height="50"/>
+				<subreportParameter name="img1">
+					<subreportParameterExpression><![CDATA[$P{img1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="img">
+					<subreportParameterExpression><![CDATA[$P{img}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="relatorio">
+					<subreportParameterExpression><![CDATA[$P{relatorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cabecalho_paisagem.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="a2790b2d-78ff-4c9b-91c7-2b0fec02bce1" style="zebra" x="0" y="0" width="802" height="15"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="fc1ff942-570f-4a70-a933-e10a6740e696" x="429" y="0" width="104" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataPagamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d3417606-6b65-4b8b-b9dd-330d9c8c61c7" x="0" y="0" width="58" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{solicitacaoFinanceira}.getId()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ec232084-0ae7-4e46-b33a-a0e54ab8dd68" x="123" y="0" width="306" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{solicitacaoFinanceira}.getCredor().getPessoa().getNome()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="40cdbc22-ee5c-4fff-bf2b-6dd391ca9812" x="58" y="0" width="65" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{solicitacaoFinanceira}.getEmpenho()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d0d823aa-424c-44c3-9d7a-b4f34cceb9e6" x="533" y="0" width="144" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{solicitacaoFinanceira}.getNotaFiscal()]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="c48fcc08-15d2-4c2b-abbf-d9e2fbfa22a8" x="677" y="0" width="125" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="55">
+			<subreport>
+				<reportElement uuid="70a9013e-26b3-4152-869a-e348e7ed9911" x="0" y="0" width="802" height="55"/>
+				<subreportParameter name="pg">
+					<subreportParameterExpression><![CDATA[$V{PAGE_NUMBER}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="rodapeEmail">
+					<subreportParameterExpression><![CDATA[$P{rodapeEmail}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rodape_paisa.jasper"]]></subreportExpression>
+			</subreport>
+			<textField evaluationTime="Report">
+				<reportElement uuid="bea4d97e-afa7-4028-b71f-1af80334a4ad" x="716" y="0" width="67" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<frame>
+				<reportElement uuid="39b3835b-d1f2-4b17-9dd7-44606a5bdd10" x="0" y="0" width="802" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement uuid="0a429e3b-961e-4a58-8957-931e221e13fe" x="322" y="0" width="255" height="20"/>
+					<box rightPadding="3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total Pago:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="70093dff-0df6-4dc6-8571-97ddbcb70b38" x="1" y="0" width="170" height="20"/>
+					<box leftPadding="2" rightPadding="0"/>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Quantidade de Processos:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="46580477-381e-49e9-a7c5-8ca8162b4f5a" x="171" y="0" width="151" height="20"/>
+					<box rightPadding="3"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0.00">
+					<reportElement uuid="553b7cba-cf5b-448f-aff6-9b4a4939d797" x="577" y="0" width="225" height="20"/>
+					<box rightPadding="2">
+						<pen lineWidth="0.75"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{valor_1}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</summary>
+</jasperReport>

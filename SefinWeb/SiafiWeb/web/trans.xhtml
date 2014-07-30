@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/templateConsulta.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo2" rendered="false" >
+        <h:outputScript name="script/navegacao.js" />
+
+        <p:blockUI block="pnlGeral" trigger="btnImpressao, btnListar">
+            <p:graphicImage value="/resources/imagens/carregar.gif"/>
+        </p:blockUI>
+
+        <p:panel id="pnlGeral" header="Consulta de Processos" styleClass="painelPadrao" >
+
+            <p:panel id="pnlLisSolicitacao">
+                <h:panelGrid width="100%" >
+
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:outputText value="Unidade Orçamentária"/>
+                            <p:selectOneMenu value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.cota.unidadeOrcamentaria}"  converter="#{indexConverter}"
+                                             style="width: 400px;">
+                                <f:selectItem itemValue="#{null}"  itemLabel="----------------- Selecione ---------------------"/>
+                                <f:selectItems value="#{solicitacaoFinanceiraMB.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.orgao.id.id}#{orc.unidadeOrcamentariaPK.id} - #{orc.nome}" itemValue="#{orc}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid >
+                            <h:panelGrid cellspacing="10" columns="3">
+                                <h:panelGrid >
+                                    <h:outputText  value="Data"/>
+                                    <p:selectBooleanCheckbox value="#{solicitacaoFinanceiraMB.filtroData}" immediate="true"  >
+                                        <p:ajax update="panelPesq" global="false" listener="#{solicitacaoFinanceiraMB.setFiltroData(filtroData)}"/>
+                                    </p:selectBooleanCheckbox>
+                                </h:panelGrid>
+
+                                <h:panelGrid>
+                                    <h:outputText value="Situação"/>
+                                    <p:selectBooleanCheckbox value="#{solicitacaoFinanceiraMB.filtroSituacao}" immediate="true"  >
+                                        <p:ajax update="panelPesq" global="false" listener="#{solicitacaoFinanceiraMB.setFiltroSituacao(filtroSituacao)}"/>
+                                    </p:selectBooleanCheckbox>
+                                </h:panelGrid>
+                                <h:panelGrid>
+                                    <h:outputText value="Número"/>
+                                    <p:selectBooleanCheckbox value="#{solicitacaoFinanceiraMB.filtroNumero}" immediate="true"  >
+                                        <p:ajax update="panelPesq" global="false" listener="#{solicitacaoFinanceiraMB.setFiltroNumero(filtroNumero)}"/>
+                                    </p:selectBooleanCheckbox>
+                                </h:panelGrid>
+                            </h:panelGrid>
+
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" id="panelPesq">
+
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Credor" title="Credor"/>
+                                <p:message for="solCred"/>
+                            </h:panelGrid>
+                            <p:commandButton global="false" immediate="true"  onclick="credBusca.show();" icon="ui-icon-circle-zoomout" title="Credor">
+                                <p:inputText id="solCred" readonly="true" size="53" required="true" requiredMessage="Informe credor" value="#{solicitacaoFinanceiraMB.credor.pessoa.nome}"/>
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Ordenar"/>
+                            <p:selectOneMenu value="#{solicitacaoFinanceiraMB.campoOrdem}" style="width: 200px">
+                                <f:selectItems value="#{solicitacaoFinanceiraMB.campos}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" rendered="#{solicitacaoFinanceiraMB.filtroSituacao}">
+                            <h:outputText value="Situação"/>
+                            <p:selectOneMenu value="#{solicitacaoFinanceiraMB.situacaoSolicitacao}" style="width: 125px;">
+                                <f:selectItems value="#{solicitacaoFinanceiraMB.situacoesSolicitacao}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" rendered="#{solicitacaoFinanceiraMB.filtroNumero}">
+                            <h:outputText value="Número"/>
+                            <p:inputText value="#{solicitacaoFinanceiraMB.numero}"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" rendered="#{solicitacaoFinanceiraMB.filtroData}">
+                            <h:outputText value="Inicio"/>
+                            <p:calendar showButtonPanel="true" effect="fade" navigator="true" value="#{solicitacaoFinanceiraMB.dataInicial}" pattern="dd/MM/yyyy"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" rendered="#{solicitacaoFinanceiraMB.filtroData}">
+                            <h:outputText value="Fim"/>
+                            <p:calendar showButtonPanel="true" effect="fade" navigator="true"  value="#{solicitacaoFinanceiraMB.dataFinal}" pattern="dd/MM/yyyy"/>
+                        </h:panelGrid>
+
+
+                    </h:panelGrid>
+                    <h:panelGrid columns="6" style="float: right">
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Listar" id="btnListar"  title="Listar" icon="ui-icon-search" action="#{solicitacaoFinanceiraMB.listarFiltros()}" update="tblSolicitacao,:frmGeral"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton id="btnImpressao" value="Imprimir" title="Imprimir relatório"  icon="ui-icon-print"  action="#{solicitacaoFinanceiraMB.impressao()}" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf')" />
+
+                    </h:panelGrid>
+                </h:panelGrid>
+
+            </p:panel>
+
+            <p:separator/>
+            <h:panelGrid width="100%" id="tblSolicitacao">
+
+                <p:dataTable  paginator="true" paginatorAlwaysVisible="false" rows="20"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{solicitacaoFinanceiraMB.lista}"
+                              rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+
+                    <p:column style="width: 2%;">
+                        <f:facet name="header">
+
+                        </f:facet>
+                        <p:rowToggler id="x"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Número"/>
+                        </f:facet>
+                        <h:outputLabel value="#{item.id}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Localização"/>
+                        </f:facet>
+                        <h:outputLabel value="#{item.local.nome}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nota Fiscal"/>
+                        </f:facet>
+                        <h:outputLabel value="#{item.notaFiscal}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Empenho"/>
+                        </f:facet>
+                        <h:outputLabel value="#{item.empenho}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Data de Solicitação"/>
+                        </f:facet>
+                        <h:outputText value="#{item.dataSolicitacao}">
+                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Valor"/>
+                        </f:facet>
+                        <h:outputText value="#{item.valor}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Situação"/>
+                        </f:facet>
+                        <h:outputText value="#{item.situacaoSolicitacao}"/>
+                    </p:column>
+                    <p:column headerText="Ações">
+                        <p:commandButton icon="ui-icon-info" disabled="#{solicitacaoFinanceiraMB.renderizarBtnLiquidacao(item)}"
+                                         update=":frmLiquidacoes"  action="#{solicitacaoFinanceiraMB.listarLiquidacoes()}"
+                                         oncomplete="listaLiqui.show();" title="Consultar pagamentos" >
+                            <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.solicitacaoFinanceira}" value="#{item}"/>
+                        </p:commandButton>
+                    </p:column>
+
+                    <p:rowExpansion>
+                        <h:panelGrid frame="none">
+                            <h:outputText value="Categoria: #{item.cota.categoria.nome}"/>
+                            <h:outputText value="Despesa: #{item.cota.despesa.nome}"/>
+                            <h:outputText value="Competência: #{item.mesCompetencia.asNumero(item.mesCompetencia)}#{item.anoCompetencia}"/>
+                            <h:outputText value="Credor: #{item.credor.pessoa.nome}"/>
+                            <h:outputLabel value="Data Autorização: ">
+                                <h:outputText value="#{item.dataAutorizacao}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                </h:outputText>
+                            </h:outputLabel>
+                            <h:outputText value="Histórico: #{item.historico}"/>
+                        </h:panelGrid>
+
+                    </p:rowExpansion>
+                </p:dataTable>
+            </h:panelGrid>
+        </p:panel>
+
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogSAF010505/>
+    </ui:define>
+
+</ui:composition>

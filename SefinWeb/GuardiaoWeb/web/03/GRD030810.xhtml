@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo">
+        <h:form id="frm01" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.usuario.gerenciar'])}">
+            <p:panel styleClass="painelPadrao">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Permissões dos Usuários"/>
+                    <h:outputText value="Página - 030810" style="float: right;"/>
+                </f:facet>
+                <p:panel id="pnlDefiniUsuario">
+                    <h:panelGrid width="100%">
+                        <p:commandButton value="Selecionar Usuário" icon="ui-icon-person" action="#{permissaoMB.sel(true)}" update=":frmConsultaUsuario" onclick="consultaUsuario.show();"/>
+                        <h:panelGrid columns="4" width="100%">
+                            <h:panelGrid columns="2" >
+                                <h:outputText value="Documento:"/>
+                                <h:outputText value="#{permissaoMB.usuario.documento}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" >
+                                <h:outputText value="Usuario:"/>
+                                <h:outputText value="#{permissaoMB.usuario.pessoa.nome}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="4" >
+                                <h:outputText value="Status:"/>
+                                <p:commandLink id="ativa" value="Ativo" update="pnlDefiniUsuario" rendered="#{permissaoMB.usuario.acesso and permissaoMB.usuario.documento != null}" style="font-weight: bold;" action="#{permissaoMB.desativarUsuario()}"/>
+                                <p:tooltip for="ativa" value="Click para desativar este usuario"/>
+                                <p:commandLink id="desativa" value="Inativo" update="pnlDefiniUsuario" rendered="#{not permissaoMB.usuario.acesso and permissaoMB.usuario.documento != null}" style="font-weight: bold;" action="#{permissaoMB.ativarUsuario()}"/>
+                                <p:tooltip for="desativa" value="Click para ativar este usuario"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" >
+                                <h:outputText value="Email:"/>
+                                <h:outputText value="#{permissaoMB.usuario.pessoa.email}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:panel>
+                <p:tabView id="tbv" styleClass="painelPadrao" activeIndex="#{permissaoMB.index}">
+                    <p:tab title="Sistema" rendered="#{permissaoMB.usuario.documento != null}">
+                        <p:panel id="pnSis">
+                            <h:panelGrid width="100%">
+                                <p:commandButton value="Incluir acesso" icon="ui-icon-circle-plus" action="#{permissaoMB.incluiAcessoSistemaUsuario()}" update="pnSis, sis"/>
+                            </h:panelGrid>
+                            <p:dataTable id="tblSistema" paginator="true" paginatorAlwaysVisible="false" rows="5"  emptyMessage="Não há sistemas cadastrados" rowKey="#{item.id}" var="item" value="#{permissaoMB.sistemaDataList}"
+                                         selection="#{permissaoMB.sistemas}" rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                                <p:column selectionMode="multiple" headerText="Marcar Todos" width="8%">
+                                </p:column>
+                                <p:column headerText="Id">
+                                    <h:outputText value="#{item.id}"/>
+                                </p:column>
+                                <p:column headerText="Nome">
+                                    <h:outputText value="#{item.nome}"/>
+                                </p:column>
+                                <p:column headerText="Mnemônico">
+                                    <h:outputText value="#{item.mnemonico}"/>
+                                </p:column>
+                                <p:column headerText="Sigla">
+                                    <h:outputText value="#{item.sigla}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab title="Permissões" id="tb3" rendered="#{permissaoMB.usuario.documento != null}">
+                        <p:fieldset legend="Sistema / Módulo" style="text-align: left;">
+                            <h:panelGrid columns="2">
+                                <h:panelGrid>
+                                    <h:outputLabel  value="Sistema"/>
+                                    <p:selectOneMenu id="sis" value="#{permissaoMB.sistema}" converter="#{indexConverter}" styleClass="listas" style="width: 250px;">
+                                        <f:selectItem itemLabel="-- Selecione --" itemValue="#{null}"/>
+                                        <f:selectItems value="#{permissaoMB.sistemas}" itemValue="#{sis}" itemLabel="#{sis.nome}" var="sis" />
+                                        <p:ajax event="change" listener="#{permissaoMB.atualizaModulos()}" update="modulo, permissaox"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <h:panelGrid id="modulos" >
+                                    <h:outputLabel  value="Módulo"/>
+                                    <p:selectOneMenu id="modulo" value="#{permissaoMB.modulo}" converter="#{indexConverter}" styleClass="listas" style="width: 250px;">
+                                        <f:selectItem itemLabel="-- Selecione --" itemValue="#{null}"/>
+                                        <f:selectItems value="#{permissaoMB.modulos}" itemValue="#{m}" itemLabel="#{m.nome}" var="m" />
+                                        <p:ajax event="change" listener="#{permissaoMB.atualizaTarefas()}" update="tblTarefas, permissaox" />
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:fieldset>
+                        <p:fieldset legend="Permissão" id="permissaox" style="text-align: left;">
+                            <p:panel>
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="Tarefa: "/>
+                                    <h:outputText value="#{permissaoMB.permissaoSel.tarefa.nome}" style="font-weight: bolder;"/>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:panel id="edtPermissao">
+                                <h:panelGrid columns="4" rendered="#{permissaoMB.existePermissao()}">
+                                    <h:panelGrid columns="2">
+                                        <h:outputText value="Incluir: "/>
+                                        <p:selectBooleanCheckbox value="#{permissaoMB.permissaoSel.incluir}"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2">
+                                        <h:outputText value="Consultar: "/>
+                                        <p:selectBooleanCheckbox value="#{permissaoMB.permissaoSel.consultar}"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2">
+                                        <h:outputText value="Editar: "/>
+                                        <p:selectBooleanCheckbox value="#{permissaoMB.permissaoSel.editar}"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2">
+                                        <h:outputText value="Excluir: "/>
+                                        <p:selectBooleanCheckbox value="#{permissaoMB.permissaoSel.excluir}"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </p:panel>
+                            <h:panelGrid columns="4">
+                                <p:commandButton value="Salvar" icon="ui-icon-disk" rendered="#{permissaoMB.existePermissao()}" action="#{permissaoMB.salvaPermissao()}" update="tblPermissoes" style="width: 150px;"/>
+                                <p:spacer width="100" height="10"/>
+                                <p:commandButton value="Selecionar todos" action="#{permissaoMB.marcarTodos()}" icon="ui-icon-plus" update="edtPermissao" rendered="#{permissaoMB.existePermissao()}"/>
+                                <p:commandButton value="Des-selecionar todos" action="#{permissaoMB.desMarcarTodos()}" icon="ui-icon-minus" update="edtPermissao" rendered="#{permissaoMB.existePermissao()}"/>
+                            </h:panelGrid>
+                        </p:fieldset>
+
+                        <p:dataTable id="tblTarefas" rowKey="#{item1}" scrollHeight="200" scrollable="true" emptyMessage="Não há tarefas cadastradas" var="item1" value="#{permissaoMB.tarefas}"
+                                     selection="#{permissaoMB.tarefa}" selectionMode="single" rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                            <p:ajax event="rowSelect" listener="#{permissaoMB.selecionaPermissaoTarefa}"  update=":frm01:tbv:permissaox">
+                                <f:setPropertyActionListener value="#{item1}" target="#{permissaoMB.tarefa}"/>
+                            </p:ajax>
+                            <p:column headerText="Mnemônico" filterBy="#{item1.mnemonico}">
+                                <h:outputText value="#{item1.mnemonico}"/>
+                            </p:column>
+                            <p:column headerText="Nome" filterBy="#{item1.nome}">
+                                <h:outputText value="#{item1.nome}" />
+                            </p:column>
+                            <p:column headerText="Descrição" filterBy="#{item1.descricao}">
+                                <h:outputText value="#{item1.descricao}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="Permissões Concedidas" id="tbv1" rendered="#{permissaoMB.usuario.documento != null}">
+                        <p:dataTable id="tblPermissoes" scrollable="true" scrollHeight="400" rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" emptyMessage="Não há tarefas cadastradas" var="itemb" value="#{permissaoMB.permissoes}">
+                            <p:column headerText="Sistema / Módulo" sortBy="#{itemb.tarefa.modulo.sistema.nome}#{itemb.tarefa.modulo.nome}">
+                                <h:outputText value="#{itemb.tarefa.modulo.sistema.nome}"/>
+                                <h:outputText value=" / "/>
+                                <h:outputText value="#{itemb.tarefa.modulo.nome}"/>
+                            </p:column>
+                            <p:column headerText="ID" sortBy="#{itemb.id}">
+                                <h:outputText value="#{itemb.id}"/>
+                            </p:column>
+                            <p:column headerText="Mnemônico" sortBy="#{itemb.tarefa.mnemonico}">
+                                <h:outputText value="#{itemb.tarefa.mnemonico}"/>
+                            </p:column>
+                            <p:column headerText="Tarefa" sortBy="#{itemb.tarefa.nome}">
+                                <h:outputText value="#{itemb.tarefa.nome}" id="tar"/>
+                                <p:tooltip for="tar" value="Descrição:#{itemb.tarefa.descricao}"/>
+                            </p:column>
+                            <p:column headerText="Incluir">
+                                <p:selectBooleanCheckbox value="#{itemb.incluir}" disabled="true"/>
+                            </p:column>
+                            <p:column headerText="Consultar">
+                                <p:selectBooleanCheckbox value="#{itemb.consultar}" disabled="true"/>
+                            </p:column>
+                            <p:column headerText="Editar" >
+                                <p:selectBooleanCheckbox value="#{itemb.editar}" disabled="true"/>
+                            </p:column>
+                            <p:column headerText="Excluir" >
+                                <p:selectBooleanCheckbox value="#{itemb.excluir}" disabled="true"/>
+                            </p:column>
+                            <p:column headerText="Ação">
+                                <p:commandButton icon="ui-icon-pencil" style="width: 20px;height: 20px;" onclick="edPermissao.show();" update=":frm01:tbv:edPermissao">
+                                    <f:setPropertyActionListener value="#{itemb}" target="#{permissaoMB.permissaoSel}"/>
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-close" style="width: 20px;height: 20px;" styleClass="mine-botao" onclick="exPermissao.show();">
+                                    <f:setPropertyActionListener value="#{itemb}" target="#{permissaoMB.permissaoSel}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                        <p:dialog widgetVar="edPermissao" showEffect="Fade" header="Editar Permissão" width="400" >
+                            <p:panel id="edPermissao" >
+                                <p:panel rendered="#{permissaoMB.index == 3}">
+                                    <h:outputText value="Tarefa: "/>
+                                    <h:outputText value="#{permissaoMB.permissaoSel.tarefa.nome}"/>
+                                </p:panel>
+                                <h:panelGrid width="100%" columns="2" rendered="#{permissaoMB.index == 3}">
+                                    <h:outputText value="Incluir"/>
+                                    <p:selectBooleanCheckbox value="#{permissaoMB.permissaoSel.incluir}"/>
+                                    <h:outputText value="Consultar"/>
+                                    <p:selectBooleanCheckbox value="#{permissaoMB.permissaoSel.consultar}"/>
+                                    <h:outputText value="Editar"/>
+                                    <p:selectBooleanCheckbox value="#{permissaoMB.permissaoSel.editar}"/>
+                                    <h:outputText value="Excluir"/>
+                                    <p:selectBooleanCheckbox value="#{permissaoMB.permissaoSel.excluir}"/>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:commandButton value="Salvar" icon="ui-icon-disk" action="#{permissaoMB.salvaPermissao()}" oncomplete="edPermissao.hide();" update="tblPermissoes"/>
+                        </p:dialog>
+                        <p:dialog widgetVar="exPermissao" showEffect="Fade" header="Excluir Permissão">
+                            <p:panel>
+                                <h:outputText value="Deseja excluir essa permissão?" />
+                                <h:panelGrid columns="3">
+                                    <p:commandButton value="Sim" style="width: 100px;" icon="ui-icon-check" action="#{permissaoMB.excluirPermissao()}" update="tblPermissoes" oncomplete="exPermissao.hide();" />
+                                    <p:spacer width="25" height="25"/>
+                                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" style="width: 100px;" onclick="exPermissao.hide();"/>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:dialog>
+                    </p:tab>
+
+                    <p:tab title="Clonagem de acessos" id="tbv2" rendered="#{permissaoMB.usuario.documento != null}">
+                        <p:panel id="pnCl" styleClass="painelPadrao">
+                            <p:panel header="Clonagem de acessos" styleClass="painelPadrao" rendered="#{empty permissaoMB.usoClonePermissoes}">
+                                <h:panelGrid  width="100%" >
+                                    <p:commandButton value="Selecionar Usuário Clone" icon="ui-icon-person" action="#{permissaoMB.sel(false)}" update=":frmConsultaUsuario" onclick="consultaUsuario.show();"/>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:panel header="Permissões a ser clonadas" rendered="#{not empty permissaoMB.usoClonePermissoes}">
+                                <h:panelGrid columns="2" width="100%">
+                                    <p:panel style="height: 60px">
+                                        <h:panelGrid columns="2">
+                                            <h:outputText value="Matrícula: "/>
+                                            <h:outputText value="#{permissaoMB.usuClone.documento}"/>
+                                            <h:outputText value="Nome: "/>
+                                            <h:outputText value="#{permissaoMB.usuClone.pessoa.nome}"/>
+                                        </h:panelGrid>
+                                    </p:panel>
+                                    <p:panel style="height: 60px">
+                                        <p:commandButton value="Continuar" icon="ui-icon-check" oncomplete="alerta.show();" update="pnlAlertaClone"/>
+                                        <p:spacer width="50" height="5"/>
+                                        <p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{permissaoMB.cancelarClonagem()}" update=":frm01:tbv:pnCl"/>
+                                    </p:panel>
+                                </h:panelGrid>
+
+                                <p:dataTable scrollHeight="250" scrollable="true" emptyMessage="Não há permissões cadastradas para este usuário." var="itemb" value="#{permissaoMB.usoClonePermissoes}"
+                                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                                    <f:facet name="header">
+                                        <h:outputText value="Permissões do Usuário #{permissaoMB.usuClone.pessoa.nome}"/>
+                                    </f:facet>
+                                    <p:column headerText="Sistema / Módulo">
+                                        <h:outputText value="#{itemb.tarefa.modulo.sistema.nome}"/>
+                                        <h:outputText value=" / "/>
+                                        <h:outputText value="#{itemb.tarefa.modulo.nome}"/>
+                                    </p:column>
+                                    <p:column headerText="Tarefa">
+                                        <h:outputText value="#{itemb.tarefa.nome}" id="tare"/>
+                                    </p:column>
+                                    <p:column headerText="Incluir">
+                                        <p:selectBooleanCheckbox value="#{itemb.incluir}" disabled="true"/>
+                                    </p:column>
+                                    <p:column headerText="Consultar">
+                                        <p:selectBooleanCheckbox value="#{itemb.consultar}" disabled="true"/>
+                                    </p:column>
+                                    <p:column headerText="Editar">
+                                        <p:selectBooleanCheckbox value="#{itemb.editar}" disabled="true"/>
+                                    </p:column>
+                                    <p:column headerText="Editar">
+                                        <p:selectBooleanCheckbox value="#{itemb.excluir}" disabled="true"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+                            <p:dialog header="Alerta" widgetVar="alerta" showEffect="Fade">
+                                <p:panel id="pnlAlertaClone">
+                                    <h:panelGrid style="text-align: center;">
+                                        <h:outputText value="Essa operação irá apagar todos os "/>
+                                        <h:outputText value="acessos do usuário #{permissaoMB.usuario.pessoa.nome}"/>
+                                        <h:outputText value="e redefinir com os acessos do usuário #{permissaoMB.usuClone.pessoa.nome}"/>
+                                        <h:outputText value="Deseja Continuar?"/>
+                                    </h:panelGrid>
+                                </p:panel>
+                                <p:panel>
+                                    <p:commandButton style="width: 100px;" icon="ui-icon-disk" value="Sim" onclick="alerta.hide();" oncomplete="confirma.show();" />
+                                    <p:spacer width="50" height="5"/>
+                                    <p:commandButton value="Não" onclick="alerta.hide();" icon="ui-icon-cancel" style="width: 100px;"/>
+                                </p:panel>
+                            </p:dialog>
+                            <p:dialog header="Confirma" widgetVar="confirma" showEffect="Fade">
+                                <p:panel>
+                                    <h:panelGrid style="text-align: center;">
+                                        <h:outputText value="Confirmar alteração?" />
+                                    </h:panelGrid>
+                                </p:panel>
+                                <p:panel>
+                                    <p:commandButton style="width: 100px;" icon="ui-icon-disk" value="Sim" action="#{permissaoMB.clonarPermissoes()}" immediate="true" update=":frm01" oncomplete="confirma.hide();"/>
+                                    <p:spacer width="50" height="5"/>
+                                    <p:commandButton value="Não" onclick="confirma.hide();" icon="ui-icon-cancel" style="width: 100px;"/>
+                                </p:panel>
+                            </p:dialog>
+                        </p:panel>
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+        </h:form>
+        <ui:include src="/WEB-INF/componentes/dialogConsultaUsuario.xhtml"/>
+    </ui:define>
+    <ui:define name="acaoUsuario">
+        <p:column headerText="Acão">
+            <p:commandButton action="#{permissaoMB.selecionaUsuario(u)}" update=":frm01" ajax="false" icon="ui-icon-check" style="width: 20px;height: 20px;" oncomplete="consultaUsuario.hide();" rendered="#{permissaoMB.sel()}"/>
+            <p:commandButton action="#{permissaoMB.selecionaUsoClone(u)}" update=":frm01" icon="ui-icon-check" style="width: 20px;height: 20px;" oncomplete="consultaUsuario.hide();" rendered="#{not permissaoMB.sel()}"/>
+        </p:column>
+    </ui:define>
+</ui:composition>

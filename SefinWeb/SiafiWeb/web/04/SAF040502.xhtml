@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo" >
+        <p:panel header="Listagem de Sub Funções" styleClass="painelPadrao" id="pnlGeral" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.sub_funcao'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Sub Funções"/>
+                <h:outputText value="Página - 040502" style="float: right;"/>
+            </f:facet>
+            <p:blockUI block="pnlGeral" trigger="btnListar"  >
+                <p:graphicImage value="/resources/imagens/carregar.gif"/>
+            </p:blockUI>
+            <p:panel>
+                <h:panelGrid columns="6">
+                    <h:panelGrid>
+                        <h:outputText value="Ordenar"/>
+                        <p:selectOneMenu value="#{subFuncaoMB.campoOrdem}" style="width: 190px">
+                            <f:selectItems value="#{subFuncaoMB.campos}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Campo"/>
+                        <p:selectOneMenu value="#{subFuncaoMB.campoBusca}" style="width: 190px">
+                            <f:selectItems value="#{subFuncaoMB.camposString}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Pesquisar por"/>
+                        <p:inputText value="#{subFuncaoMB.valorBusca}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Listar" title="Listar" id="btnListar" icon="ui-icon-search" action="#{subFuncaoMB.listar()}" update="tblProjeAtiv"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+            </p:panel>
+            <p:dataTable id="tblProjeAtiv" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma função encontrada" var="item" value="#{subFuncaoMB.listaSubfuncaos}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                <p:column headerText="Id">
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+                <p:column headerText="Nome">
+                    <h:outputText value="#{item.nome}"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </ui:define>
+</ui:composition>

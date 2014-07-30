@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/maskMoney.js" />
+        <h:outputScript name="script/edtMoeda.js" />
+        <h:outputScript name="script/sonumero.js" />
+        <p:panel styleClass="painelPadrao" id="pnlGeral" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.cadastro.convenio'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Cadastro de convênios"/>
+                <h:outputText value="Página - 020810" style="float: right;"/>
+            </f:facet>
+            <h:panelGrid width="100%">
+                <h:panelGrid columns="3">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Unidade Orçamentária"/>
+                            <p:message for="solUnidade"/>
+                        </h:panelGrid>
+                        <p:selectOneMenu id="solUnidade" value="#{convenioMB.convenio.unidadeOrcamentaria}"
+                                         converter="#{indexConverter}" style="width: 350px;" required="true" requiredMessage="Informe a unidade Orçamentaria.">
+                            <f:selectItem itemLabel=" -- Selecione -- "/>
+                            <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="i" itemLabel="#{i.orgao.id.id}#{i.unidadeOrcamentariaPK.id} - #{i.nome}"  itemValue="#{i}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+                    <h:panelGrid>
+                        <h:outputText value="Data de Início"/>
+                        <p:calendar value="#{convenioMB.convenio.dataInicio}" style="width: 200px;" navigator="true" required="true" requiredMessage="Informe a data de Início"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="3">
+                    <h:panelGrid id="solCred">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Credor" title="Credor"/>
+                            <p:message for="solCred"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:inputText  style="width: 350px;" readonly="true" required="true" requiredMessage="Informe credor" value="#{convenioMB.convenio.credor.pessoa.nome}"/>
+                            <p:commandButton immediate="true" onclick="credorBusca.show();" icon="ui-icon-circle-zoomout" title="Credor"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid >
+                        <h:outputText value="Número"/>
+                        <p:inputText value="#{convenioMB.convenio.numero}" style="width: 200px;" required="true" requiredMessage="Informe o número do convênio!"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid width="100%">
+                    <h:outputText value="Objetivo"/>
+                    <p:inputTextarea style="width: 100%" value="#{convenioMB.convenio.objetivo}" maxlength="1024" required="true" requiredMessage="Informe o objetivo do convênio"/>
+                </h:panelGrid>
+                <h:panelGrid columns="5">
+                    <p:commandButton icon="ui-icon-disk" action="#{convenioMB.salvar()}" value="Salvar" update="pnlGeral" rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.cadastro.convenio'])}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton icon="ui-icon-plus" action="#{convenioMB.novo()}" value="Novo" update="pnlGeral" rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.cadastro.convenio'])}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton icon="ui-icon-search" value="Listagem" action="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.listar.convenio'])}" rendered="#{usuarioMB.permissaoEditar(navegacao['licitacao.listar.convenio'])}" immediate="true"/>
+                </h:panelGrid>
+
+                <p:panel rendered="#{convenioMB.convenio.id != null}" header="Aditivos" style="text-align: center;">
+                    <h:panelGrid columns="2">
+                        <p:commandButton icon="ui-icon-plus" value="Incluir Aditivo" update=":faditivo" onclick="addAditivo.show();" action="#{convenioMB.novoAditivo()}" rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.cadastro.convenio'])}"/>
+                    </h:panelGrid>
+                    <p:dataTable value="#{convenioMB.aditivoConvenioList}" emptyMessage="Nenhum aditivo cadastrado." id="tabelaAditivos" var="a" paginator="true" paginatorAlwaysVisible="false"
+                                 rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                        <p:column headerText="Número">
+                            <h:outputText value="#{a.numero}"/>
+                        </p:column>
+                        <p:column headerText="Data de Cadastro">
+                            <h:outputText value="#{a.dataCadastro}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Data de validade">
+                            <h:outputText value="#{a.dataFinal}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Valor ">
+                            <h:outputText value="#{a.valorRepasse}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Ação">
+                            <p:commandButton title="Editar" icon="ui-icon-pencil" onclick="addAditivo.show();" update=":faditivo" rendered="#{convenioMB.isEditarAditivo(a)}">
+                                <f:setPropertyActionListener value="#{a}" target="#{convenioMB.aditivoConvenio}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </h:panelGrid>
+
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogSAF020810/>
+        <scgb:dialogConsultaCredor/>
+
+    </ui:define>
+    <ui:define name="acaoCredor">
+        <p:column headerText="">
+            <p:commandButton style="width: 20px; height: 20px;" icon="ui-icon-check" immediate="true" oncomplete="credorBusca.hide();" update=":frmGeral:solCred">
+                <f:setPropertyActionListener value="#{cred}" target="#{convenioMB.convenio.credor}"/>
+            </p:commandButton>
+        </p:column>
+    </ui:define>
+</ui:composition>

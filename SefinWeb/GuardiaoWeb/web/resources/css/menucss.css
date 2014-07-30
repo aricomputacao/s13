@@ -1,0 +1,25 @@
+/*
+    Document   : menucss
+    Created on : 21/03/2013, 09:25:57
+    Author     : Gilmário
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.conteiner1{
+    float: left;
+}
+
+.conteiner2{
+    float: left;
+    min-width: 620px;
+    min-height: 400px;
+    width: 70%;
+}
+
+.menuPrincipal{
+
+    min-width: 210px;
+    min-height: 350px;
+    width: 100%;
+}

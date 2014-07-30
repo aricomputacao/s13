@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel id="pnlSis" header="Cadastro de Cargo" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.cargo'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Cadastro de Cargo"/>
+                    <h:outputText value="Página - 010407" style="float: right;"/>
+                </f:facet>
+                <p:focus/>
+                <h:panelGrid width="100%">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="nomeCar" value="Nome"/>
+                            <p:message for="nomeCar" id="msgCarNome"/>
+                        </h:panelGrid>
+                        <p:inputText id="nomeCar" size="50" value="#{cargoMB.cargoSelecionado.nome}" required="true" requiredMessage="Preencher campo nome!"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellspacing="10" cellpadding="10">
+                    <p:commandButton icon="ui-icon-disk" action="#{cargoMB.salvar()}" value="Salvar" update="pnlSis" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.cargo'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.cargo'])}" value="Listar" immediate="true" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.cargo'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" type="reset" ajax="false" value="Limpar"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

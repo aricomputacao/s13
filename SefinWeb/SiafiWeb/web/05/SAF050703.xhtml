@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo">
+        <h:outputScript name="script/navegacao.js" />
+        <p:panel styleClass="painelPadrao" id="panelGeral" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.cota'])}">
+            <p:blockUI block="panelGeral" widgetVar="bui" trigger="btnImpressao,btnConsulta">
+                <p:graphicImage value="/resources/imagens/carregar.gif"/>
+            </p:blockUI>
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Consulta de Cotas Sintético"/>
+                <h:outputText value="Página - 050703" style="float: right;"/>
+            </f:facet>
+            <h:panelGrid width="100%">
+                <h:panelGrid columns="4">
+                    <h:panelGrid>
+                        <h:outputText value="Unidade Orçamentária"/>
+                        <p:selectOneMenu value="#{relatorioCotaMB.unidadeOrcamentaria}"  converter="#{indexConverter}" style="width: 400px;">
+                            <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.orgao.id.id}#{orc.unidadeOrcamentariaPK.id} - #{orc.nome}" itemValue="#{orc}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Categoria"/>
+                        </h:panelGrid>
+                        <p:selectOneMenu id="categoria" value="#{relatorioCotaMB.categoria}" style="width: 300px;" converter="#{indexConverter}">
+                            <f:selectItem itemValue="#{null}" itemLabel="-- Todos --"/>
+                            <f:selectItems value="#{relatorioCotaMB.categoriasList}" var="m" itemLabel="#{m.nome}" itemValue="#{m}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="15"/>
+                        <p:commandButton value="Pesquisar" action="#{relatorioCotaMB.listar()}" id="btnConsulta" update="tblCota" icon="ui-icon-search" />
+                    </h:panelGrid>
+                    <h:panelGrid id="imp">
+                        <p:spacer width="15"/>
+                        <p:commandButton action="#{relatorioCotaMB.impressao()}" id="btnImpressao"  value="Imprimir" icon="ui-icon-print" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf')"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid width="100%" id="tblCota">
+                    <p:dataTable paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{relatorioCotaMB.cotasList}"
+                                 rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+                        <p:column headerText="Unidade Orçamentaria">
+                            <h:outputLabel value="#{item.unidadeOrcamentaria.abreviacao}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Categoria"/>
+                            </f:facet>
+                            <h:outputLabel value="#{item.categoria.nome}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Despesa"/>
+                            </f:facet>
+                            <h:outputLabel value="#{item.despesa.nome}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Valor"/>
+                            </f:facet>
+                            <h:outputText value="#{item.valor}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+</ui:composition>

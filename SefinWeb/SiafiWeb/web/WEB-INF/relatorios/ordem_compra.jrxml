@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ordem_compra" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="50efeff6-c1e3-4be6-a7f5-5ee8e0bec387">
+	<property name="ireport.zoom" value="2.5937424601000028"/>
+	<property name="ireport.x" value="514"/>
+	<property name="ireport.y" value="233"/>
+	<style name="zebrado">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean( $V{REPORT_COUNT}.intValue() % 2 == 0 )]]></conditionExpression>
+			<style forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Projetos\\SefinWeb\\SiafiWeb\\web\\WEB-INF\\relatorios\\sub_relatorios\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="credor" class="java.lang.Object"/>
+	<parameter name="ordem" class="java.lang.Object"/>
+	<parameter name="relatorio" class="java.lang.String"/>
+	<parameter name="img" class="java.lang.String"/>
+	<parameter name="rodapeEmail" class="java.lang.String"/>
+	<parameter name="img1" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="itemLicitacao" class="br.com.siafi.modelo.ItemLicitacao">
+		<fieldDescription><![CDATA[itemLicitacao]]></fieldDescription>
+	</field>
+	<field name="itemOrdemCompraPk" class="br.com.siafi.modelo.ItemOrdemCompraPk">
+		<fieldDescription><![CDATA[itemOrdemCompraPk]]></fieldDescription>
+	</field>
+	<field name="ordemCompra" class="br.com.siafi.modelo.OrdemCompra">
+		<fieldDescription><![CDATA[ordemCompra]]></fieldDescription>
+	</field>
+	<field name="quantidade" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[quantidade]]></fieldDescription>
+	</field>
+	<field name="valorUnitario" class="java.math.BigDecimal"/>
+	<variable name="totalItem" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{quantidade}*$F{valorUnitario}]]></variableExpression>
+	</variable>
+	<variable name="totalSumItens" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$V{totalItem}]]></variableExpression>
+	</variable>
+	<title>
+		<band height="70" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="907f4f91-4e4b-4bf9-8256-a4d8c205d7b3" x="0" y="0" width="555" height="70"/>
+				<subreportParameter name="img1">
+					<subreportParameterExpression><![CDATA[$P{img1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="img">
+					<subreportParameterExpression><![CDATA[$P{img}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="relatorio">
+					<subreportParameterExpression><![CDATA[$P{relatorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cabecalho_retrato.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="81">
+			<staticText>
+				<reportElement uuid="783b58f4-bba5-4a97-a6ba-0ddcb4ee4eca" x="0" y="0" width="74" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Credor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="a78996f9-72c0-4b2a-8edf-05bc34c5d05e" x="74" y="0" width="295" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[""+$P{ordem}.getCredor().getPessoa().getNome()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3302b746-eb54-4dca-a400-216551b22a53" x="369" y="20" width="60" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[CPF\CNPJ:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement uuid="d1a2a4e6-ad89-46d7-880d-e0927f780930" x="429" y="20" width="126" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[br.com.guardiao.modelo.Util.formatarDocumento($P{ordem}.getCredor().getDocumento())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0c7ccbfe-763e-440d-a682-7a8f96676b5d" x="369" y="0" width="60" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Número:]]></text>
+			</staticText>
+			<textField pattern="(99)9999-9999">
+				<reportElement uuid="a9677896-35e2-4037-9ecc-87a5bfb37f54" x="429" y="40" width="126" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[""+$P{ordem}.getCredor().getPessoa().getTelefone()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="748cd96d-17da-44b9-817c-baf2d82913b6" x="0" y="20" width="74" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Secretaria:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8886c394-c058-412f-a707-1b3a9189732a" x="74" y="20" width="295" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[""+$P{ordem}.getUnidadeOrcamentaria().getAbreviacao()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0b9a3593-174f-4cb7-ac2d-c43339f54b53" x="0" y="40" width="74" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Licitação:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="70a1fd1a-1a12-457b-ad4a-def405129623" x="74" y="40" width="295" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[""+$P{ordem}.getLicitacao().getNumero()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a8bb4656-9374-4e67-8a82-27ebd4ae8de8" x="429" y="0" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$P{ordem}.getId()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b964bbac-1085-419d-a9a5-1a4c074beb7f" x="369" y="40" width="60" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Fone:]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="a7f50800-a496-41ed-9b73-a1e147a4c38c" x="0" y="0" width="555" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="951354ed-dc2e-4bb3-9d76-c4fb496fcec1" x="0" y="60" width="74" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Situação:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="5f3942e0-f681-497e-a237-5858e5f99630" x="74" y="60" width="295" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[""+$P{ordem}.getStatus()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="2d379545-d0f8-4f59-8a87-c64d052f14ea" x="0" y="80" width="555" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="9fffac24-2497-4c82-bc5a-3422d686ab81" x="369" y="60" width="60" height="21"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Contrato:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="67f0a7ec-b1b5-470d-b6dd-81e6ca1059a2" x="429" y="60" width="126" height="21"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ordemCompra}.getContrato().getNumero()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<frame>
+				<reportElement uuid="95ac5dc4-fe42-4fd6-8022-992755c0513f" mode="Opaque" x="0" y="0" width="555" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+				</box>
+				<staticText>
+					<reportElement uuid="0ee1a57e-d4e7-4943-843d-54fc494b5af4" x="91" y="0" width="228" height="20"/>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Descrição]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="02401e27-72d9-49c3-ab49-53103b67251c" x="43" y="0" width="48" height="20"/>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Und.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="8968704f-87f2-46a3-b0e9-70ea1a1543e0" x="0" y="0" width="43" height="20"/>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Id]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="1a18a136-5916-43e2-8b0c-9f8bb4c2e0ac" x="378" y="0" width="84" height="20"/>
+					<box rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Valor Uni.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="c7d317e0-7130-4b6c-a213-618e7cab9e44" x="319" y="0" width="59" height="20"/>
+					<box rightPadding="3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Qtd.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="32fe91fd-6d6d-4a15-818f-9ddb21008dc2" x="462" y="0" width="93" height="20"/>
+					<box rightPadding="3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total]]></text>
+				</staticText>
+			</frame>
+			<line>
+				<reportElement uuid="068f5dee-b5be-4a52-8ae2-480fc9f1bfb3" x="0" y="19" width="555" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="ea273e5b-a668-430f-858b-5a87c0d32f0e" style="zebrado" x="0" y="0" width="555" height="15"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Dashed"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="8094ddb2-849e-4264-acf3-09b7e8256f36" x="0" y="0" width="43" height="15"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{itemLicitacao}.getItem().getId()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8a7d1131-235f-4926-992c-28ea0239e4bd" x="43" y="0" width="48" height="15"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{itemLicitacao}.getItem().getUnidadeMedida().getAbreviacao()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="cbf23b94-879b-4a3a-ac81-eda1ac471bca" x="91" y="0" width="228" height="15"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{itemLicitacao}.getItem().getNome()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bc034311-5983-4246-b3cc-35cac33ed163" x="319" y="0" width="59" height="15"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="95d58a79-f105-47b5-b296-6044506c16eb" x="378" y="0" width="84" height="15"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorUnitario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="d94659fe-a700-4486-946c-35151bf93606" x="462" y="0" width="93" height="15"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalItem}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="60">
+			<subreport>
+				<reportElement uuid="329b34c8-bc16-47f0-a1af-045f309a9040" x="0" y="0" width="555" height="60"/>
+				<subreportParameter name="rodapeEmail">
+					<subreportParameterExpression><![CDATA[$P{rodapeEmail}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rodape_retrato.jasper"]]></subreportExpression>
+			</subreport>
+			<textField evaluationTime="Report">
+				<reportElement uuid="faafdd69-e9ed-41cd-abf4-a1730f9df3eb" x="508" y="4" width="30" height="18"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="5d595d35-975b-4b96-85cf-f3002be05abd" x="0" y="0" width="439" height="20"/>
+				<box rightPadding="2">
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="1e0d70ca-6cf6-4b98-9d87-a468909a6907" x="439" y="0" width="116" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalSumItens}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

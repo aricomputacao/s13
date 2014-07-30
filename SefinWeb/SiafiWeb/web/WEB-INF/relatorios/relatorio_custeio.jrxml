@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_custeio" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1691a819-09ec-4d7f-b148-e16bb88aec10">
+	<property name="ireport.zoom" value="1.9487171000000025"/>
+	<property name="ireport.x" value="192"/>
+	<property name="ireport.y" value="0"/>
+	<style name="zebra">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean( $V{REPORT_COUNT}.intValue() % 2 == 0 )]]></conditionExpression>
+			<style forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="money" hAlign="Right" vAlign="Middle" pattern="#,##0.00" isBlankWhenNull="true" fontSize="7">
+		<box rightPadding="2"/>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Projetos\\SefinWeb\\SiafiWeb\\web\\WEB-INF\\relatorios\\sub_relatorios\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="relatorio" class="java.lang.String"/>
+	<parameter name="img" class="java.lang.String"/>
+	<parameter name="rodapeEmail" class="java.lang.String"/>
+	<parameter name="img1" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="marco" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[marco]]></fieldDescription>
+	</field>
+	<field name="dezembro" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[dezembro]]></fieldDescription>
+	</field>
+	<field name="agosto" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[agosto]]></fieldDescription>
+	</field>
+	<field name="julho" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[julho]]></fieldDescription>
+	</field>
+	<field name="fevereiro" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[fevereiro]]></fieldDescription>
+	</field>
+	<field name="setembro" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[setembro]]></fieldDescription>
+	</field>
+	<field name="junho" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[junho]]></fieldDescription>
+	</field>
+	<field name="maio" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[maio]]></fieldDescription>
+	</field>
+	<field name="solicitacaoFinanceiras" class="java.util.List">
+		<fieldDescription><![CDATA[solicitacaoFinanceiras]]></fieldDescription>
+	</field>
+	<field name="unidadeOrcamentaria" class="br.com.guardiao.modelo.UnidadeOrcamentaria">
+		<fieldDescription><![CDATA[unidadeOrcamentaria]]></fieldDescription>
+	</field>
+	<field name="outubro" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[outubro]]></fieldDescription>
+	</field>
+	<field name="abril" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[abril]]></fieldDescription>
+	</field>
+	<field name="janeiro" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[janeiro]]></fieldDescription>
+	</field>
+	<field name="novembro" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[novembro]]></fieldDescription>
+	</field>
+	<field name="total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[total]]></fieldDescription>
+	</field>
+	<variable name="total_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	</variable>
+	<variable name="janeiro_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{janeiro}]]></variableExpression>
+	</variable>
+	<variable name="fevereiro_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{fevereiro}]]></variableExpression>
+	</variable>
+	<variable name="marco_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{marco}]]></variableExpression>
+	</variable>
+	<variable name="abril_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{abril}]]></variableExpression>
+	</variable>
+	<variable name="maio_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{maio}]]></variableExpression>
+	</variable>
+	<variable name="junho_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{junho}]]></variableExpression>
+	</variable>
+	<variable name="julho_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{julho}]]></variableExpression>
+	</variable>
+	<variable name="agosto_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{agosto}]]></variableExpression>
+	</variable>
+	<variable name="setembro_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{setembro}]]></variableExpression>
+	</variable>
+	<variable name="outubro_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{outubro}]]></variableExpression>
+	</variable>
+	<variable name="novembro_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{novembro}]]></variableExpression>
+	</variable>
+	<variable name="dezembro_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{dezembro}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="84808450-d9b2-4f96-8230-248dd2e9a825" x="0" y="0" width="802" height="50"/>
+				<subreportParameter name="img1">
+					<subreportParameterExpression><![CDATA[$P{img1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="img">
+					<subreportParameterExpression><![CDATA[$P{img}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="relatorio">
+					<subreportParameterExpression><![CDATA[$P{relatorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cabecalho_paisagem.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<frame>
+				<reportElement uuid="de940083-1783-40d1-b7d1-8f37b3e4ed43" mode="Opaque" x="0" y="0" width="802" height="20" forecolor="#FFFFFF" backcolor="#FFFFFF"/>
+				<staticText>
+					<reportElement uuid="2e442ae0-3cfd-4d56-88c6-be1c25fb4166" x="160" y="0" width="53" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fev]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="147cc4ae-4db3-4867-9839-6dc11c603f99" x="107" y="0" width="53" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Jan]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="e185fdcc-4a07-41b2-9957-7a6ea27dfea2" x="213" y="0" width="53" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Mar]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="b69eb0b2-b32a-41d9-9e71-30e7bc4c2b3f" x="266" y="0" width="53" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Abr]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d5eb566f-2aa0-48de-9581-f8d83f58f204" x="319" y="0" width="53" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Mai]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="4d01a017-2f6c-4d28-8c65-b8f38a7611d8" x="371" y="0" width="53" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Jun]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="f96111c4-3a41-474f-ba0f-70a27f5e9b06" x="424" y="0" width="53" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Jul]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="dbf3377c-4ad7-41d6-adf5-59e87ff6cfbe" x="477" y="0" width="53" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ago]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="b22ed312-8cad-4c66-bec7-a613df5016ad" x="530" y="0" width="53" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Set]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="249683c8-1ffc-467d-b38d-6af8387f136b" x="583" y="0" width="53" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Out]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="affa7754-1f8b-4f56-b5c5-e6518eb90a4a" x="636" y="0" width="53" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nov]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="77fe8148-3719-4468-8faf-b7f03aef8d80" x="689" y="0" width="53" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Dez]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="17c8a733-7b0b-4cf7-a3c3-df335762059d" x="742" y="0" width="60" height="20"/>
+					<box leftPadding="0" rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="757b4e8b-f5db-43bf-bf5a-a207a83f9df8" x="0" y="0" width="107" height="20"/>
+					<box leftPadding="3"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Unidade Orçamentária]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="a2790b2d-78ff-4c9b-91c7-2b0fec02bce1" style="zebra" x="0" y="0" width="802" height="15"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="b1d46560-f460-41db-816c-d754de34ee97" style="money" x="107" y="0" width="53" height="15"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{janeiro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1b192122-4717-4fdd-92ef-a8ad750bf165" x="0" y="0" width="107" height="15"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unidadeOrcamentaria}.getAbreviacao()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0f124114-272c-4bb9-ac16-811398ac5b69" style="money" x="160" y="0" width="53" height="15"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fevereiro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8a289834-05d6-4aa2-ac9a-46eae484212e" style="money" x="213" y="0" width="53" height="15"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{marco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="aa2b7eeb-9899-445c-bd38-dea279a57cb1" style="money" x="266" y="0" width="53" height="15"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abril}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="df939f26-9954-4747-bca2-04dc6df9e91c" style="money" x="319" y="0" width="53" height="15"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{maio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f7913c7d-5fd5-4341-aeb5-bb8d3a4a922f" style="money" x="371" y="0" width="53" height="15"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{junho}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f7ef82c6-4bc0-4605-86d6-29fa5f7cffea" style="money" x="424" y="0" width="53" height="15"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{julho}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c547b34f-83ae-4b2c-827c-03c1875d93a2" style="money" x="477" y="0" width="53" height="15"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{agosto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0e784c7d-b7d1-4d68-aca5-b6a638ff8aa6" style="money" x="530" y="0" width="53" height="15"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{setembro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fd031afe-e7fe-4d3f-88ca-150e60567a82" style="money" x="583" y="0" width="53" height="15"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{outubro}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="62c10cf3-37d7-4814-b7f5-f780d93e39f2" style="money" x="636" y="0" width="53" height="15"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{novembro}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="1752073b-6979-4abd-b3da-4544cc215e61" style="money" x="689" y="0" width="53" height="15"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dezembro}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="97de4854-f9da-470f-9c4d-cf274e435775" style="money" x="742" y="0" width="60" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="55">
+			<subreport>
+				<reportElement uuid="70a9013e-26b3-4152-869a-e348e7ed9911" x="0" y="0" width="802" height="55"/>
+				<subreportParameter name="pg">
+					<subreportParameterExpression><![CDATA[$V{PAGE_NUMBER}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="rodapeEmail">
+					<subreportParameterExpression><![CDATA[$P{rodapeEmail}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rodape_paisa.jasper"]]></subreportExpression>
+			</subreport>
+			<textField evaluationTime="Report">
+				<reportElement uuid="bea4d97e-afa7-4028-b71f-1af80334a4ad" x="731" y="2" width="44" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<lastPageFooter>
+		<band height="20"/>
+	</lastPageFooter>
+	<summary>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="449c8061-dc9d-4490-92b1-f445e8ee47ef" x="0" y="0" width="107" height="25"/>
+				<box rightPadding="2">
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="9ad93807-bbb3-40b2-809f-890a67066430" style="money" x="742" y="0" width="60" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4dbd112d-7941-45a1-b7b2-8d9228980233" style="money" x="107" y="0" width="53" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{janeiro_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="aa2ae77a-dffb-4232-bb43-5fa553f64d50" style="money" x="160" y="0" width="53" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{fevereiro_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2599b71b-aea4-42c7-b604-c97dcb4b80a6" style="money" x="213" y="0" width="53" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{marco_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c92085f0-f124-4a43-8758-0fab8410f9d4" style="money" x="266" y="0" width="53" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{abril_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2868bdfd-72a6-4d8f-961b-8c47d6ffc076" style="money" x="319" y="0" width="52" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{maio_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4dc03de0-0d48-4952-8c48-2de04b0c4a5a" style="money" x="371" y="0" width="53" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{junho_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b3b56bef-3b49-4dd1-8a76-ce85ca041470" style="money" x="424" y="0" width="53" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{julho_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="96559a92-b140-449d-be8a-dc7bab1ee9d2" style="money" x="477" y="0" width="53" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{agosto_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="512139b9-1ff9-44ea-bbc2-aa59a350d77a" style="money" x="530" y="0" width="53" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{setembro_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f04fb3af-4c7c-42ee-babd-fcf2b8656c7a" style="money" x="583" y="0" width="53" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{outubro_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a879a298-1b4a-4746-a00d-6691fbdada11" style="money" x="636" y="0" width="53" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{novembro_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="10ccc9d3-19d1-446e-96ba-e57f91f56c20" style="money" x="689" y="0" width="53" height="25"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{dezembro_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

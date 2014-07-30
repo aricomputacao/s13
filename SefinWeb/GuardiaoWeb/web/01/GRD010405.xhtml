@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel id="pnlSis" header="Cadastro de Orgão" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.orgao'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Cadastro de Orgão"/>
+                    <h:outputText value="Página - 010405" style="float: right;"/>
+                </f:facet>
+                <p:focus/>
+                <h:panelGrid width="100%">
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="codOrg" value="Código"/>
+                                <p:message for="codOrg"/>
+                            </h:panelGrid>
+                            <p:inputText  id="codOrg" size="3" maxlength="2" required="true" requiredMessage="Preencher o campo código!" value="#{orgaoMB.orgaoSelecionado.id.id}" disabled="#{orgaoMb.orgaoSelecionado.id.id != null}"  />
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="nomeOrg" value="Nome"/>
+                                <p:message for="nomeOrg" id="msgOrgNome"/>
+                            </h:panelGrid>
+                            <p:inputText id="nomeOrg" size="40" value="#{orgaoMB.orgaoSelecionado.nome}" required="true" requiredMessage="Preencher campo nome!"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel  for="selUnid" value="Unidade Administrativa"/>
+                                <p:message for="selUnid"/>
+                                <p:selectOneMenu id="selUnid" value="#{orgaoMB.orgaoSelecionado.unidadeAdministrativa}"  required="true" styleClass="listas" requiredMessage="Selecione uma Unidade Administrativa" converter="#{indexConverter}">
+                                    <f:selectItem itemLabel=""/>
+                                    <f:selectItems value="#{orgaoMB.listUnidadesAdm}" var="und" itemLabel="#{und.nome}" itemValue="#{und}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid >
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel  value="Abreviação" for="orgAbrev"/>
+                                <p:message for="orgAbrev"/>
+                            </h:panelGrid>
+                            <p:inputText id="orgAbrev" size="10" value="#{orgaoMB.orgaoSelecionado.abreviacao}" required="true" requiredMessage="Preencher campo abreviação!"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="CNPJ" for="orgCnpj"/>
+                                <p:message for="orgCnpj" id="msgOrgCnpj"/>
+                            </h:panelGrid>
+                            <p:inputMask mask="99.999.999/9999-99" id="orgCnpj" size="20"  value="#{orgaoMB.orgaoSelecionado.cnpj}"
+                                         required="true" requiredMessage="Preencher campo CNPJ!">
+                                <f:validator validatorId="documentoValidator"/>
+                            </p:inputMask>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Exercício" title="Exercício do orçamento"/>
+                                <p:message for="orcExe"/>
+                            </h:panelGrid>
+                            <p:selectOneMenu id="orcExe" value="#{orgaoMB.orgaoSelecionado.exercicio}" converter="#{indexConverter}" style="width: 220px"
+                                             effect="fade" required="true" requiredMessage="Informe o exercício.">
+                                <f:selectItems  value="#{orgaoMB.listExercicios}" var="e" itemLabel="#{e.descricao}" itemValue="#{e}"  />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="orgEnd" value="Endereço"/>
+                            <p:message for="orgEnd" id="msgOrgEnd"/>
+                        </h:panelGrid>
+                        <p:inputText id="orgEnd" size="50" value="#{orgaoMB.orgaoSelecionado.endereco}"  requiredMessage="Preencher campo abreviação!"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel  value="Fone"/>
+                                <p:message for="orgFone" id="msgOrgFone"/>
+                            </h:panelGrid>
+                            <p:inputMask mask="(99) 9999-9999" id="orgFone" size="15" value="#{orgaoMB.orgaoSelecionado.fone}"  />
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel  value="Email"/>
+                                <p:message for="orgEmail" id="msgOrgEmail"/>
+                            </h:panelGrid>
+                            <p:inputText id="orgEmail" size="25" value="#{orgaoMB.orgaoSelecionado.email}"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel  value="Ativo"/>
+                                <p:message for="orgAtv" id="msgOrgAtv"/>
+                            </h:panelGrid>
+                            <p:selectOneRadio id="orgAtv" value="#{orgaoMB.orgaoSelecionado.ativo}" >
+                                <f:selectItem itemLabel="Sim" itemValue="#{true}"/>
+                                <f:selectItem itemLabel="Não"  itemValue="#{false}"/>
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+
+                    <h:panelGrid width="100%">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel  value="Objetivo"/>
+                            <p:message for="orgObj" id="msgOrgObj"/>
+                        </h:panelGrid>
+                        <p:inputTextarea id="orgObj" rows="3" style="width: 95%;"  value="#{orgaoMB.orgaoSelecionado.objetivo}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellspacing="10" cellpadding="10">
+                    <p:commandButton icon="ui-icon-disk" action="#{orgaoMB.salvar()}" value="Salvar" update="pnlSis" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.orgao'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.orgao'])}" value="Listar" immediate="true" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.orgao'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" type="reset" ajax="false" value="Limpar"/>
+                </h:panelGrid>
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

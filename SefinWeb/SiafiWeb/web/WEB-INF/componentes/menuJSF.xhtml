@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+    <h:form style="background: lightgray;border-radius: 5px">
+        <p:menubar autoDisplay="false" style="background: #E8E8E8;border-color: #666666">
+            <p:menuitem value="Inicio" icon="ui-icon-home" actionListener="#{beanNavegacaoMB.index()}" immediate="true"/>
+            <p:submenu label="Solicitação Financeira" icon="ui-icon-document-b" rendered="#{not usuarioMB.navegadorMobile}">
+                <p:separator />
+                <p:separator />
+                <p:submenu label="Cadastros">
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.exercicio'])}"/>
+                    <p:menuitem value="Exercicio" rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.exercicio'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['cadastro.exercicio'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.exercicio'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.categoria'])}"/>
+                    <p:menuitem value="Categoria" rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.categoria'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['cadastro.categoria'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.categoria'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.cota'])}"/>
+                    <p:menuitem value="Cota" rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.cota'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['cadastro.cota'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.cota'])}"/>
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+
+                <p:submenu  label="Listar">
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['solicitacao.financeira.listar'])}"/>
+                    <p:menuitem  value="Solicitações" rendered="#{usuarioMB.permissaoConsultar(navegacao['solicitacao.financeira.listar'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['solicitacao.financeira.listar'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['solicitacao.financeira.listar'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.exercicio'])}"/>
+                    <p:menuitem value="Exercicios" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.exercicio'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.exercicio'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.exercicio'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.categoria'])}"/>
+                    <p:menuitem value="Categorias" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.categoria'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.categoria'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.categoria'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.despesa'])}"/>
+                    <p:menuitem value="Despesas"   rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.despesa'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.despesa'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.despesa'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.conta'])}"/>
+                    <p:menuitem value="Contas"   rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.conta'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.conta'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.conta'])}"/>
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+                <p:submenu label="Movimentação">
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['solicitacao.financeira.emitir'])}"/>
+                    <p:menuitem value="Solicitação Financeira" rendered="#{usuarioMB.permissaoIncluir(navegacao['solicitacao.financeira.emitir'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['solicitacao.financeira.emitir'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['solicitacao.financeira.emitir'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['solicitacao.financeira.autorizar'])}"/>
+                    <p:menuitem value="Autorizar Solicitação" rendered="#{usuarioMB.permissaoIncluir(navegacao['solicitacao.financeira.autorizar'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['solicitacao.financeira.autorizar'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['solicitacao.financeira.autorizar'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.autorizarPagamento'])}"/>
+                    <p:menuitem value="Autorizar Pagamento" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.autorizarPagamento'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.autorizarPagamento'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.autorizarPagamento'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.autorizar_restos_pagar'])}"/>
+                    <p:menuitem value="Autorizar Restos a Pagar" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.autorizar_restos_pagar'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.autorizar_restos_pagar'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.autorizar_restos_pagar'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['pendencia.liberar'])}"/>
+                    <p:menuitem value="Liberar Credor" rendered="#{usuarioMB.permissaoConsultar(navegacao['pendencia.liberar'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['pendencia.liberar'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['pendencia.liberar'])}"/>
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+
+            </p:submenu>
+            <p:submenu label="Orçamento" icon="ui-icon-extlink" rendered="#{not usuarioMB.navegadorMobile}">
+                <p:separator />
+                <p:separator />
+
+                <p:submenu label="Cadastro">
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.orcamento'])}"/>
+                    <p:menuitem value="Orçamento" rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.orcamento'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['cadastro.orcamento'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.orcamento'])}"/>
+                </p:submenu>
+                <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['editar.centro_custo'])}"/>
+                <p:submenu label="Editar" rendered="#{usuarioMB.permissaoConsultar(navegacao['editar.centro_custo'])}">
+                    <p:menuitem value="Centro Custo" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['editar.centro_custo'])}" immediate="true" rendered="#{usuarioMB.permissaoConsultar(navegacao['editar.centro_custo'])}"/>
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+                <p:submenu label="Lista" style="min-width: 150px;">
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.orcamento'])}"/>
+                    <p:menuitem value="Orçamento" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.orcamento'])}" immediate="true"  actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.orcamento'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.orcamento'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.programa'])}"/>
+                    <p:menuitem value="Programas" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.programa'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.programa'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.programa'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.dotacao'])}"/>
+                    <p:menuitem value="Dotações" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.dotacao'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.dotacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.dotacao'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.tipo_fonte_recurso'])}"/>
+                    <p:menuitem value="T. Fonte Recurso" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.tipo_fonte_recurso'])}" immediate="true"  actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.tipo_fonte_recurso'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.tipo_fonte_recurso'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.fonte_recurso'])}"/>
+                    <p:menuitem value="Fonte de Recurso" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.fonte_recurso'])}" immediate="true"  actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.fonte_recurso'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.fonte_recurso'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.elemento_despesa'])}"/>
+                    <p:menuitem value="Elemento Despesa" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.elemento_despesa'])}" immediate="true"  actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.elemento_despesa'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.elemento_despesa'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.modalidade_aplicacao_despesa'])}"/>
+                    <p:menuitem value="Mod. Apli. Despesa" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.modalidade_aplicacao_despesa'])}" immediate="true"  actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.modalidade_aplicacao_despesa'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.modalidade_aplicacao_despesa'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.funcoes'])}"/>
+                    <p:menuitem value="Função" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.funcoes'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.funcoes'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.funcoes'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.sub_funcao'])}"/>
+                    <p:menuitem value="Sub Função" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.sub_funcao'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.sub_funcao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.sub_funcao'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.categoria_despesa'])}"/>
+                    <p:menuitem value="Categoria Despesa" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.categoria_despesa'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.categoria_despesa'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.categoria_despesa'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.grupo_natureza_despesa'])}"/>
+                    <p:menuitem value="Grupo Nat. Despesa" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.grupo_natureza_despesa'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.grupo_natureza_despesa'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.grupo_natureza_despesa'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.projeto_atividade'])}"/>
+                    <p:menuitem value="Projeto Atividade" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.projeto_atividade'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.projeto_atividade'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.projeto_atividade'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.sub_elemento_despesa'])}"/>
+                    <p:menuitem value="Sub-elemento Despesa" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.sub_elemento_despesa'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.sub_elemento_despesa'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.sub_elemento_despesa'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.natureza_despesa'])}"/>
+                    <p:menuitem value="Natureza Despesa" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.natureza_despesa'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['listar.natureza_despesa'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.natureza_despesa'])}"/>
+
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+
+                <p:submenu label="Utilitários">
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['orcamento.importacao'])}"/>
+                    <p:menuitem value="Importar Orçamento" rendered="#{usuarioMB.permissaoIncluir(navegacao['orcamento.importacao'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['orcamento.importacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['orcamento.importacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['orcamento.importacaosaldos'])}"/>
+                    <p:menuitem value="Importar Saldos" rendered="#{usuarioMB.permissaoIncluir(navegacao['orcamento.importacaosaldos'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['orcamento.importacaosaldos'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['orcamento.importacaosaldos'])}"/>
+
+                </p:submenu>
+
+                <p:separator />
+                <p:separator />
+
+            </p:submenu>
+            <p:submenu label="Licitação" icon="ui-icon-newwin" rendered="#{not usuarioMB.navegadorMobile}">
+                <p:separator />
+                <p:separator />
+
+                <p:submenu label="Cadastro">
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.cadastro.convenio'])}"/>
+                    <p:menuitem value="Cadastrar convênio" rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.cadastro.convenio'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.cadastro.convenio'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.cadastro.convenio'])}"/>
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+
+                <p:submenu label="Listar">
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.unidade_medida'])}"/>
+                    <p:menuitem value="Unidade de Medida" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.unidade_medida'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.listar.unidade_medida'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.unidade_medida'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.grupo_item'])}"/>
+                    <p:menuitem value="Grupo de Item" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.grupo_item'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.listar.grupo_item'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.grupo_item'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.item'])}"/>
+                    <p:menuitem value="Item" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.item'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.listar.item'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.item'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.credor'])}"/>
+                    <p:menuitem value="Credor" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.credor'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.listar.credor'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.credor'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.licitacao'])}"/>
+                    <p:menuitem value="Licitações" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.licitacao'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.listar.licitacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.licitacao'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.contrato'])}" />
+                    <p:menuitem value="Contratos" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.contrato'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.listar.contrato'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.contrato'])}" />
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.aditivo'])}" />
+                    <p:menuitem rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.aditivo'])}" value="Aditivos" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.listar.aditivo'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.aditivo'])}" />
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.item_licitacao'])}"/>
+                    <p:menuitem value="Itens da Licitação" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.item_licitacao'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.listar.item_licitacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.item_licitacao'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.resumo.licitacao'])}"/>
+                    <p:menuitem value="Resumo das licitações" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.resumo.licitacao'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.resumo.licitacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.resumo.licitacao'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.ordem_compra'])}"/>
+                    <p:menuitem value="Ordens de Compra" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.ordem_compra'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.listar.ordem_compra'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.ordem_compra'])}"/>
+
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.convenio'])}"/>
+                    <p:menuitem value="Convenio"   rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.convenio'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.listar.convenio'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.convenio'])}"/>
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+
+                <p:submenu label="Movimentação">
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.emitir.ordem_compra'])}"/>
+                    <p:menuitem value="Cadastrar Ordem de Compra" rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.emitir.ordem_compra'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.emitir.ordem_compra'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.emitir.ordem_compra'])}"/>
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+
+            </p:submenu>
+            <p:submenu label="Protocolo" icon="ui-icon-transferthick-e-w" rendered="#{not usuarioMB.navegadorMobile}">
+                <p:separator />
+                <p:separator />
+                <p:submenu label="Protocolo">
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.encaminar_processo'])}"/>
+                    <p:menuitem value="Encaminhar Protocolo" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.encaminar_processo'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.encaminar_processo'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.encaminar_processo'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.receber_processo'])}"/>
+                    <p:menuitem value="Receber Protocolo" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.receber_processo'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.receber_processo'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.receber_processo'])}"/>
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+                <p:submenu label="Liquidação">
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.cadastro_solicitacao_liquidacao'])}"/>
+                    <p:menuitem value="Abrir Liquidação" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.cadastro_solicitacao_liquidacao'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.cadastro_solicitacao_liquidacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.cadastro_solicitacao_liquidacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.listar_solicitacao_liquidacao'])}"/>
+                    <p:menuitem value="Consultar  Liquidação" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.listar_solicitacao_liquidacao'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.listar_solicitacao_liquidacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.listar_solicitacao_liquidacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.encaminhar_solicitacao_liquidacao'])}"/>
+                    <p:menuitem value="Encaminhar Liquidação" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.encaminhar_solicitacao_liquidacao'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.encaminhar_solicitacao_liquidacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.encaminhar_solicitacao_liquidacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.receber_solicitacao_liquidacao'])}"/>
+                    <p:menuitem value="Receber Liquidação" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.receber_solicitacao_liquidacao'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.receber_solicitacao_liquidacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.receber_solicitacao_liquidacao'])}"/>
+
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+                <p:submenu label="Movi. Bancaria" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.consulta_movimentacao_bancaria'])}">
+                    <p:separator />
+                    <p:menuitem value="Consultar"  immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.consulta_movimentacao_bancaria'])}" />
+                    <p:separator />
+                </p:submenu>
+                <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.consulta_movimentacao_bancaria'])}" />
+                <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.consulta_movimentacao_bancaria'])}" />
+            </p:submenu>
+            <p:submenu label="Relatórios" icon="ui-icon-bookmark" rendered="#{not usuarioMB.navegadorMobile}">
+
+                <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.font_recurso'])}"/>
+                <p:menuitem value="Fonte Recurso" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.font_recurso'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.font_recurso'])}" immediate="true"/>
+                <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.font_recurso'])}"/>
+
+                <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.centro_custo'])}"/>
+                <p:menuitem value="Centro de Custo" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.centro_custo'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.centro_custo'])}" immediate="true"/>
+                <p:separator />
+                <p:separator />
+                <p:submenu label="Custeio">
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.custeio'])}"/>
+                    <p:menuitem value="Custeio Total" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.custeio'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.custeio'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.custeio'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.despesa_unidade_mensal'])}"/>
+                    <p:menuitem value="Despesa por mes" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.despesa_unidade_mensal'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.despesa_unidade_mensal'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.despesa_unidade_mensal'])}"/>
+                </p:submenu>
+                <p:separator/>
+                <p:separator/>
+                <p:submenu label="Cota">
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.cota_analitico'])}"/>
+                    <p:menuitem value="Analítico de Cotas" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.cota_analitico'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.cota_analitico'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.cota_analitico'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.cota'])}"/>
+                    <p:menuitem value="Sintético Cotas" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.cota'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.cota'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.cota'])}"/>
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+                <p:submenu label="Solicitações">
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.solicitacao_convenio'])}"/>
+                    <p:menuitem value="Por Convênios" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.solicitacao_convenio'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.solicitacao_convenio'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.solicitacao_convenio'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.solicitacao_tesouraria'])}"/>
+                    <p:menuitem value="Resumo Pagamento" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.solicitacao_tesouraria'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.solicitacao_tesouraria'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.solicitacao_tesouraria'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.liquidacoes_pagas'])}"/>
+                    <p:menuitem value="Pagamentos Efetuados" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.liquidacoes_pagas'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.liquidacoes_pagas'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.liquidacoes_pagas'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.protocolo_liquidacao'])}" />
+                    <p:menuitem value="Tesouraria" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.protocolo_liquidacao'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.protocolo_liquidacao'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.protocolo_liquidacao'])}" />
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.acompanhamento_credor'])}" />
+                    <p:menuitem value="Acomp. Credor" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.acompanhamento_credor'])}" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.acompanhamento_credor'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.acompanhamento_credor'])}" />
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+                <p:submenu label="Protocolo">
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.processos_encaminhados_periodo'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.processos_encaminhados_periodo'])}"/>
+                    <p:menuitem value="Por período" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.processos_encaminhados_periodo'])}" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.processos_encaminhados_periodo'])}" immediate="true"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.processos_encaminhados_periodo'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.consulta_encaminhamento_liquidacao'])}"/>
+                    <p:menuitem rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.consulta_encaminhamento_liquidacao'])}" value="Enc. Liquidações" title="Encaminhamento de Liquidações" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.consulta_encaminhamento_liquidacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.consulta_encaminhamento_liquidacao'])}"/>
+                    <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.consulta_encaminhamento_liquidacao'])}"/>
+                </p:submenu>
+                <p:separator />
+                <p:separator />
+            </p:submenu>
+            <p:submenu label="Auditoria" icon="ui-icon-tag" rendered="#{usuarioMB.permissaoConsultar(navegacao['auditoria.acesso']) and not usuarioMB.navegadorMobile}">
+                <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['auditoria.solicitacao_financeira'])}"/>
+                <p:menuitem value="Solicitação Financeira" rendered="#{usuarioMB.permissaoConsultar(navegacao['auditoria.solicitacao_financeira'])}" immediate="true" actionListener="#{beanNavegacaoMB.redirecionar(navegacao['auditoria.solicitacao_financeira'])}"/>
+                <p:separator rendered="#{usuarioMB.permissaoConsultar(navegacao['auditoria.solicitacao_financeira'])}"/>
+
+            </p:submenu>
+            <p:submenu label="Ajuda" icon="ui-icon-help" rendered="#{not usuarioMB.navegadorMobile}">
+                <p:submenu label="Solicitacao Financeira">
+                    <p:menuitem value="Emissão / Listagem de Solicitação" rendered="#{usuarioMB.permissaoConsultar(navegacao['solicitacao.financeira.emitir'])}" onclick="popup('/#{label['nome.url.sistema']}/00/manuais/#{navegacao['solicitacao.financeira.emitir']}.pdf');"/>
+                </p:submenu>
+                <p:submenu label="Orçamento" rendered="false">
+
+                </p:submenu>
+                <p:submenu label="Licitação">
+                    <p:menuitem value="Emssão / Listagem de Ordem de compra" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.emitir.ordem_compra'])}" onclick="popup('/#{label['nome.url.sistema']}/00/manuais/#{navegacao['licitacao.emitir.ordem_compra']}.pdf');"/>
+                </p:submenu>
+                <p:submenu label="Protocolo">
+                    <p:submenu label="Encaminhar Processo">
+                        <p:menuitem value="Fin. -> Con." onclick="popup('/#{label['nome.url.sistema']}/00/manuais/#{navegacao['protocolo.encaminar_processo']}1.pdf');" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.encaminar_processo'])}"/>
+                        <p:menuitem value="Empenhar: Con. -> Fin." onclick="popup('/#{label['nome.url.sistema']}/00/manuais/#{navegacao['protocolo.encaminar_processo']}2.pdf');" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.encaminar_processo'])}"/>
+                        <p:menuitem value="Liberar Doc.: Fin. -> Con." onclick="popup('/#{label['nome.url.sistema']}/00/manuais/#{navegacao['protocolo.encaminar_processo']}3.pdf');" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.encaminar_processo'])}"/>
+                        <p:menuitem value="Liquidar: Con. -> Fin." onclick="popup('/#{label['nome.url.sistema']}/00/manuais/#{navegacao['protocolo.encaminar_processo']}4.pdf');" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.encaminar_processo'])}"/>
+                        <p:menuitem value="Pagar: Tes. -> Con." onclick="popup('/#{label['nome.url.sistema']}/00/manuais/#{navegacao['protocolo.encaminar_processo']}5.pdf');" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.encaminar_processo'])}"/>
+                        <p:menuitem value="Concluir Solicitação" onclick="popup('/#{label['nome.url.sistema']}/00/manuais/#{navegacao['protocolo.encaminar_processo']}6.pdf');" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.encaminar_processo'])}"/>
+                    </p:submenu>
+                    <p:menuitem value="Receber processo" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.receber_processo'])}" onclick="popup('/#{label['nome.url.sistema']}/00/manuais/#{navegacao['protocolo.receber_processo']}.pdf');"/>
+                </p:submenu>
+                <p:submenu label="Relatórios" rendered="false">
+
+                </p:submenu>
+                <p:submenu label="Auditoria" rendered="false">
+
+                </p:submenu>
+                <p:submenu label="Manuais Completos">
+                    <p:menuitem value="Setor Financeiro" onclick="popup('/#{label['nome.url.sistema']}/00/manuais/MANUAL-FINANCEIRO.pdf');"/>
+                    <p:menuitem value="Setor Contabilidade" onclick="popup('/#{label['nome.url.sistema']}/00/manuais/MANUAL-CONTABILIDADE.pdf');"/>
+                    <p:menuitem value="Setor Controladoria" onclick="popup('/#{label['nome.url.sistema']}/00/manuais/MANUAL-CONTROLADORIA.pdf');"/>
+                    <p:menuitem value="Setor Tesouraria" onclick="popup('/#{label['nome.url.sistema']}/00/manuais/MANUAL-TESOURARIA.pdf');"/>
+                </p:submenu>
+
+            </p:submenu>
+            <p:menuitem value="Sair" immediate="true" icon="ui-icon-closethick" ajax="false" actionListener="#{beanNavegacaoMB.logout1()}"/>
+
+            <f:facet name="options">
+                <h:panelGrid columns="7" rendered="#{not usuarioMB.navegadorMobile}">
+                    <p:watermark for="pg2" value="Localizar"/>
+                    <p:autoComplete value="#{beanNavegacaoMB.pagina}" title="Localizar uma página" size="15" forceSelection="true" id="pg2" completeMethod="#{beanNavegacaoMB.completar}"/>
+                    <p:commandButton value="Ir" icon="ui-icon-circle-triangle-e" actionListener="#{beanNavegacaoMB.redirecionarRapido()}"/>
+                    <p:spacer width="40" height="0"/>
+                </h:panelGrid>
+            </f:facet>
+        </p:menubar>
+    </h:form>
+</ui:component>
+

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:form id="frmConsultaUsuario">
+        <p:panel header="Lista de Usuarios" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.usuario'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="100"/>
+                <h:outputText value="Listagem de Usuários"/>
+                <h:outputText value="Página - 020509" style="float: right;"/>
+            </f:facet>
+            <h:panelGrid columns="6">
+                <h:panelGrid>
+                    <h:outputText value="Ordenar"/>
+                    <p:selectOneMenu value="#{usuarioMB.campoOrdem}" style="width: 190px">
+                        <f:selectItem itemLabel="Documento" itemValue="documento"/>
+                        <f:selectItem itemLabel="Nome" itemValue="pessoa.nome"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputText value="Campo"/>
+                    <p:selectOneMenu value="#{usuarioMB.campoBusca}" style="width: 190px">
+                        <f:selectItem itemLabel="Documento" itemValue="documento"/>
+                        <f:selectItem itemLabel="Nome" itemValue="pessoa.nome"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputText value="Pesquisar por"/>
+                    <p:inputText value="#{usuarioMB.valorBusca}" size="25"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="Pesquisar" icon="ui-icon-circle-zoomin" update="tblUsuario" action="#{usuarioMB.listar()}"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="Novo" icon="ui-icon-plus" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.usuario'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.usuario'])}"/>
+                </h:panelGrid>
+            </h:panelGrid>
+            <p:dataTable id="tblUsuario" rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum usuário encontrado" var="u" value="#{usuarioMB.usuarios}">
+                <p:column headerText="Documento" sortBy="#{u.documento}" filterBy="#{u.documento}">
+                    <h:outputText value="#{u.documento}"/>
+                </p:column>
+                <p:column headerText="Nome" sortBy="#{u.pessoa}" filterBy="#{u.pessoa.nome}">
+                    <h:outputText value="#{u.pessoa.nome}"/>
+                </p:column>
+                <p:column headerText="Email">
+                    <h:outputText value="#{u.pessoa.email}"/>
+                </p:column>
+                <p:column headerText="Orgão" sortBy="#{u.orgao.abreviacao}" filterBy="#{u.orgao.abreviacao}">
+                    <h:outputText value="#{u.orgao.abreviacao}"/>
+                </p:column>
+                <p:column headerText="Status" sortBy="#{u.acesso}">
+                    <h:outputText value="Inativo" rendered="#{not u.acesso}"/>
+                    <h:outputText value="Ativo" rendered="#{u.acesso}"/>
+                </p:column>
+                <ui:insert name="acaoUsuario">
+                    <p:column headerText="Ações">
+                        <p:commandButton icon="ui-icon-pencil" title="Editar usuario" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.usuario'],'usuario',u)}" rendered="#{usuarioLogadoMB.permissaoEditar(navegacao['cadastro.usuario'])}"/>
+                        <p:commandButton title="Editar as unidades orçamentárias do usuário"  icon="ui-icon-circle-plus" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['permissao.usuario.unidade_orcamentaria'],'usuario_und_orcamentaria',u)}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.usuario.unidade_orcamentaria'])}"/>
+                        <p:commandButton title="Editar as permissões usuário" icon="ui-icon-key" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['permissao.usuario.gerenciar'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.usuario.gerenciar'])}"/>
+                    </p:column>
+                </ui:insert>
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+</ui:composition>

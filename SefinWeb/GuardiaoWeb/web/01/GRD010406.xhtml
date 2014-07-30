@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel id="pnlSis" header="Cadastro de Unidade Orçamentária" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.unidade_orc'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Cadastro de Unidade Orçamentária"/>
+                    <h:outputText value="Página - 010406" style="float: right;"/>
+                </f:facet>
+                <p:focus/>
+                <h:panelGrid width="100%">
+                    <h:panelGrid columns="2">
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="codUndOrc" value="Código"/>
+                                <p:message for="codUndOrc" id="msgCodUndOrc"/>
+                            </h:panelGrid>
+                            <p:inputText id="codUndOrc" size="5" maxlength="2" required="true" requiredMessage="Preencher o campo código!" value="#{unidadeOrcamentariaMB.orcamentariaPK.id}" disabled="#{unidadeOrcamentariaMB.orcamentariaPK.id != null}" validator="#{unidadeOrcamentariaMB.validaId}"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="org" value="Órgão"/>
+                                <p:message for="org"/>
+                            </h:panelGrid>
+                            <p:selectOneMenu id="org" value="#{unidadeOrcamentariaMB.unidadeOrcamentariaSelecionada.orgao}" converter="#{indexConverter}" styleClass="listas" required="true" requiredMessage="Selecione um orgão" disabled="#{unidadeOrcamentariaMB.orcamentariaPK.id != null}">
+                                <f:selectItem itemLabel="" />
+                                <f:selectItems value="#{unidadeOrcamentariaMB.listaOrgao}" itemValue="#{orgao}" itemLabel="#{orgao.id.id} - #{orgao.nome}" var="orgao" />
+                                <p:ajax event="change" update="org" immediate="true"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="nomeUndOrc" value="Nome"/>
+                                <p:message for="nomeUndOrc" id="msgUndOrcNome"/>
+                            </h:panelGrid>
+
+                            <p:inputText id="nomeUndOrc" size="50" value="#{unidadeOrcamentariaMB.unidadeOrcamentariaSelecionada.nome}" required="true" requiredMessage="Preencher campo nome!"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="UndOrcAbrev" value="Abreviação"/>
+                                <p:message for="UndOrcAbrev" id="msgUndOrcAbrev"/>
+                            </h:panelGrid>
+                            <p:inputText id="UndOrcAbrev" size="20" value="#{unidadeOrcamentariaMB.unidadeOrcamentariaSelecionada.abreviacao}" required="true" requiredMessage="Preencher campo abreviação!"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Pendente de Autorização?" for="pendenteAutorizacao"/>
+                                <p:message for="pendenteAutorizacao"/>
+                            </h:panelGrid>
+                            <p:selectBooleanCheckbox id="pendenteAutorizacao" value="#{unidadeOrcamentariaMB.unidadeOrcamentariaSelecionada.pendenteAutorizacao}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid width="100%">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="UndOrcObj" value="Objetivo"/>
+                            <p:message for="UndOrcObj" id="msgUndOrcObj"/>
+                        </h:panelGrid>
+                        <p:inputTextarea id="UndOrcObj" style="width: 95%;" rows="3"  value="#{unidadeOrcamentariaMB.unidadeOrcamentariaSelecionada.objetivo}" required="true" requiredMessage="Preencher campo abreviação!"/>
+                    </h:panelGrid>
+
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellspacing="30" cellpadding="10">
+                    <p:commandButton icon="ui-icon-disk" action="#{unidadeOrcamentariaMB.salvar()}" value="Salvar" update="pnlSis" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.unidade_orc'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.unidade_orc'])}" value="Listar" immediate="true" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.unidade_orc'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" type="reset" ajax="false" value="Limpar"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+
+</ui:composition>

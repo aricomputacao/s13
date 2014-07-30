@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+    <ui:define name="corpo">
+        <p:panel id="panelLstAditivo" header="Listagem de Aditivos" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.aditivo'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Aditivios"/>
+                <h:outputText value="Página - 020507" style="float: right;"/>
+            </f:facet>
+            <p:panel >
+                <p:blockUI block="panelLstAditivo" trigger="btnListar">
+                    <p:graphicImage value="/resources/imagens/carregar.gif"/>
+                </p:blockUI>
+                <h:panelGrid columns="3" >
+
+                    <h:panelGrid>
+                        <h:outputText value="Ordenar"/>
+                        <p:selectOneMenu value="#{aditivoMB.campoOrdem}" style="width: 190px">
+                            <f:selectItems value="#{aditivoMB.campos}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Contrato"/>
+                        <p:inputText size="20" value="#{aditivoMB.contrato}" />
+                    </h:panelGrid>
+
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton id="btnListar" value="Listar" title="Listar" icon="ui-icon-search" action="#{aditivoMB.listar()}" update="tblAditivo"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+
+            </p:panel>
+            <p:dataTable id="tblAditivo" paginator="true" paginatorAlwaysVisible="false" rows="10" emptyMessage="Nenhuma despesa encontrado" var="item" value="#{aditivoMB.aditivos}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+
+                <p:column style="width: 2%;">
+                    <f:facet name="header">
+
+                    </f:facet>
+                    <p:rowToggler id="x"/>
+                </p:column>
+                <p:column sortBy="#{item.codigo}">
+                    <f:facet name="header">
+                        <h:outputText value="Cod"/>
+                    </f:facet>
+                    <h:outputText value="#{item.codigo}"/>
+                </p:column>
+                <p:column sortBy="#{item.contrato.numero}">
+                    <f:facet name="header">
+                        <h:outputText value="Contrato"/>
+                    </f:facet>
+                    <h:outputText value="#{item.contrato.numero}"/>
+                </p:column>
+                <p:column sortBy="#{item.contrato.credor.pessoa.nome}">
+                    <f:facet name="header">
+                        <h:outputText value="Credor"/>
+                    </f:facet>
+                    <h:outputText value="#{item.contrato.credor.pessoa.nome}"/>
+                </p:column>
+                <p:column sortBy="#{item.contrato.licitacao.numero}">
+                    <f:facet name="header">
+                        <h:outputText value="Licitação"/>
+                    </f:facet>
+                    <h:outputText value="#{item.contrato.licitacao.numero}"/>
+                </p:column>
+                <p:rowExpansion>
+                    <h:panelGrid frame="none">
+
+                        <h:outputText value="Unidade Orçamentaria: #{item.contrato.unidadeOrcamentaria.nome}"/>
+                        <h:outputLabel value="Data Inicio: ">
+                            <h:outputText value="#{item.dataInicio}">
+                                <f:convertDateTime pattern="dd/MM/YYYY"/>
+                            </h:outputText>
+                        </h:outputLabel>
+                        <h:outputLabel value="Data Final: ">
+                            <h:outputText value="#{item.dataFim}">
+                                <f:convertDateTime pattern="dd/MM/YYYY"/>
+                            </h:outputText>
+                        </h:outputLabel>
+                        <h:outputLabel value="Valor: ">
+                            <h:outputText value="#{item.valor}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </h:outputLabel>
+                    </h:panelGrid>
+
+                </p:rowExpansion>
+            </p:dataTable>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

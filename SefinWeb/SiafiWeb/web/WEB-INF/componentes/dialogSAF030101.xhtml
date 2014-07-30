@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog header="Encaminhar Solicitação" showEffect="Fade" modal="true" closable="false" resizable="false" width="800" height="400" widgetVar="confirmaEncaminhamento">
+        <h:form id="enc_formu">
+
+            <p:panel rendered="#{encaminhamentoMB.encaminhamento.id == null}">
+                <h:panelGrid width="100%">
+                    <h:panelGrid columns="4">
+                        <h:panelGrid>
+                            <h:outputText value="Solicitação"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.id}" size="15" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Data de Emissão"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.dataEncaminhamento}" readonly="true">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Usuario"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.usuarioEncaminhou.pessoa.nome}" size="20"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Número da nota Fiscal"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.notaFiscal}" size="20" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <h:panelGrid id="area">
+                            <h:panelGrid columns="2">
+                                <h:outputText value="Destino"/>
+                                <p:message for="dest" />
+                            </h:panelGrid>
+                            <p:selectOneMenu value="#{encaminhamentoMB.encaminhamento.destino}" id="dest" converter="#{indexConverter}" required="true" requiredMessage="Selecione o destino" style="width: 350px;">
+                                <!--                                <f:selectItem itemValue="{null}" itemLabel="  Selecionar -"/> -->
+                                <f:selectItems value="#{encaminhamentoMB.listAreaAdministrativa}" var="a" itemLabel="#{a.nome}" itemValue="#{a}"/>
+                                <p:ajax event="change" update="area"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid width="100%">
+                        <h:outputText value="Observações"/>
+                        <p:inputTextarea value="#{encaminhamentoMB.encaminhamento.observacao}" style="width: 100%;"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <p:commandButton value="Encaminhar" action="#{encaminhamentoMB.encaminhar()}" oncomplete="confirmaEncaminhamento.hide();"  icon="ui-icon-circle-arrow-e" update=":frmGeral:pnlGeral, :enc_formu"/>
+                        <p:spacer width="15"/>
+                        <p:commandButton value="Sair" icon="ui-icon-circle-close" onclick="confirmaEncaminhamento.hide();"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <ui:include src="/WEB-INF/componentes/dialogSAF030101parte.xhtml"/>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="Empenhar Solicitação" showEffect="Fade" modal="true" resizable="false" width="800" height="400" widgetVar="empenhar">
+        <h:form id="emp_form">
+            <p:panel rendered="#{encaminhamentoMB.encaminhamento.id == null}">
+                <h:panelGrid styleClass="msgAtencao" rendered="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.empenho == null and encaminhamentoMB.encaminhamento.solicitacaoFinanceira != null}">
+                    <h:outputText value="Essa solicitação ainda não foi empenhada pelo sistema gestor!"/>
+                    <p:commandButton value="Sair" icon="ui-icon-circle-close" oncomplete="empenhar.hide();"/>
+                </h:panelGrid>
+                <h:panelGrid width="100%" rendered="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.empenho != null}">
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:outputText value="Solicitação"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.id}" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Data de Emissão"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.dataEncaminhamento}" readonly="true">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Usuario"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.usuarioEncaminhou.pessoa.nome}" size="30" readonly="true"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:outputText value="Número do Empenho"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.empenho}" size="20" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Número da nota Fiscal"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.notaFiscal}" size="20" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid id="area">
+                            <h:panelGrid columns="2">
+                                <h:outputText value="Destino"/>
+                                <p:message for="dest" />
+                            </h:panelGrid>
+                            <p:selectOneMenu value="#{encaminhamentoMB.encaminhamento.destino}" id="dest" required="true" requiredMessage="Selecione o destino" converter="#{indexConverter}" style="width: 400px;">
+                                <!--<f:selectItem itemValue="{null}" itemLabel="  Selecionar  "/>-->
+                                <f:selectItems value="#{encaminhamentoMB.listAreaAdministrativa}" var="a" itemLabel="#{a.nome}" itemValue="#{a}"/>
+                                <p:ajax event="change" update="area"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid width="100%">
+                        <h:outputText value="Observações"/>
+                        <p:inputTextarea value="#{encaminhamentoMB.encaminhamento.observacao}" style="width: 100%;"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <p:commandButton value="Empenhar" icon="ui-icon-circle-check" action="#{encaminhamentoMB.empenhar()}" update=":frmGeral:pnlGeral, :emp_form" oncomplete="empenhar.hide();"/>
+                        <p:spacer width="15"/>
+                        <p:commandButton value="Sair" icon="ui-icon-circle-close" oncomplete="empenhar.hide();"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <ui:include src="/WEB-INF/componentes/dialogSAF030101parte.xhtml"/>
+        </h:form>
+    </p:dialog>
+
+
+
+    <p:dialog header="Empenhar Solicitação na Contabilida" showEffect="Fade" modal="true" resizable="false" width="800" height="400" widgetVar="empenharContabil">
+        <h:form id="emp_form2">
+            <h:panelGrid styleClass="msgAtencao" rendered="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.empenho == null}">
+                <h:outputText value="Essa solicitação ainda não foi empenhada pelo sistema gestor!"/>
+            </h:panelGrid>
+            <p:panel >
+                <h:panelGrid width="100%" rendered="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.empenho != null}">
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:outputText value="Solicitação"/>
+                            <p:inputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.id}" readonly="true"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:outputText value="Número do Empenho"/>
+                            <p:inputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.empenho}" size="20" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Número da nota Fiscal"/>
+                            <p:inputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.notaFiscal}" size="59" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:commandButton value="Empenhar" icon="ui-icon-circle-check" action="#{solicitacaoFinanceiraMB.empenharNaContabilidade()}" update=":frmGeral:pnlGeral" oncomplete="empenharContabil.hide();"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+            </p:panel>
+            <ui:include src="/WEB-INF/componentes/dialogSAF030101parte.xhtml"/>
+        </h:form>
+    </p:dialog>
+
+
+
+    <p:dialog header="Liquidar Solicitação" showEffect="Fade" modal="true" resizable="false" width="800" height="400" widgetVar="liquidar">
+        <h:form id="liq_form">
+            <h:panelGrid styleClass="msgAtencao" rendered="#{encaminhamentoMB.listaEmpenhoDetalhe.size() == 0}">
+                <p:outputLabel  value="Não existem liquidações registradas no sistema Gestor para esse processo!" />
+            </h:panelGrid>
+            <p:panel rendered="#{encaminhamentoMB.encaminhamento.id == null}" >
+                <h:panelGrid width="100%" rendered="#{encaminhamentoMB.listaEmpenhoDetalhe.size() > 0}">
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:outputText value="Solicitação"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.id}" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Data de Emissão"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.dataEncaminhamento}" readonly="true">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Usuario"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.usuarioEncaminhou.pessoa.nome}" size="30"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1">
+                        <h:panelGrid>
+                            <h:outputText value="Nota Fiscal"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.notaFiscal}" size="30"/>
+                        </h:panelGrid>
+                        <h:panelGrid id="area">
+                            <h:outputText value="Destino"/>
+                            <p:selectOneMenu value="#{encaminhamentoMB.encaminhamento.destino}" required="true" requiredMessage="Selecione o destino" converter="#{indexConverter}" style="width: 350px;">
+                                <!--<f:selectItem itemValue="{null}" itemLabel="  Selecionar  "/> -->
+                                <f:selectItems value="#{encaminhamentoMB.listAreaAdministrativa}" var="a" itemLabel="#{a.nome}" itemValue="#{a}"/>
+                                <p:ajax event="change" update="area"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid width="100%">
+                        <h:outputText value="Observações"/>
+                        <p:inputTextarea value="#{encaminhamentoMB.encaminhamento.observacao}" style="width: 100%;"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:commandButton value="Liquidar"  icon="ui-icon-circle-check" action="#{encaminhamentoMB.liquidar()}" update=":frmGeral:pnlGeral" oncomplete="liquidar.hide();"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <ui:include src="/WEB-INF/componentes/dialogSAF030101parte.xhtml"/>
+        </h:form>
+    </p:dialog>
+    <p:dialog  header="Liquidar Solicitação na Contabilidade" showEffect="Fade" modal="true" resizable="false" width="600" height="200" widgetVar="liquidarContabilidade">
+        <h:form id="liq_form2">
+            <h:panelGrid styleClass="msgAtencao" rendered="#{solicitacaoFinanceiraMB.empenhoDetalhes.size() == 0}">
+                <p:outputLabel  value="Não existem liquidações registradas no sistema Gestor para esse processo!" />
+            </h:panelGrid>
+            <p:panel >
+                <h:panelGrid width="100%" rendered="#{solicitacaoFinanceiraMB.empenhoDetalhes.size() > 0}">
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:outputText value="Solicitação"/>
+                            <p:inputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.id}" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Empenho"/>
+                            <p:inputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.empenho}" readonly="true"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1">
+                        <h:panelGrid>
+                            <h:outputText value="Nota Fiscal"/>
+                            <p:inputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.notaFiscal}" size="30"/>
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:commandButton value="Liquidar"  icon="ui-icon-circle-check" action="#{solicitacaoFinanceiraMB.liquidarNaContabilidade()}" update=":frmGeral:pnlGeral" oncomplete="liquidarContabilidade.hide();"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <ui:include src="/WEB-INF/componentes/dialogSAF030101parte.xhtml"/>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="Concluir Solicitação" showEffect="Fade" modal="true" resizable="false" width="300" height="200" widgetVar="concluir">
+        <h:form id="con_form">
+            <p:panel rendered="#{encaminhamentoMB.encaminhamento.id == null}">
+                <h:panelGrid >
+                    <h:outputText value="Concluir solicitação financeira?" style="font-weight: bold;"/>
+                    <h:outputText value="A solicitação financeira será arquivada e estará disponivel somente para consulta!"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3">
+                    <p:commandButton value="Concluir" icon="ui-icon-circle-check" action="#{encaminhamentoMB.concluir()}" update=":frmGeral:pnlGeral" oncomplete="concluir.hide();"/>
+                    <p:spacer width="25"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-circle-close" oncomplete="concluir.hide();"/>
+                </h:panelGrid>
+            </p:panel>
+            <ui:include src="/WEB-INF/componentes/dialogSAF030101parte.xhtml"/>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="Devolver Solicitação" showEffect="Fade" modal="true" resizable="false" width="500"  widgetVar="devolverEncaminhamento">
+        <h:form id="dev_form">
+            <center>
+
+                <h:panelGrid styleClass="msgAtencao" rendered="#{encaminhamentoMB.encaminhamento.id != null}">
+                    <h:outputText value="Esse processo já está encaminhado,mas pendente de recebimento."/>
+                </h:panelGrid>
+                <p:panel rendered="#{encaminhamentoMB.encaminhamento.id == null}">
+
+                    <h:panelGrid width="100%">
+                        <h:outputText style="font-weight: bold" value="Devolver Encaminhamento?"/>
+                        <p:separator/>
+                        <h:panelGrid width="100%">
+                            <h:outputText value="Observações"/>
+                            <p:inputTextarea value="#{encaminhamentoMB.encaminhamento.observacao}" rows="5" cols="50" style="width: 100%;" />
+                        </h:panelGrid>
+                        <h:panelGrid  columns="2">
+                            <p:commandButton action="#{encaminhamentoMB.devolver()}" icon="ui-icon-disk" value="Sim" oncomplete="devolverEncaminhamento.hide();" update=":frmGeral"/>
+                            <p:commandButton icon="ui-icon-circle-close" value="Não" immediate="true" oncomplete="devolverEncaminhamento.hide();" style="margin-left: 150px"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                </p:panel>
+            </center>
+
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="Liberar documentação" showEffect="Fade" modal="true" resizable="false" width="800" height="400" widgetVar="libDoc">
+        <h:form id="doc_form">
+            <p:panel rendered="#{encaminhamentoMB.encaminhamento.id == null}">
+                <h:panelGrid width="100%">
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:outputText value="Solicitação"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.id}" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Data de Emissão"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.dataEncaminhamento}" readonly="true">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Usuario"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.usuarioEncaminhou.pessoa.nome}" size="30"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <h:panelGrid id="area">
+                            <h:outputText value="Destino"/>
+                            <p:selectOneMenu value="#{encaminhamentoMB.encaminhamento.destino}" required="true" requiredMessage="Selecione o destino" converter="#{indexConverter}" style="width: 350px;">
+                                <!-- <f:selectItem itemValue="{null}" itemLabel="  Selecionar  "/> -->
+                                <f:selectItems value="#{encaminhamentoMB.listAreaAdministrativa}" var="a" itemLabel="#{a.nome}" itemValue="#{a}"/>
+                                <p:ajax event="change" update="area"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid width="100%">
+                        <h:outputText value="Observações"/>
+                        <p:inputTextarea value="#{encaminhamentoMB.encaminhamento.observacao}" style="width: 100%;"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:commandButton value="Liberar" icon="ui-icon-circle-check" action="#{encaminhamentoMB.liberarDocumentacao()}" update=":frmGeral:pnlGeral" oncomplete="libDoc.hide();"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <ui:include src="/WEB-INF/componentes/dialogSAF030101parte.xhtml"/>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="Encaminhar Solicitação Paga" showEffect="Fade" modal="true" resizable="false" width="800" height="400" widgetVar="encPagar">
+        <h:form id="enc_pag_form">
+            <p:panel rendered="#{encaminhamentoMB.encaminhamento.id == null}">
+                <h:panelGrid width="100%">
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:outputText value="Solicitação"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.id}" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Data de Emissão"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.dataEncaminhamento}" readonly="true">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Usuario"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.usuarioEncaminhou.pessoa.nome}" size="30"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <h:panelGrid id="area">
+                            <h:outputText value="Destino"/>
+                            <p:selectOneMenu value="#{encaminhamentoMB.encaminhamento.destino}" required="true" requiredMessage="Selecione o destino" converter="#{indexConverter}" style="width: 350px;">
+                                <!-- <f:selectItem itemValue="{null}" itemLabel="  Selecionar  "/> -->
+                                <f:selectItems value="#{encaminhamentoMB.listAreaAdministrativa}" var="a" itemLabel="#{a.nome}" itemValue="#{a}"/>
+                                <p:ajax event="change" update="area"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid width="100%">
+                        <h:outputText value="Observações"/>
+                        <p:inputTextarea value="#{encaminhamentoMB.encaminhamento.observacao}" style="width: 100%;"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:commandButton value="Encaminhar pagamento" icon="ui-icon-circle-check" action="#{encaminhamentoMB.encaminhar()}" update=":frmGeral:pnlGeral" oncomplete="encPagar.hide();"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <ui:include src="/WEB-INF/componentes/dialogSAF030101parte.xhtml"/>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="Pagar Solicitação Financeira"  showEffect="Fade" modal="true" resizable="false" width="800" widgetVar="pagar">
+        <h:form id="pag_form">
+            <p:focus/>
+            <h:panelGrid styleClass="msgAtencao" rendered="#{not encaminhamentoMB.pagamentoLiberado and not encaminhamentoMB.liquidacoesPagas}">
+                <h:outputText value="Existem liquidações pendentes. É nessessário o pagamento das mesmas para poder pagar essa solicitação." />
+            </h:panelGrid>
+            <h:panelGrid styleClass="msgAtencao" rendered="#{empty encaminhamentoMB.listaEmpenhoDetalhe}">
+                <h:outputText value="Não foram encontradas liquidações dessa solicitação" />
+            </h:panelGrid>
+            <p:panel id="grdPag" rendered="#{encaminhamentoMB.encaminhamento.id == null}">
+                <h:panelGrid width="100%">
+                    <p:dataTable var="i" value="#{encaminhamentoMB.listaEmpenhoDetalhe}" rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+                        <f:facet name="header">
+                            <h:outputText value="Liquidações do processo"/>
+                        </f:facet>
+
+                        <p:column headerText="Data de Pagamento">
+                            <h:outputText value="#{i.dataPagamento}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Documento">
+                            <h:outputText value="#{i.documentoPagamento}"/>
+                        </p:column>
+                        <p:column headerText="Empenho">
+                            <h:outputText value="#{i.empenho}"/>
+                        </p:column>
+                        <p:column headerText="Conta">
+                            <h:outputText value="#{i.conta.nome}"/>
+                        </p:column>
+                        <p:column headerText="Valor Bruto">
+                            <h:outputText value="#{i.valor}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Situação">
+                            <h:panelGrid>
+                                <h:outputText value="Pendente de pagamento" rendered="#{i.dataPagamento == null}"/>
+                                <h:outputText value="Pago" rendered="#{i.dataPagamento != null}"/>
+                                <h:outputText value="Pendente de Autorização" rendered="#{i.dataAutorizacao == null}"/>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:dataTable>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel style="font-weight: bolder" value="Valor Liquido do Processo :"/>
+                        <h:outputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.valorLiquido}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+                <h:panelGrid width="100%" rendered="#{encaminhamentoMB.checarLiquidacao(encaminhamentoMB.encaminhamento.solicitacaoFinanceira)}">
+                    <h:panelGrid columns="4">
+                        <h:panelGrid>
+                            <h:outputText value="Solicitação"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.id}" size="15" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Valor solicitado"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.valor}" readonly="true" size="15">
+                                <f:convertNumber type="currency"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Data do pagamento"/>
+                            <p:calendar id="pag" showButtonPanel="true" value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.dataPagamento}" pattern="dd/MM/yyyy" size="15" required="true" requiredMessage="Informe a data de pagamento"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Fonte de recurso"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.fonteRecurso.nome}" readonly="true" size="40"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" >
+                        <h:panelGrid rendered="false">
+                            <h:outputText value="INSS"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.inss}" onfocus="mascaraInputs();" converter="#{bigDecimalConverter}" converterMessage="Valor Invalido" styleClass="edtMoeda">
+                                <p:ajax event="blur" listener="#{encaminhamentoMB.somarValorPagamento()}" update="vlLiq"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid rendered="false">
+                            <h:outputText value="IRRF"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.irrf}" onfocus="mascaraInputs();" converter="#{bigDecimalConverter}" converterMessage="Valor Invalido" styleClass="edtMoeda">
+                                <p:ajax event="blur" listener="#{encaminhamentoMB.somarValorPagamento()}" update="vlLiq"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid rendered="false">
+                            <h:outputText value="ISS"/>
+                            <p:inputText value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.iss}" onfocus="mascaraInputs();" converter="#{bigDecimalConverter}" converterMessage="Valor Invalido" styleClass="edtMoeda">
+                                <p:ajax event="blur"  listener="#{encaminhamentoMB.somarValorPagamento()}" update="vlLiq"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid id="vlLiq">
+                            <h:outputText value="Valor Liquido"/>
+                            <p:inputText  value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.valorLiquido}" onfocus="mascaraInputs();" converter="#{bigDecimalConverter}" converterMessage="Valor Invalido" validator="#{encaminhamentoMB.validaValor}"
+                                          validatorMessage="O valor deve ser maior que zero" styleClass="edtMoeda" required="true" requiredMessage="Informe o valor">
+
+                            </p:inputText>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid width="100%">
+                        <h:outputText value="Observações"/>
+                        <p:inputTextarea value="#{encaminhamentoMB.encaminhamento.solicitacaoFinanceira.observacao}" style="width: 100%;"/>
+                    </h:panelGrid>
+
+                </h:panelGrid>
+                <h:panelGrid  width="100%" columns="2" >
+
+                    <p:commandButton value="Pagar" rendered="#{encaminhamentoMB.renderBtnPagar()}" icon="ui-icon-circle-check" action="#{encaminhamentoMB.pagar()}" oncomplete="pagar.hide();" update=":pag_form,:frmGeral:pnlGeral"/>
+                    <p:commandButton value="Fechar" update=":frmGeral:pnlGeral" onclick="pagar.hide();" immediate="true" icon="ui-icon-circle-close"/>
+                </h:panelGrid>
+
+            </p:panel>
+            <ui:include src="/WEB-INF/componentes/dialogSAF030101parte.xhtml"/>
+        </h:form>
+    </p:dialog>
+
+
+    <p:dialog header="Pagar Solicitação Financeira Contabilidade"  showEffect="Fade" modal="true" resizable="false" width="800" widgetVar="pagarContabilidade">
+        <h:form id="pag_form2">
+            <p:focus/>
+            <h:panelGrid styleClass="msgAtencao" rendered="#{not solicitacaoFinanceiraMB.pagamentoLiberado}">
+                <h:outputText value="Existem liquidações pendentes. É nessessário o pagamento das mesmas para poder pagar essa solicitação." />
+            </h:panelGrid>
+            <h:panelGrid styleClass="msgAtencao" rendered="#{empty solicitacaoFinanceiraMB.empenhoDetalhes}">
+                <h:outputText value="Não foram encontradas liquidações dessa solicitação" />
+            </h:panelGrid>
+            <p:panel id="grdPag" >
+                <h:panelGrid width="100%">
+                    <p:dataTable var="i" value="#{solicitacaoFinanceiraMB.empenhoDetalhes}" rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+                        <f:facet name="header">
+                            <h:outputText value="Liquidações do processo"/>
+                        </f:facet>
+
+                        <p:column headerText="Documento">
+                            <h:outputText value="#{i.documentoPagamento}"/>
+                        </p:column>
+                        <p:column headerText="Empenho">
+                            <h:outputText value="#{i.empenho}"/>
+                        </p:column>
+                        <p:column headerText="Conta">
+                            <h:outputText value="#{i.conta.nome}"/>
+                        </p:column>
+                        <p:column headerText="Valor pago">
+                            <h:outputText value="#{i.valor}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Situação">
+                            <h:panelGrid>
+                                <h:outputText value="Pendente de pagamento" rendered="#{i.dataPagamento == null}"/>
+                                <h:outputText value="Pago" rendered="#{i.dataPagamento != null}"/>
+                                <h:outputText value="Pendente de Autorização" rendered="#{i.dataAutorizacao == null}"/>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+
+                <h:panelGrid width="100%" rendered="#{solicitacaoFinanceiraMB.checarLiquidacao(i.solicitacaoFinanceira)}">
+                    <h:panelGrid columns="4">
+                        <h:panelGrid>
+                            <h:outputText value="Solicitação"/>
+                            <p:inputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.id}" size="15" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Valor solicitado"/>
+                            <p:inputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.valor}" readonly="true" size="15">
+                                <f:convertNumber type="currency"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Data do pagamento"/>
+                            <p:calendar id="pag" showButtonPanel="true" value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.dataPagamento}" pattern="dd/MM/yyyy" size="15" required="true" requiredMessage="Informe a data de pagamento"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Fonte de recurso"/>
+                            <p:inputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.fonteRecurso.nome}" readonly="true" size="40"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+
+                        <h:panelGrid id="vlLiq">
+                            <h:outputText value="Valor Liquido"/>
+                            <p:inputText  value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.valorLiquido}" onfocus="mascaraInputs();" converter="#{bigDecimalConverter}" converterMessage="Valor Invalido" validator="#{solicitacaoFinanceiraMB.validaValor}"
+                                          validatorMessage="O valor deve ser maior que zero" styleClass="edtMoeda" required="true" requiredMessage="Informe o valor">
+
+                            </p:inputText>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                </h:panelGrid>
+                <h:panelGrid columns="2" width="100%">
+                    <p:commandButton value="Pagar" icon="ui-icon-circle-check" action="#{solicitacaoFinanceiraMB.pagarNaContabilidade()}" oncomplete="pagarContabilidade.hide();" update=":pag_form2,:frmGeral" rendered="#{solicitacaoFinanceiraMB.pagamentoLiberado and not solicitacaoFinanceiraMB.liquidacoesPagas}"/>
+                    <p:commandButton value="Fechar" update=":frmGeral:pnlGeral" onclick="pagarContabilidade.hide();" immediate="true" icon="ui-icon-circle-close"/>
+                </h:panelGrid>
+            </p:panel>
+            <ui:include src="/WEB-INF/componentes/dialogSAF030101parte.xhtml"/>
+        </h:form>
+    </p:dialog>
+
+</ui:component>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+    <ui:define name="corpo" >
+        <h:outputScript name="script/navegacao.js" />
+        <p:blockUI block="pnlGeral" trigger="btnListar">
+            <p:graphicImage value="/resources/imagens/carregar.gif"/>
+        </p:blockUI>
+       
+
+        <p:panel id="pnlGeral" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['auditoria.solicitacao_financeira'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Solicitações Auditoria"/>
+                <h:outputText value="Página - 060505" style="float: right;"/>
+            </f:facet>
+            <p:panel id="pnlLisSolicitacao">
+                <h:panelGrid width="100%" >
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:outputText value="Unidade Orçamentária"/>
+                            <p:selectOneMenu value="#{solicitacaoFinanceiraAudMB.solicitacaoFinanceira.cota.unidadeOrcamentaria}"  converter="#{indexConverter}"
+                                             style="width: 350px;">
+                                <f:selectItem itemValue="#{null}"  itemLabel="----------------------------------- TODAS -------------------------------"/>
+                                <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.unidadeOrcamentariaPK.idOrgao}#{orc.unidadeOrcamentariaPK.id} - #{orc.nome}" itemValue="#{orc}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid >
+                            <h:panelGrid cellspacing="10" columns="3">
+                                <h:panelGrid >
+                                    <h:outputText  value="Data"/>
+                                    <p:selectBooleanCheckbox value="#{solicitacaoFinanceiraAudMB.filtroData}" immediate="true"  >
+                                        <p:ajax update="panelPesq" global="false" listener="#{solicitacaoFinanceiraAudMB.setFiltroData(filtroData)}"/>
+                                    </p:selectBooleanCheckbox>
+                                </h:panelGrid>
+
+                                <h:panelGrid>
+                                    <h:outputText value="Situação"/>
+                                    <p:selectBooleanCheckbox value="#{solicitacaoFinanceiraAudMB.filtroSituacao}" immediate="true"  >
+                                        <p:ajax update="panelPesq" global="false" listener="#{solicitacaoFinanceiraAudMB.setFiltroSituacao(filtroSituacao)}"/>
+                                    </p:selectBooleanCheckbox>
+                                </h:panelGrid>
+                                <h:panelGrid>
+                                    <h:outputText value="Número"/>
+                                    <p:selectBooleanCheckbox value="#{solicitacaoFinanceiraAudMB.filtroNumero}" immediate="true"  >
+                                        <p:ajax update="panelPesq" global="false" listener="#{solicitacaoFinanceiraAudMB.setFiltroNumero(filtroNumero)}"/>
+                                    </p:selectBooleanCheckbox>
+                                </h:panelGrid>
+                            </h:panelGrid>
+
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid id="panelPesq">
+                        <h:panelGrid columns="2">
+                            <h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Credor" title="Credor"/>
+                                    <p:message for="solCred"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:inputText id="solCred" readonly="true" size="53" required="true" requiredMessage="Informe credor" value="#{solicitacaoFinanceiraAudMB.credor.pessoa.nome}"/>
+                                    <p:commandButton immediate="true"  onclick="credorBusca.show();" icon="ui-icon-circle-zoomout" title="Credor"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                            <h:panelGrid>
+                                <h:outputLabel value="Mês"/>
+                                <p:selectOneMenu value="#{solicitacaoFinanceiraAudMB.competenciaConsulta}" style="width: 150px;">
+                                    <f:selectItem itemLabel="" itemValue="#{null}"/>
+                                    <f:selectItems value="#{solicitacaoFinanceiraAudMB.listaMeses}" var="m" itemLabel="#{m}" itemValue="#{m}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid rendered="#{solicitacaoFinanceiraAudMB.filtroSituacao}">
+                                <h:outputText value="Situação"/>
+
+                                <p:selectCheckboxMenu  value="#{solicitacaoFinanceiraAudMB.listaSituacaoSolicitacaos}"  label="Selecione"  style="width: 200px;">
+                                    <f:selectItems value="#{solicitacaoFinanceiraAudMB.situacoesSolicitacao}"/>
+                                </p:selectCheckboxMenu >
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+
+                            <h:panelGrid rendered="#{solicitacaoFinanceiraAudMB.filtroNumero}">
+                                <h:outputText value="Número"/>
+                                <p:inputText value="#{solicitacaoFinanceiraAudMB.numero}"/>
+                            </h:panelGrid>
+                            <h:panelGrid rendered="#{solicitacaoFinanceiraAudMB.filtroNumero}">
+                                <h:outputText value="Empenho"/>
+                                <p:inputText value="#{solicitacaoFinanceiraAudMB.empenho}"/>
+                            </h:panelGrid>
+                            <h:panelGrid rendered="#{solicitacaoFinanceiraAudMB.filtroData}">
+                                <h:outputText value="Período"/>
+                                <h:panelGrid columns="3">
+                                    <p:calendar showButtonPanel="true" effect="fade" navigator="true" value="#{solicitacaoFinanceiraAudMB.dataInicial}" pattern="dd/MM/yyyy"/>
+                                    <p:spacer width="10"/>
+                                    <p:calendar showButtonPanel="true" effect="fade" navigator="true"  value="#{solicitacaoFinanceiraAudMB.dataFinal}" pattern="dd/MM/yyyy"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="6" style="float: right;">
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Listar" id="btnListar"  title="Listar" icon="ui-icon-search" immediate="true" action="#{solicitacaoFinanceiraAudMB.listarSolicitacoes()}" update="tab"/>
+                        <p:spacer width="10"/>
+                     
+                    </h:panelGrid>
+                </h:panelGrid>
+
+            </p:panel>
+            <h:panelGrid id="tab" width="100%">
+                <p:tabView activeIndex="#{solicitacaoFinanceiraAudMB.tabAtiva}">
+                    <p:tab title="Consulta">
+                        <p:dataTable paginatorAlwaysVisible="false" paginator="true" rows="10" emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{solicitacaoFinanceiraAudMB.listaSolicitacaoFinanceiras}"
+                                     rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+                            <p:column style="width: 2%;">
+                                <p:rowToggler id="x"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Número"/>
+                                </f:facet>
+                                <h:outputLabel value="#{item.id}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Data de Solicitação"/>
+                                </f:facet>
+                                <h:outputText value="#{item.dataSolicitacao}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Valor"/>
+                                </f:facet>
+                                <h:outputText value="#{item.valor}">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Situação"/>
+                                </f:facet>
+                                <h:outputText value="#{item.situacaoSolicitacao}"/>
+                            </p:column>
+                            <p:column headerText="Ações" style="max-width: 10px">
+                                <p:commandButton icon="ui-icon-circle-check" immediate="true" action="#{solicitacaoFinanceiraAudMB.listarAlteracoes()}" title="Selecionar" update=":frmGeral:tab">
+                                    <f:setPropertyActionListener target="#{solicitacaoFinanceiraAudMB.solicitacaoFinanceira}" value="#{item}"/>
+                                </p:commandButton>
+                            </p:column>
+                            <p:rowExpansion>
+                                <h:panelGrid frame="none">
+                                    <h:outputText value="Usuário: #{item.usuario.pessoa.nome}"/>
+                                    <h:outputText value="Unidade Orçamentaria: #{item.cota.unidadeOrcamentaria.nome}"/>
+                                    <h:outputText value="Despesa: #{item.cota.despesa.nome}"/>
+                                    <h:outputText value="Localização: #{item.local.nome}"/>
+                                    <h:outputText value="Categoria: #{item.cota.categoria.nome}"/>
+                                    <h:outputText value="Despesa: #{item.cota.despesa.nome}"/>
+                                    <h:outputText value="Competência: #{item.mesCompetencia.asNumero(item.mesCompetencia)}#{item.anoCompetencia}"/>
+                                    <h:outputText value="Credor: #{item.credor.pessoa.nome}"/>
+                                    <h:outputText value="Autorizado por: #{item.usuarioAutorizou.pessoa.nome}"/>
+                                    <h:outputLabel value="Data Autorização: ">
+                                        <h:outputText value="#{item.dataAutorizacao}">
+                                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                        </h:outputText>
+                                    </h:outputLabel>
+                                    <h:outputText value="Histórico: #{item.historico}"/>
+                                </h:panelGrid>
+                            </p:rowExpansion>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="Solicitação Financeira" rendered="#{solicitacaoFinanceiraAudMB.solicitacaoFinanceira != null}">
+                        <h:panelGrid  width="100%">
+                            <h:panelGrid>
+                                <h:outputText value="Solicitação"/>
+                                <h:outputText value="#{solicitacaoFinanceiraAudMB.solicitacaoFinanceira.id}"/>
+                            </h:panelGrid>
+                            <h:panelGrid width="100%">
+                                <p:dataTable  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="sol" value="#{solicitacaoFinanceiraAudMB.listaSolicitacaoFinanceiraAud}"
+                                              rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+                                    <p:column style="width: 2%;">
+                                        <p:rowToggler id="x"/>
+                                    </p:column>
+                                    <p:column headerText="Estado">
+                                        <h:outputText value="Incluido" rendered="#{sol.revtype == 0}"/>
+                                        <h:outputText value="Alterado" rendered="#{sol.revtype == 1}"/>
+                                        <h:outputText value="Excluido" rendered="#{sol.revtype == 2}"/>
+                                    </p:column>
+                                    <p:column headerText="Data do Ocorrido">
+                                        <h:outputText value="#{sol.solicitacaFinaceiraAudPk.entidadeRevisional.dataRevisao}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Usuario ">
+                                        <h:outputText value="#{sol.solicitacaFinaceiraAudPk.entidadeRevisional.usuario.pessoa.nome}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Número">
+                                        <h:outputLabel value="#{sol.solicitacaFinaceiraAudPk.id}"/>
+                                    </p:column>
+                                    <p:column headerText="Data da Solicitação">
+                                        <h:outputText value="#{sol.dataSolicitacao}">
+                                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Valor">
+                                        <h:outputText value="#{sol.valor}">
+                                            <f:convertNumber type="currency"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Contrato">
+                                        <h:outputText value="#{sol.contrato.numero}"/>
+                                    </p:column>
+                                    <p:column headerText="Situação">
+                                        <h:outputText value="#{sol.situacaoSolicitacao}"/>
+                                    </p:column>
+                                    <p:rowExpansion>
+                                        <h:panelGrid frame="none">
+                                            <h:outputText value="Usuário: #{sol.usuario.pessoa.nome}"/>
+                                            <h:outputText value="Unidade Orçamentaria: #{sol.cota.unidadeOrcamentaria.nome}"/>
+                                            <h:outputText value="Despesa: #{sol.cota.despesa.nome}"/>
+                                            <h:outputText value="Localização: #{sol.local.nome}"/>
+                                            <h:outputText value="Categoria: #{sol.cota.categoria.nome}"/>
+                                            <h:outputText value="Centro de Custo #{sol.cota.despesa.nome}"/>
+                                            <h:outputText value="Competência: #{sol.mesCompetencia.asNumero(sol.mesCompetencia)}#{sol.anoCompetencia}"/>
+                                            <h:outputText value="Credor: #{sol.credor.pessoa.nome}"/>
+                                            <h:outputText value="#{sol.situacaoSolicitacao}"/>
+                                            <h:outputText value="Autorizado por: #{sol.usuarioAutorizou.pessoa.nome}"/>
+                                            <h:outputLabel value="Data Autorização: ">
+                                                <h:outputText value="#{sol.dataAutorizacao}">
+                                                    <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                                </h:outputText>
+                                            </h:outputLabel>
+                                            <h:outputText value="Histórico: #{sol.historico}"/>
+                                        </h:panelGrid>
+                                    </p:rowExpansion>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogSAF060505/>
+    </ui:define>
+
+</ui:composition>

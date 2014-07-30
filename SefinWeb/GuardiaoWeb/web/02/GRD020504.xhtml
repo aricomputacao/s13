@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel id="pnlForm" header="Lista de Unidades Administrativas" style="width:100%;" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.unidade_adm'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Listagem de Unidades Administrativas"/>
+                    <h:outputText value="Página - 020504" style="float: right;"/>
+                </f:facet>
+                <h:panelGrid columns="6">
+                    <h:panelGrid>
+                        <h:outputText value="Ordenar"/>
+                        <p:selectOneMenu value="#{unidadeAdministrativaMB.campoOrdem}" style="width: 190px">
+                            <f:selectItems value="#{unidadeAdministrativaMB.campos}" var="c" itemLabel="#{c}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Campo"/>
+                        <p:selectOneMenu value="#{unidadeAdministrativaMB.campoBusca}" style="width: 190px">
+                            <f:selectItems value="#{unidadeAdministrativaMB.camposString}" var="c" itemLabel="#{c}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Pesquisar por"/>
+                        <p:inputText value="#{unidadeAdministrativaMB.valorBusca}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Pesquisar" icon="ui-icon-circle-zoomin" update="pnlForm" action="#{unidadeAdministrativaMB.listar()}"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Novo" icon="ui-icon-plus" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.unidade_adm'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.unidade_adm'])}"/>
+                    </h:panelGrid>
+
+
+                </h:panelGrid>
+
+
+                <p:dataTable id="tblUndAdm" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Unidades Administrativas não encontrados" var="item" value="#{unidadeAdministrativaMB.listaUnidadeAdministrativas}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+
+                    <p:column style="width:16px">
+                        <p:rowToggler />
+                    </p:column>
+                    <p:column headerText="Id">
+                        <h:outputText value="#{item.id}"/>
+                    </p:column>
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{item.nome}"/>
+                    </p:column>
+                    <p:rowExpansion>
+                        <p:dataTable   value="#{item.orgaos}"  emptyMessage="Órgãos não encontrados" var="org">
+                            <p:column>
+                                <f:facet name="header">
+                                    Id
+                                </f:facet>
+                                <h:outputText value="#{org.id}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    Nome
+                                </f:facet>
+                                <h:outputText value="#{org.nome}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:rowExpansion>
+                    <p:column>
+                        <f:facet name="header">
+                            Ações
+                        </f:facet>
+                        <p:commandButton  id="btnEditUndAdm" icon="ui-icon-pencil" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.unidade_adm'],'unidadeAdm',item)}" title="Editar" rendered="#{usuarioLogadoMB.permissaoEditar(navegacao['cadastro.unidade_adm'])}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

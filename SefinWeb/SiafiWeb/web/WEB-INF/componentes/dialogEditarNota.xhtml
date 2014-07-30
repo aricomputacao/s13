@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <p:dialog widgetVar="edtNota" id="dt" modal="true" header="#{label['nome.sistema']}" showEffect="fade" closable="true" width="600">
+        <h:form id="frmEdtNota">
+            <p:fieldset toggleable="true" legend="Número da Solicitação">
+                <h:outputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.id}" style="font-weight: bolder;"/>
+            </p:fieldset>
+            <h:panelGrid columns="2">
+                <p:fieldset toggleable="true" legend="Empenho">
+                    <p:inputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.empenho}" />
+                </p:fieldset>
+
+            </h:panelGrid>
+            <p:fieldset toggleable="true" legend="Números de Notas Fiscais">
+                <p:inputTextarea value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.notaFiscal}" style="width:100%;" cols="180" rows="5" maxlength="255"/>
+            </p:fieldset>
+
+            <p:fieldset toggleable="true" legend="Histórico">
+                <p:inputTextarea value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.historico}" style="width:100%;" cols="180" rows="5" readonly="#{not solicitacaoFinanceiraMB.podeEditarHistorico()}"/>
+            </p:fieldset>
+            <h:panelGrid columns="3">
+                <p:commandButton value="Confirmar" icon="ui-icon-check" oncomplete="edtNota.hide();" update="frmEdtNota" action="#{solicitacaoFinanceiraMB.atualiza()}"/>
+                <p:spacer width="15"/>
+                <p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="edtNota.hide();" update="frmEdtNota"/>
+            </h:panelGrid>
+        </h:form>
+    </p:dialog>
+
+
+</ui:component>

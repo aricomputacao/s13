@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<ui:composition template="/modelo/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <ui:define name="corpo">
+        <p:panel id="pnlExercicio" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.exercicio'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Cadastro de Exercicio"/>
+                <h:outputText value="Página - 010401" style="float: right;"/>
+            </f:facet>
+            <p:focus/>
+
+            <h:panelGrid width="100%">
+                <h:panelGrid columns="2">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Ano" title="Ano de referencia do exercicio"/>
+                            <p:message for="exeAno"/>
+                        </h:panelGrid>
+                        <p:inputMask id="exeAno" mask="9999"  size="4" validator="#{exercicioMB.validate}" value="#{exercicioMB.exercicio.ano}" required="true" requiredMessage="Informe o ano de exercício." validatorMessage="Já existe um exercicio cadastrado com esse ano." disabled="#{exercicioMB.exercicio.ano != null}"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel  value="Descrição" title="Descrição do exercicio"/>
+                            <p:message for="exeDesc"/>
+                        </h:panelGrid>
+                        <p:inputText id="exeDesc" size="40" value="#{exercicioMB.exercicio.descricao}" required="true" requiredMessage="Informe a descrição do exercício."/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel  value="Data de inicio" title="Data de inicio do exercicio."/>
+                            <p:message for="exedtInicio"/>
+                        </h:panelGrid>
+                        <p:calendar id="exedtInicio"  showButtonPanel="true" size="22" navigator="true" value="#{exercicioMB.exercicio.dataInicial}" required="true" requiredMessage="Informe a data de Início"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel  value="Data final" title="Data de término do exercicio"/>
+                            <p:message for="exedtFinal"/>
+                        </h:panelGrid>
+                        <p:calendar id="exedtFinal" showButtonPanel="true" navigator="true" size="22" value="#{exercicioMB.exercicio.dataFinal}" required="true" requiredMessage="Informe a data final."/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="3">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel  value="Ativo"/>
+                        </h:panelGrid>
+                        <p:selectBooleanCheckbox id="exeAtivo" value="#{exercicioMB.exercicio.ativo}"/>
+                    </h:panelGrid>
+                    <p:spacer width="20" height="25"/>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel  value="Padrão" title="Marcar esse exercicio como o exercicio atual"/>
+                        </h:panelGrid>
+                        <p:selectBooleanCheckbox id="exePadrao" value="#{exercicioMB.exercicio.padrao}" />
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellspacing="30" cellpadding="10">
+                    <comp:commandButton_salvar acao_butao="#{exercicioMB.salvar()}" rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.exercicio'])}"/>
+                    <comp:commandbutton_navegar_consulta acao_butao="#{beanNavegacaoMB.redirecionar(navegacao['listar.exercicio'])}" rendered="#{usuarioMB.permissaoEditar(navegacao['cadastro.exercicio'])}"/>
+                    <comp:commandButton_limpar/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+</ui:composition>

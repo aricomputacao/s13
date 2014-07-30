@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:form>
+        <center>
+            <p:dialog widgetVar="cancelarSolicitacao" modal="true" width="400" header="#{label['nome.sistema']}" closable="false"
+                      draggable="false" resizable="false" showEffect="Fade">
+                <h:outputText style="font-size: 15px;font-style: normal" value="Cancelar solicitação financeira?"/>
+
+                <h:panelGrid style="margin-top: 30px" columns="2">
+                    <h:panelGrid width="150"  style="text-align: center;">
+                        <p:commandButton value="Sim" action="#{solicitacaoFinanceiraMB.cancelarSolicitacao()}" icon="ui-icon-check" update=":frmGeral:tblSolicitacao" oncomplete="cancelarSolicitacao.hide()"/>
+
+                    </h:panelGrid>
+                    <h:panelGrid width="150"  style="text-align: center;">
+                        <p:commandButton value="Não" icon="ui-icon-circle-close" onclick="cancelarSolicitacao.hide()"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+            </p:dialog>
+        </center>
+    </h:form>
+
+    <p:dialog header="Lista de Encaminhamentos" showEffect="Fade" resizable="false" width="800" modal="true" height="400" id="listaEncaminhamentos" widgetVar="listaEnc" closable="true">
+        <h:form id="frmEncaminhamento">
+
+            <p:blockUI block="pnlDialog" trigger="btnImpressao" widgetVar="bui">
+                <p:graphicImage value="/resources/imagens/carregar.gif"/>
+            </p:blockUI>
+            <p:panel id="pnlDialog" >
+                <center>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Fechar" onclick="listaEnc.hide();" icon="ui-icon-circle-close"/>
+                        <p:commandButton value="Imprimir" id="btnImpressao"  icon="ui-icon-print" action="#{encaminhamentoMB.impressaoEncaminhaments(solicitacaoFinanceiraMB.listaEncaminhamentos)}"  oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf')"/>
+
+                    </h:panelGrid>
+                </center>
+                <p:dataTable id="tblListaEnc" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="enc" value="#{solicitacaoFinanceiraMB.listaEncaminhamentos}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" style="margin-bottom: 20px">
+
+                    <p:column style="width: 2%;">
+                        <f:facet name="header">
+                        </f:facet>
+                        <p:rowToggler id="x"/>
+                    </p:column>
+                    <p:column headerText="Origem" sortBy="#{enc.usuarioEncaminhou.areaAdministrativa.nome}">
+                        <h:outputText value="#{enc.usuarioEncaminhou.areaAdministrativa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Destino" sortBy="#{enc.destino.nome}" style="max-width: 350px;">
+                        <h:outputText value="#{enc.destino.nome}" />
+                    </p:column>
+                    <p:column headerText="Data Enc" sortBy="#{enc.dataEncaminhamento}" >
+                        <h:outputText value="#{enc.dataEncaminhamento}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Data Rec" sortBy="#{enc.dataRecebimento}" >
+                        <h:outputText value="#{enc.dataRecebimento}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:rowExpansion>
+                        <h:panelGrid frame="none"  >
+                            <h:outputText value="Encaminhado por :  #{enc.usuarioEncaminhou.pessoa.nome}"/>
+                            <h:outputText value="Recebido por :  #{enc.usuarioRecebeu.pessoa.nome}"/>
+                            <p:inputTextarea value="Observação :  #{enc.observacao}" style="width: 100%;color: #000;" rows="3" readonly="true" autoResize="true" cols="100"/>
+                        </h:panelGrid>
+                    </p:rowExpansion>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="Lista de Liquidações" showEffect="Fade" resizable="false" width="800" modal="true" height="400" id="listaLiquidacoes" widgetVar="listaLiqui" closable="true">
+        <h:form id="frmLiquidacoes">
+            <p:panel>
+
+                <p:dataTable id="tblListaLiq" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="liq" value="#{solicitacaoFinanceiraMB.empenhoDetalhes}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" style="margin-bottom: 20px">
+
+                    <p:column headerText="Nº Liquidação" sortBy="#{liq.documentoPagamento}">
+                        <h:outputText value="#{liq.documentoPagamento}"/>
+                    </p:column>
+                    <p:column headerText="Data do Pagamento" sortBy="#{liq.dataPagamento}">
+                        <h:outputText value="#{liq.dataPagamento}">
+                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Documento">
+                        <h:outputText value="#{liq.documentoPagamento}"/>
+                    </p:column>
+                    <p:column headerText="Conta">
+                        <h:outputText value="#{liq.conta.nome}"/>
+                    </p:column>
+                    <p:column headerText="Valor">
+                        <h:outputText value="#{liq.valor}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Situação">
+                        <h:panelGrid>
+                            <h:outputText value="Pendente de pagamento" rendered="#{liq.dataPagamento == null}"/>
+                            <h:outputText value="Pago" rendered="#{liq.dataPagamento != null}"/>
+                            <h:outputText value="Pendente de Autorização" rendered="#{liq.dataAutorizacao == null}"/>
+                        </h:panelGrid>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+            <center>
+                <p:commandButton value="Fechar" onclick="listaLiqui.hide();" icon="ui-icon-circle-close"/>
+            </center>
+        </h:form>
+    </p:dialog>
+</ui:component>

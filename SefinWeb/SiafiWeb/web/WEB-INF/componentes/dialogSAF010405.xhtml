@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <h:form id="frmProjAtividade">
+        <center>
+            <p:dialog  id="dialogProj" widgetVar="listaProjAtividade" modal="true" width="800" header="#{label['nome.sistema']}" closable="true"
+                       draggable="true" resizable="false" showEffect="Fade">
+
+                <p:dataTable id="tab" value="#{solicitacaoFinanceiraMB.projetoAtividades}" var="item"  rows="10"  emptyMessage="Nenhum projeto atividade encontrado"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx"  paginator="true" paginatorAlwaysVisible="false">
+
+                    <p:column style="max-width: 30px"  filterBy="#{item.tipo}#{item.acao}">
+                        <f:facet name="header">
+                            <h:outputText value="Número"/>
+                        </f:facet>
+                        <h:outputLabel value="#{item.tipo}#{item.acao}"/>
+                    </p:column>
+                    <p:column style="max-width: 400px">
+                        <f:facet name="header">
+                            <h:outputText value="Nome" />
+                        </f:facet>
+                        <h:outputLabel value="#{item.nome}" title="#{item.nome}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Ações"/>
+                        </f:facet>
+                        <p:commandButton oncomplete="listaProjAtividade.hide()" styleClass="btnTabela" icon="ui-icon-circle-check" action="#{solicitacaoFinanceiraMB.listarDotacaoProjetoAtividadeOrcamento()}" update=":frmGeral:grdDot">
+                            <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.projetoAtividade}" value="#{item}"/>
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </p:dialog>
+        </center>
+    </h:form>
+
+
+
+
+    <p:dialog  id="dialogNatDes" widgetVar="listaNaturezaDespesa" modal="true" position="center"  width="800" header="#{label['nome.sistema']}" closable="true"
+               resizable="false" showEffect="Fade">
+        <h:form id="frmNaturezaDespesa">
+            <p:dataTable id="tabNat" value="#{solicitacaoFinanceiraMB.listaDotacaoDtos}" var="nat"  rows="10"  emptyMessage="Nenhum projeto atividade encontrado"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx"    paginator="true" paginatorAlwaysVisible="false">
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Código"/>
+                    </f:facet>
+                    <h:outputLabel value="#{nat.dotacao.naturezaDespesa.id}"/>
+                </p:column>
+
+                <p:column style="max-width: 400px">
+                    <f:facet name="header">
+                        <h:outputText value="Nome"/>
+                    </f:facet>
+                    <h:outputLabel value="#{nat.dotacao.naturezaDespesa.nome}" title="#{nat.dotacao.naturezaDespesa.nome}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Valor Utilizado"/>
+                    </f:facet>
+                    <h:outputLabel value="#{nat.valorUtilizado}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputLabel>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Saldo"/>
+                    </f:facet>
+                    <h:outputLabel value="#{nat.calcularSaldo()}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputLabel>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Ações"/>
+                    </f:facet>
+                    <p:commandButton oncomplete="listaNaturezaDespesa.hide()" styleClass="btnTabela" rendered="#{nat.calcularSaldo() > 0}"  icon="ui-icon-circle-check" update=":frmGeral:grdDot,:frmGeral:dotSaldo">
+                        <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.dotacao}" value="#{nat.dotacao}"/>
+                        <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.saldoDotacao}" value="#{nat.calcularSaldo()}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:dialog>
+
+
+
+
+    <p:dialog  id="dialogContrato" widgetVar="listaContratos"  modal="true" width="1000" header="#{label['nome.sistema']}" closable="true"
+               resizable="false" showEffect="Fade">
+        <h:form id="frmContrato">
+            <p:dataTable id="tblListaContra" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="itemCon" value="#{solicitacaoFinanceiraMB.listaAditivos}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+
+                <p:column headerText="Id" style="max-width: 50px" sortBy="#{itemCon.contrato.id}">
+                    <h:outputText value="#{itemCon.contrato.id}"/>
+                </p:column>
+                <p:column headerText="Número" sortBy="#{itemCon.contrato.numero}" filterBy="#{itemCon.contrato.numero}">
+                    <h:outputText value="#{itemCon.contrato.numero}"/>
+                </p:column>
+                <p:column headerText="Credor" style="max-width: 300px" sortBy="#{itemCon.contrato.credor.pessoa.nome}">
+                    <h:outputText value="#{itemCon.contrato.credor.pessoa.nome}"/>
+                </p:column>
+                <p:column headerText="Licitação" sortBy="#{itemCon.contrato.licitacao.numero}">
+                    <h:outputText value="#{itemCon.contrato.licitacao.numero}"/>
+                </p:column>
+
+                <p:column headerText="Saldo" >
+                    <h:outputText value="#{solicitacaoFinanceiraMB.mostraSaldoAditivo(itemCon)}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Unidade Orçamentaria">
+                    <h:outputText value="#{itemCon.contrato.unidadeOrcamentaria}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Ações"/>
+                    </f:facet>
+                    <p:commandButton oncomplete="listaContratos.hide()" styleClass="btnTabela" icon="ui-icon-circle-check"  update=":frmGeral:pnlContrato">
+                        <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.aditivo}" value="#{itemCon}"/>
+
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="Busca Ordem de compra" showEffect="Fade" resizable="false" width="900" height="400" modal="true" widgetVar="ordemCompraBusca">
+        <h:form id="frmOrdemCompra">
+            <p:panel>
+                <p:panel rendered="false">
+                    <h:panelGrid columns="2">
+                        <h:panelGrid>
+                            <h:outputText value="Pesquisar por"/>
+                            <p:inputText value="" size="25" onkeyup="$(this).val($(this).val().toUpperCase());"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:spacer width="10"/>
+                            <p:commandButton value="Listar" title="Listar" id="btnListar" icon="ui-icon-search" action="#{ordemCompraMB.listar()}" update="tblLista" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.ordem_compra'])}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:panel>
+                <p:dataTable id="tblListaOrdemCompra" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="o" value="#{solicitacaoFinanceiraMB.ordemCompraLista}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                    <p:column headerText="Id" sortBy="#{o.id}">
+                        <h:outputText value="#{o.id}"/>
+                    </p:column>
+                    <p:column headerText="Status" sortBy="#{o.status}">
+                        <h:outputText value="#{o.status}"/>
+                    </p:column>
+                    <p:column headerText="Data de Emissão" sortBy="#{o.dataEmissao}">
+                        <h:outputText value="#{o.dataEmissao}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Credor" sortBy="#{o.credor.pessoa.nome}" style="max-width: 350px">
+                        <h:outputText value="#{o.credor.pessoa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Total">
+                        <h:outputText value="#{o.valorTotal}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Emissor" sortBy="#{o.emissor.pessoa.nome}">
+                        <h:outputText value="#{o.emissor.pessoa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Itens" rendered="false">
+                        <p:commandButton onclick="itensOrdemCompra.show();" update=":frmItensOrdemCompra" title="ver itens" icon="ui-icon-search" action="#{ordemCompraMB.listarItensOrdemCompra()}">
+                            <f:setPropertyActionListener value="#{item}" target="#{ordemCompraMB.ordemCompra}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Ação">
+                        <p:commandButton onclick="ordemCompraBusca.hide();" styleClass="btnTabela" update=":frmGeral:ordemCompra,:frmGeral:solValor" title="Selecionar ordem de compra" icon="ui-icon-circle-check">
+                            <f:setPropertyActionListener value="#{o}" target="#{solicitacaoFinanceiraMB.ordemCompra}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </p:dialog>
+
+
+    <p:dialog widgetVar="dialogConvenios"  modal="true" width="800" header="#{label['nome.sistema']}" closable="true"
+              resizable="false" showEffect="Fade">
+        <h:form id="frmConvenio">
+            <p:dataTable paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="i" value="#{solicitacaoFinanceiraMB.conveniosList}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+
+                <p:column headerText="Id" sortBy="#{i.id}">
+                    <h:outputText value="#{i.id}"/>
+                </p:column>
+                <p:column headerText="Número" sortBy="#{i.numero}">
+                    <h:outputText value="#{i.numero}"/>
+                </p:column>
+                <p:column headerText="Objetivo"  style="max-width: 300px" >
+                    <h:outputText style="max-width: 300px" title="#{i.objetivo}" value="#{i.objetivo}"/>
+                </p:column>
+                <p:column headerText="Credor" style="max-width: 300px" sortBy="#{i.credor.pessoa.nome}">
+                    <h:outputText value="#{i.credor.pessoa.nome}"/>
+                </p:column>
+                <p:column headerText="Ações">
+                    <p:commandButton oncomplete="dialogConvenios.hide()" styleClass="btnTabela" icon="ui-icon-circle-check" update=":frmGeral">
+                        <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.convenio}" value="#{i}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog widgetVar="dialogFonteRec"  modal="true" width="800" header="#{label['nome.sistema']}" closable="true" id="dialoFonte"
+              resizable="false" showEffect="Fade">
+        <p:dataTable id="tblFont" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="fon" value="#{fonteRecursoMB.lista}"
+                     rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+            <p:column headerText="Id" sortBy="#{fon.id}">
+                <h:outputText value="#{fon.id}"/>
+            </p:column>
+            <p:column headerText="Número" sortBy="#{fon.nome}">
+                <h:outputText value="#{fon.nome}"/>
+            </p:column>
+            <p:column headerText="Tipo " >
+                <h:outputText value="#{fon.tipoFonteRecurso.nome}"/>
+            </p:column>
+            <p:column headerText="Ações">
+                <p:commandButton oncomplete="dialogFonteRec.hide()" styleClass="btnTabela" icon="ui-icon-circle-check" update=":frmGeral">
+                    <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.fonteRecurso}" value="#{fon}"/>
+                </p:commandButton>
+            </p:column>
+        </p:dataTable>
+    </p:dialog>
+
+    <p:dialog widgetVar="historico_padrao_cadastro"  modal="true" width="800" header="#{label['nome.sistema']}" closable="true" resizable="false" showEffect="Fade">
+        <h:form id="frmHistoricoPadrao">
+            <p:messages autoUpdate="true"/>
+            <p:focus/>
+            <p:panel header="Cadastrar Histórico Padrão">
+                <h:panelGrid width="100%">
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <p:outputLabel value="Unidade Orçamentária"/>
+                            <p:inputText value="#{historicoPadraoMB.unidadeOrcamentaria.nome}" maxlength="50" size="40" readonly="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:outputLabel for="his_nome" value="Nome"/>
+                            <p:inputText id="his_nome" value="#{historicoPadraoMB.historicoPadrao.nome}" maxlength="50" required="true" requiredMessage="Informe um nome"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid width="100%">
+                        <p:outputLabel for="his_texto" value="Texto do Histórico"/>
+                        <p:inputTextarea id="his_texto" value="#{historicoPadraoMB.historicoPadrao.texto}" maxlength="1024" required="true" requiredMessage="Informe o texto do histórico" style="width: 100%" rows="5" cols="180"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <p:commandButton icon="ui-icon-disk" value="Salvar" update="frmHistoricoPadrao" action="#{historicoPadraoMB.salvar()}"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog widgetVar="historico_padrao_listagem" modal="true" width="1000" position="top" header="#{label['nome.sistema']}" closable="true" resizable="false" showEffect="Fade">
+        <h:form id="frmHistoricoPadraoLista">
+            <p:messages autoUpdate="true"/>
+            <p:panel>
+                <h:panelGrid columns="2">
+                    <h:panelGrid>
+                        <p:inputText value="#{historicoPadraoMB.nome}" id="busca" size="40">
+                            <p:ajax update="tabelaHistorico" listener="#{historicoPadraoMB.listar()}" event="keyup" />
+                        </p:inputText>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <comp:commandButton_consulta acao_butao="#{historicoPadraoMB.listar()}" update="@form:tabelaHistorico" />
+                    </h:panelGrid>
+                    <p:watermark value="Digite um texto para consultar" for="busca"/>
+                </h:panelGrid>
+            </p:panel>
+            <p:panel header="Consultar Histórico Padrão" id="tabelaHistorico">
+                <p:dataTable paginator="true" paginatorAlwaysVisible="false"  rows="10"  emptyMessage="Nenhum registro encontrado" var="h" value="#{historicoPadraoMB.historicoPadraoList}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+
+                    <p:column headerText="Nome" width="10%">
+                        <strong> <h:outputText value="#{h.nome}"/></strong>
+                    </p:column>
+                    <p:column width="30%" headerText="Texto">
+                        <h:outputText style="max-width: 200px" title="#{h.texto}" value="#{h.texto}"/>
+                    </p:column>
+                    <p:column headerText="Ações" width="2%">
+                        <p:commandButton icon="ui-icon-check" styleClass="btnTabela" onclick="historico_padrao_listagem.hide()" update=":frmGeral:historico_cad">
+                            <f:setPropertyActionListener value="#{h.texto}" target="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.historico}"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-pencil" onclick="historico_padrao_cadastro.show();" title="alterar esse historico" styleClass="btnTabela" update=":frmHistoricoPadrao">
+                            <f:setPropertyActionListener value="#{h}" target="#{historicoPadraoMB.historicoPadrao}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </p:dialog>
+</ui:component>

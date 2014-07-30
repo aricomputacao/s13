@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:form>
+        <center>
+            <p:dialog widgetVar="log" modal="true" width="400" header="#{label['nome.sistema']}" closable="false" draggable="false" resizable="false" showEffect="Fade">
+                <p:panel>
+                    <h:panelGrid style="text-align: center;">
+                        <h:outputText value="Efetue Login Novamente"/>
+                        <h:outputText value="Sua sessão expirou"/>
+                        <a href="#{beanNavegacaoMB.nomeSistema}/j_spring_security_logout" style="padding: 10px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-icon-person">Clique Aqui</a>
+                    </h:panelGrid>
+                </p:panel>
+            </p:dialog>
+        </center>
+        <p:poll immediate="true" listener="#{beanNavegacaoMB.logout()}" interval="3595"/>
+    </h:form>
+</ui:component>

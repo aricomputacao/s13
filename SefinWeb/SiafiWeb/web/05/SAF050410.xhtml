@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<ui:composition template="/modelo/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <ui:define name="corpo">
+        <p:panel  styleClass="painelPadrao" >
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Relatório Credor a Unidade Orçamentária"/>
+                <h:outputText value="Página - 050410" style="float: right;"/>
+            </f:facet>
+            <p:focus/>
+            <p:tabView id="tbView">
+                <p:tab title="Vincular credor" id="tb01"  rendered="#{usuarioMB.permissaoIncluir(navegacao['relatorio.acompanhamento_credor'])}" >
+                    <h:panelGrid width="100%" >
+                        <h:panelGrid id="un">
+                            <h:panelGrid>
+                                <comp:outputText value="Unidade Orçamentária" />
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:inputText value="#{credorUnidadeOrcamentariaMB.idUnidade}" size="5" id="cod" maxlength="4">
+                                    <p:ajax listener="#{credorUnidadeOrcamentariaMB.selecionaSecretaria()}" event="keyup" update="und grd1" />
+                                </p:inputText>
+                                <p:selectOneMenu value="#{credorUnidadeOrcamentariaMB.unidadeOrcamentaria}" converter="#{indexConverter}" style="width: 400px;" required="true" id="und" requiredMessage="Selecione a unidade Orçamentaria">
+                                    <f:selectItem itemValue="#{null}" itemLabel=" -- Selecionar -- "/>
+                                    <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.unidadeOrcamentariaPK} - #{orc.nome}" itemValue="#{orc}"/>
+                                    <p:ajax event="change" update="@form"  listener="#{credorUnidadeOrcamentariaMB.ajustaCodigo()}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <p:panel id="pnl">
+                            <h:panelGrid columns="2" id="grd1">
+                                <h:panelGrid  columns="2">
+                                    <p:panel >
+                                        <f:facet name="header">
+                                            <p:spacer height="10" width="170"/>
+                                            <h:outputText value="Credores"/>
+                                        </f:facet>
+                                        <p:dataTable style="min-height: 400px;"   paginator="true" paginatorAlwaysVisible="false" rows="10" rowKey="#{item.id}"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{credorUnidadeOrcamentariaMB.credorDataList}"
+                                                     rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" selection="#{credorUnidadeOrcamentariaMB.listaCredores}">
+
+                                            <p:column selectionMode="multiple" headerText="Todos"  width="1%" >
+                                            </p:column>
+                                            <p:column filterBy="#{item.pessoa.nome}" >
+                                                <f:facet name="header" >
+                                                    <h:outputText value="Credor" />
+                                                </f:facet>
+                                                <comp:outputText value="#{item.pessoa.nome}"/>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </p:panel>
+                                    <h:panelGrid >
+                                        <p:commandButton title="Adicionar" icon="ui-icon-circle-arrow-e" update="grd2"  actionListener="#{credorUnidadeOrcamentariaMB.addCredor()}" onclick="block.show" oncomplete="block.hide"   />
+                                        <p:spacer width="15"/>
+                                        <p:commandButton title="Remover todos"  update="grd2" icon="ui-icon-circle-arrow-w" actionListener="#{credorUnidadeOrcamentariaMB.removerCredores()}" >
+                                            <p:confirm header="Confirmação" message="Excluir todos os credores?"  icon="ui-icon-alert"/>
+                                        </p:commandButton> 
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <h:panelGrid id="grd2">
+                                    <p:panel style="min-width: 400px" >
+                                        <f:facet name="header">
+                                            <p:spacer height="10" width="130"/>
+                                            <h:outputText value="Credores Selecionados"/>
+                                        </f:facet>
+                                        <p:dataTable id="tab"  style="min-height: 400px;"  paginator="true" paginatorAlwaysVisible="false" rows="10" rowKey="#{item2.id}"  emptyMessage="Nenhum credor encontrado" var="item2" value="#{credorUnidadeOrcamentariaMB.listaCredores2}"
+                                                     rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+                                            <p:column filterBy="#{item2.pessoa.nome}" >
+                                                <f:facet name="header"  >
+                                                    <h:outputText value="Credor" />
+                                                </f:facet>
+                                                <comp:outputText value="#{item2.pessoa.nome}"/>
+                                            </p:column>
+                                            <p:column  >
+                                                <f:facet name="header"  >
+                                                    <h:outputText value="Ação" />
+                                                </f:facet>
+                                                <comp:commandButton_excluir acao_butao="#{credorUnidadeOrcamentariaMB.excluirCredor(item2)}" form_to_update="@form:tbView:tb01:tab" classe="Credor"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:panel>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Consulta Credor Unidade Orçmantária" id="tb02" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.acompanhamento_credor'])}">
+                    <h:panelGrid columns="4" width="100%" >
+                        <h:panelGrid id="un2">
+                            <h:panelGrid>
+                                <comp:outputText value="Unidade Orçamentária" />
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:inputText value="#{credorUnidadeOrcamentariaMB.idUnidade}" size="5" id="cod2" maxlength="4">
+                                    <p:ajax listener="#{credorUnidadeOrcamentariaMB.selecionaSecretaria()}" event="keyup" update="und2, cre" />
+                                </p:inputText>
+                                <p:selectOneMenu value="#{credorUnidadeOrcamentariaMB.unidadeOrcamentaria}" converter="#{indexConverter}" style="width: 300px;" id="und2" requiredMessage="Selecione a unidade Orçamentaria">
+                                    <f:selectItem itemValue="#{null}" itemLabel=" -- Selecionar -- "/>
+                                    <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.unidadeOrcamentariaPK} - #{orc.nome}" itemValue="#{orc}"/>
+                                    <p:ajax event="change" update="cre"  listener="#{credorUnidadeOrcamentariaMB.ajustaCodigo()}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid id="cre">
+                            <h:panelGrid>
+                                <comp:outputText value="Credor" />
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:selectOneMenu value="#{credorUnidadeOrcamentariaMB.credor}" converter="#{indexConverter}" style="width: 300px;"   requiredMessage="Selecione o credor">
+                                    <f:selectItem itemValue="#{null}" itemLabel=" -- Selecionar -- "/>
+                                    <f:selectItems value="#{credorUnidadeOrcamentariaMB.credorUnidadeOrcamentaria.credores}" var="c" itemLabel="#{c.pessoa.nome}" itemValue="#{c}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid >
+                            <h:panelGrid>
+                                <comp:outputText value="Competência" />
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:selectOneMenu value="#{credorUnidadeOrcamentariaMB.mes}"  style="width: 150px;"  requiredMessage="Selecione o mês">
+                                    <f:selectItem itemValue="#{null}" itemLabel=" -- Selecionar -- "/>
+                                    <f:selectItems value="#{credorUnidadeOrcamentariaMB.listaMeses}" var="m" itemLabel="#{m}" itemValue="#{m}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid  columns="2">
+                            <p:spacer width="15"/>
+                            <p:spacer width="15"/>
+
+                            <comp:commandButton_consulta acao_butao="#{credorUnidadeOrcamentariaMB.consultarProcessos()}"  update="@form:tbView:tb02:tbl" />
+                            <comp:commandButton_imprimir acao_butao="#{credorUnidadeOrcamentariaMB.impressao()}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <p:dataTable id="tbl"  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{credorUnidadeOrcamentariaMB.listaSolicitacaoFinanceiras}"
+                                 rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+
+
+                        <p:column width="5%">
+                            <f:facet name="header" >
+                                <h:outputText value="Número" />
+                            </f:facet>
+                            <comp:outputText value="#{item.id}" />
+                        </p:column>
+                        <p:column width="5%">
+                            <f:facet name="header">
+                                <h:outputText value="Empenho"/>
+                            </f:facet>
+                            <comp:outputText value="#{item.empenho}" />
+                        </p:column>
+                        <p:column sortBy="#{item.credor.pessoa.nome}">
+                            <f:facet name="header">
+                                <h:outputText value="Unidade"/>
+                            </f:facet>
+                            <comp:outputText tipo="c" value="#{item.cota.unidadeOrcamentaria.nome}"/>
+                        </p:column>
+                        <p:column >
+                            <f:facet name="header">
+                                <h:outputText value="Localização"/>
+                            </f:facet>
+                            <comp:outputText tipo="c" value="#{item.local.nome}"/>
+                        </p:column>
+                        <p:column width="5%" >
+                            <f:facet name="header" >
+                                <h:outputText value="Data de Solicitação"/>
+                            </f:facet>
+                            <comp:outputText tipo="d" value="#{item.dataSolicitacao}"/>
+                        </p:column>
+                        <p:column width="12%">
+                            <f:facet name="header">
+                                <h:outputText value="Valor"/>
+                            </f:facet>
+                            <comp:outputText tipo="c" value="#{item.valor}"/>
+                        </p:column>
+                        <p:column width="3%"  sortBy="#{item.situacaoSolicitacao}" >
+                            <f:facet name="header" >
+                                <h:outputText value="Situação"/>
+                            </f:facet>
+                            <comp:outputText value="#{item.situacaoSolicitacao}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:tab>
+            </p:tabView>
+        </p:panel>
+    </ui:define>
+</ui:composition>

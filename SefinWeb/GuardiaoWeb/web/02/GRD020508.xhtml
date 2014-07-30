@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel header="Lista de Áreas Administrativas" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.unidade_orc'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Listagem de Áreas Administrativas"/>
+                    <h:outputText value="Página - 020501" style="float: right;"/>
+                </f:facet>
+                <h:panelGrid columns="6">
+                    <h:panelGrid>
+                        <h:outputText value="Ordenar"/>
+                        <p:selectOneMenu value="#{areaAdministrativaMB.campoOrdem}" style="width: 190px">
+                            <f:selectItems value="#{areaAdministrativaMB.campos}" var="c" itemLabel="#{c}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Campo"/>
+                        <p:selectOneMenu value="#{areaAdministrativaMB.campoBusca}" style="width: 190px">
+                            <f:selectItems value="#{areaAdministrativaMB.camposString}" var="c" itemLabel="#{c}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Pesquisar por"/>
+                        <p:inputText value="#{orgaoMB.valorBusca}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Pesquisar" icon="ui-icon-circle-zoomin" update="tblAreas" action="#{areaAdministrativaMB.listar()}"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Novo" icon="ui-icon-plus" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.area_adm'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.unidade_orc'])}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+                <p:dataTable id="tblAreas" rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx"
+                             paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="item" value="#{areaAdministrativaMB.listaAreasAdministrativas}">
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{item.nome}"/>
+                    </p:column>
+                    <p:column headerText="Acesso Unidade Adm">
+                        <h:outputText value="Sim" rendered="#{item.acessoUnidadeOrcamentaria}"/>
+                        <h:outputText value="Não" rendered="#{not item.acessoUnidadeOrcamentaria}"/>
+                    </p:column>
+                    <p:column headerText="Nome do Orgão">
+                        <h:outputText value="#{item.orgao.nome}"/>
+                    </p:column>
+                    <p:column headerText="Tipo">
+                        <h:outputText value="#{item.tipoAreaAdm}"/>
+                    </p:column>
+                    <p:column headerText="Ações">
+                        <p:commandButton icon="ui-icon-pencil" title="Editar" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.area_adm'],'areaAdm',item)}" rendered="#{usuarioLogadoMB.permissaoEditar(navegacao['cadastro.unidade_orc'])}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

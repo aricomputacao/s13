@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel id="pnlSis" header="Cadastro de Sistema" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.sistema'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Cadastro de Sistema"/>
+                    <h:outputText value="Página - 010401" style="float: right;"/>
+                </f:facet>
+                <p:focus/>
+                <h:panelGrid cellspacing="5" width="100%">
+                    <h:panelGrid width="100%">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="sisSigla" value="Sigla"/>
+                            <p:message for="sisSigla"/>
+                        </h:panelGrid>
+                        <p:inputText id="sisSigla" size="25" value="#{sistemaMB.sistemaSelecionado.sigla}" required="true" requiredMessage="Preencher campo sigla!"/>
+                    </h:panelGrid>
+                    <h:panelGrid width="100%">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="sisMnemonico" value="Mnemônico"/>
+                            <p:message for="sisMnemonico"/>
+                        </h:panelGrid>
+                        <p:inputMask mask="aaa" id="sisMnemonico" size="25" value="#{sistemaMB.sistemaSelecionado.mnemonico}" required="true" requiredMessage="Preencher campo mnemônico!"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="nomeSis" value="Nome"/>
+                            <p:message for="nomeSis"/>
+                        </h:panelGrid>
+                        <p:inputText id="nomeSis" size="50" value="#{sistemaMB.sistemaSelecionado.nome}" required="true" requiredMessage="Preencher campo nome!"/>
+                    </h:panelGrid>
+                    <h:panelGrid width="100%">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="Descrição" for="descrSis"/>
+                            <p:message for="descrSis"/>
+                        </h:panelGrid>
+                        <p:inputTextarea id="descrSis" rows="5" style="width: 100%;" cols="50" value="#{sistemaMB.sistemaSelecionado.descricao}" required="true" requiredMessage="Preencher campo descrição!"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellspacing="30" cellpadding="10">
+                    <p:commandButton icon="ui-icon-disk" action="#{sistemaMB.salvar()}" value="Salvar" update="pnlSis" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.sistema'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.sistema'])}" value="Listar" immediate="true" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.sistema'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" type="reset" ajax="false" value="Limpar"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <p:dialog widgetVar="edtNota" id="dt" modal="true" header="#{label['nome.sistema']}" showEffect="fade" closable="true" width="400">
+        <h:form id="frmEdtNota">
+
+            <h:panelGrid columns="3">
+                <h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Nota Fiscal"/>
+                    </h:panelGrid>
+                    <p:inputText value="#{solicitacaiLiquidacaoMB.solicitacaoLiquidacao.documento}"   size="20"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Valor"/>
+                    </h:panelGrid>
+                    <p:inputText value="#{solicitacaiLiquidacaoMB.solicitacaoLiquidacao.valor}" styleClass="edtMoeda" onfocus="mascaraInputs();"   size="10">
+                        <f:convertNumber type="currency" maxFractionDigits="2" minFractionDigits="2" minIntegerDigits="1" locale="pt_BR" currencyCode="BRL" />
+                    </p:inputText>
+                </h:panelGrid>
+
+                <h:panelGrid >
+                   
+                    <p:spacer width="18"/>
+                    <p:commandButton value="Confirmar" icon="ui-icon-check" oncomplete="edtNota.hide();" update="frmEdtNota,:frmGeral" actionListener="#{solicitacaiLiquidacaoMB.atualizarLiquidacao()}"/>
+
+                </h:panelGrid>
+            </h:panelGrid>
+
+        </h:form>
+    </p:dialog>
+
+
+</ui:component>

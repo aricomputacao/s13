@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp"
+                xmlns:scgb="http://sefin.ce.gov.br">
+    <ui:define name="corpo" >
+        <p:panel header="Listagem de Projetos Atividades" id="pnlGeral" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.projeto_atividade'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Projetos Atividades"/>
+                <h:outputText value="Página - 040504" style="float: right;"/>
+            </f:facet>
+            <scgb:consultaProjetoAtividade/>
+        </p:panel>
+    </ui:define>
+</ui:composition>

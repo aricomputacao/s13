@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_cota_analitico" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="50efeff6-c1e3-4be6-a7f5-5ee8e0bec387">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="zebrado">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean( $V{REPORT_COUNT}.intValue() % 2 == 0 )]]></conditionExpression>
+			<style forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Projetos\\SefinWeb\\SiafiWeb\\web\\WEB-INF\\relatorios\\sub_relatorios\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="credor" class="java.lang.Object"/>
+	<parameter name="ordem" class="java.lang.Object"/>
+	<parameter name="relatorio" class="java.lang.String"/>
+	<parameter name="img" class="java.lang.String"/>
+	<parameter name="rodapeEmail" class="java.lang.String"/>
+	<parameter name="img1" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="cota" class="br.com.siafi.modelo.Cota">
+		<fieldDescription><![CDATA[cota]]></fieldDescription>
+	</field>
+	<field name="saldo" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[saldo]]></fieldDescription>
+	</field>
+	<field name="saldoRelativo" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[saldoRelativo]]></fieldDescription>
+	</field>
+	<variable name="saldo_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{saldo}]]></variableExpression>
+	</variable>
+	<variable name="saldo_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{saldo}]]></variableExpression>
+	</variable>
+	<variable name="saldoRelativo_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{saldoRelativo}]]></variableExpression>
+	</variable>
+	<group name="categoria">
+		<groupExpression><![CDATA[$F{cota}.getCategoria().getNome()]]></groupExpression>
+		<groupHeader>
+			<band height="26">
+				<textField>
+					<reportElement uuid="97318432-bc0e-4e26-b972-205dbf783cf6" x="83" y="3" width="185" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""+$F{cota}.getCategoria().getNome().toUpperCase()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="b494d918-15e0-4283-a7d1-c79ac6894c87" x="375" y="4" width="90" height="20"/>
+					<box rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Valor]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="58be9fd7-a3e1-4b6f-acbe-78b505199d53" x="465" y="3" width="90" height="20"/>
+					<box rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Saldo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="4b3828ef-7760-4aa5-a93d-e21881e8fadd" x="0" y="3" width="83" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[CATEGORIA:]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="51e20ab6-6549-42c3-8e0b-53a9bb003446" x="1" y="24" width="555" height="1"/>
+				</line>
+				<line>
+					<reportElement uuid="2d53b513-20fc-436a-b1bd-d8b9afa443a3" x="0" y="3" width="555" height="1"/>
+				</line>
+			</band>
+		</groupHeader>
+	</group>
+	<title>
+		<band height="70" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="907f4f91-4e4b-4bf9-8256-a4d8c205d7b3" x="0" y="0" width="555" height="70"/>
+				<subreportParameter name="img1">
+					<subreportParameterExpression><![CDATA[$P{img1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="img">
+					<subreportParameterExpression><![CDATA[$P{img}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="relatorio">
+					<subreportParameterExpression><![CDATA[$P{relatorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cabecalho_retrato.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="34" splitType="Stretch">
+			<frame>
+				<reportElement uuid="95ac5dc4-fe42-4fd6-8022-992755c0513f" mode="Opaque" x="0" y="0" width="555" height="34" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textField>
+					<reportElement uuid="613357bd-abf6-42af-81df-0be6197d3c16" x="130" y="7" width="399" height="20"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{cota}.getUnidadeOrcamentaria().getUnidadeOrcamentariaPK().getIdOrgao()+$F{cota}.getUnidadeOrcamentaria().getUnidadeOrcamentariaPK().getId()+"-"+$F{cota}.getUnidadeOrcamentaria().getNome()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="4dfe1313-2117-4a74-b476-500885338d04" x="0" y="6" width="128" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[Unidade Orçamentária:]]></text>
+				</staticText>
+			</frame>
+			<line>
+				<reportElement uuid="068f5dee-b5be-4a52-8ae2-480fc9f1bfb3" x="0" y="33" width="555" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="ea273e5b-a668-430f-858b-5a87c0d32f0e" style="zebrado" x="0" y="0" width="555" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Dashed"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="db54e80a-e802-484b-969b-d347bd354e7d" x="0" y="0" width="268" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[""+$F{cota}.getDespesa().getNome()]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="77070f04-a67c-4aec-a8db-6fca3acccc79" x="375" y="0" width="90" height="20"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cota}.getValor()]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="1ae8978d-7418-4a99-b1d0-ef3a838f29ff" x="465" y="0" width="90" height="20"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="60">
+			<subreport>
+				<reportElement uuid="329b34c8-bc16-47f0-a1af-045f309a9040" x="0" y="0" width="555" height="60"/>
+				<subreportParameter name="rodapeEmail">
+					<subreportParameterExpression><![CDATA[$P{rodapeEmail}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rodape_retrato.jasper"]]></subreportExpression>
+			</subreport>
+			<textField evaluationTime="Report">
+				<reportElement uuid="faafdd69-e9ed-41cd-abf4-a1730f9df3eb" x="484" y="4" width="30" height="18"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>

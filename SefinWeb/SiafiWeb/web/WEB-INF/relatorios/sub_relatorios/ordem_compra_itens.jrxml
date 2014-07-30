@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ordem_compra_itens" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="50efeff6-c1e3-4be6-a7f5-5ee8e0bec387">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="zebrado">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean( $V{REPORT_COUNT}.intValue() % 2 == 0 )]]></conditionExpression>
+			<style forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="dataset1" uuid="49734840-187d-4ec5-a36c-fb8e673caa4b">
+		<field name="quantidade" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[quantidade]]></fieldDescription>
+		</field>
+		<field name="itemLicitacao" class="br.com.siafi.modelo.ItemLicitacao">
+			<fieldDescription><![CDATA[itemLicitacao]]></fieldDescription>
+		</field>
+		<field name="itemOrdemCompraPk" class="br.com.siafi.modelo.ItemOrdemCompraPk">
+			<fieldDescription><![CDATA[itemOrdemCompraPk]]></fieldDescription>
+		</field>
+		<field name="ordemCompra" class="br.com.siafi.modelo.OrdemCompra">
+			<fieldDescription><![CDATA[ordemCompra]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="lista" class="java.util.List"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="5d5c8a43-aeeb-4b1b-9e43-bab6e9961af3" x="0" y="0" width="47" height="20"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Qtde.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="010b520d-da6f-4415-af12-7d58fec68754" x="47" y="0" width="46" height="20"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Unid.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d200f23d-efc1-431a-b641-a2dee051b850" x="93" y="0" width="312" height="20"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Especificação do item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3dd76e0a-d7cb-4ab3-b0f6-482b807e8a4d" x="405" y="0" width="79" height="20"/>
+				<box rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Valor Unitário R$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1191612a-a686-43f2-9c4d-34f6e2edaa21" x="484" y="0" width="71" height="20"/>
+				<box rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Total item R$]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="28" splitType="Stretch">
+			<componentElement>
+				<reportElement uuid="71ba5785-512c-494f-884a-1b6c6b41f17d" x="0" y="0" width="555" height="25"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset1" uuid="f8030ad2-a6ee-4eca-ae4f-7236a10e2a30">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{lista})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="25" width="555">
+						<textField>
+							<reportElement uuid="58ce91e9-8c53-4bee-92f3-a88e14a95872" x="0" y="0" width="47" height="20"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="640e7e07-8d5f-45d1-8c02-ef00cfce5b9c" x="47" y="0" width="46" height="20"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$F{itemLicitacao}.getItem().getUnidadeMedida().getNome()]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="91f4871b-9658-4852-b490-1abf2a12bde9" x="93" y="0" width="312" height="20"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$F{itemLicitacao}.getItem().getNome()]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="edcfc00d-1a02-441d-92ea-13a92398f2a9" x="405" y="0" width="79" height="20"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$F{itemLicitacao}.getValor()]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="bf9fa86a-db42-4af0-b2cb-92cd5f8fdb4b" x="484" y="0" width="71" height="20"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$F{itemLicitacao}.getValor().multiply($F{quantidade})]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

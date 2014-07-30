@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel header="Lista de Módulos" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.modulo'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Listagem de Módulos"/>
+                    <h:outputText value="Página - 020502" style="float: right;"/>
+                </f:facet>
+                <h:panelGrid columns="6">
+                    <h:panelGrid>
+                        <h:outputText value="Ordenar"/>
+                        <p:selectOneMenu value="#{moduloMB.campoOrdem}" style="width: 190px">
+                            <f:selectItems value="#{moduloMB.campos}" var="c" itemLabel="#{c}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid >
+                        <p:outputLabel for="sis" value="Sistema"/>
+                        <p:selectOneMenu id="sis" value="#{moduloMB.sistema}" converter="#{indexConverter}" styleClass="listas">
+                            <f:selectItem itemLabel=""/>
+                            <f:selectItems value="#{moduloMB.lstSistemas()}" itemValue="#{sis}" itemLabel="#{sis.nome}" var="sis" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Campo"/>
+                        <p:selectOneMenu value="#{moduloMB.campoBusca}" style="width: 190px">
+                            <f:selectItems value="#{moduloMB.camposString}" var="c" itemLabel="#{c}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Pesquisar por"/>
+                        <p:inputText value="#{moduloMB.valorBusca}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Pesquisar" icon="ui-icon-circle-zoomin" update="tblModulos" action="#{moduloMB.listar()}"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Novo" icon="ui-icon-plus" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.modulo'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.modulo'])}"/>
+                    </h:panelGrid>
+
+
+                </h:panelGrid>
+                <p:dataTable id="tblModulos" rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Módulos não encontrados" var="item" value="#{moduloMB.modulos}">
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{item.nome}"/>
+                    </p:column>
+                    <p:column headerText="Mnemonico">
+                        <h:outputText value="#{item.mnemonico}"/>
+                    </p:column>
+                    <p:column headerText="Nome do Sistema">
+                        <h:outputText value="#{item.sistema.nome}"/>
+                    </p:column>
+                    <p:column headerText="Ações">
+                        <p:commandButton id="btnEditModulo" icon="ui-icon-pencil" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.modulo'],'modulo',item)}" title="Editar" rendered="#{usuarioLogadoMB.permissaoEditar(navegacao['cadastro.modulo'])}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

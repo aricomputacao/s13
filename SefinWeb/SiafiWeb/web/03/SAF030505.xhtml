@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/navegacao.js" />
+        <p:panel id="pnlGeral" styleClass="painelPadrao"  style="width: 1200px" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.consulta_encaminhamento_liquidacao'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Consulta Encaminhamentos de Liquidação"/>
+                <h:outputText value="Página - 030505" style="float: right;"/>
+            </f:facet>
+
+            <h:panelGrid width="100%">
+                <h:panelGrid id="un"  columns="4">
+                    <h:panelGrid >
+                        <h:outputText value="Data"/>
+                        <p:calendar value="#{encaminhamentoLiquidacaoMB.dataEncaminhamento}" effect="fade" navigator="true" showButtonPanel="true" pattern="dd/MM/yyyy"/>
+                    </h:panelGrid>
+                    <h:panelGrid >
+                        <h:outputText value="Destino"/>
+                        <p:selectOneMenu value="#{encaminhamentoLiquidacaoMB.destino}"  converter="#{indexConverter}" style="width: 220px;">
+                            <f:selectItem itemValue="#{null}" itemLabel=" -- Selecionar -- "/>
+                            <f:selectItems value="#{encaminhamentoLiquidacaoMB.listaAreaAdministrativas}" var="a" itemLabel="#{a.nome}" itemValue="#{a}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1"  >
+                        <p:spacer width="15"/>
+                        <h:panelGrid columns="4">
+                            <comp:commandButton_consulta acao_butao="#{encaminhamentoLiquidacaoMB.listaEncaminhamentosData()}"  />
+                            <comp:commandButton_imprimir acao_butao="#{encaminhamentoLiquidacaoMB.impressaoEncaminhamentos()}" immediate="true" />
+
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid width="100%" id="tblRecebimento">
+                <p:dataTable rowKey="#{item.id}"  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="#{mensagens['lista_vazia']}" var="item" value="#{encaminhamentoLiquidacaoMB.listaEncaminhamentoLiquidacaos}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+
+                    <p:column headerText="Solicitação">
+                        <comp:outputText value="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.id}"/>
+                    </p:column>
+                    <p:column headerText="Origem">
+                        <comp:outputText value="#{item.usuarioEncaminhou.areaAdministrativa.nome}" />
+                    </p:column>
+                    <p:column headerText="Destino">
+                        <comp:outputText value="#{item.destino.nome}"/> 
+                    </p:column>
+                    <p:column headerText="Data">
+                        <comp:outputText value="#{item.dataEncaminhamento}" tipo="d"/> 
+                    </p:column>
+                    <p:column headerText="Nota">
+                        <comp:outputText value="#{item.solicitacaoLiquidacao.documento}"/> 
+                    </p:column>
+                    <p:column headerText="Credor">
+                        <comp:outputText value="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.credor.pessoa.nome}"/> 
+                    </p:column>
+                    <p:column headerText="Valor">
+                        <comp:outputText value="#{item.solicitacaoLiquidacao.valor}" tipo="c"/> 
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGrid>
+
+        </p:panel>
+
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogEditarLiquidacao/>
+        <scgb:dialogConsultaCredor/>
+    </ui:define>
+    <ui:define name="acaoCredor">       
+        <comp:consulta_confirm_button alvo="#{solicitacaiLiquidacaoMB.credor}" componente_to_update=":frmGeral:un" nome_dialog="credorBusca" valor="#{cred}" />
+    </ui:define>
+
+
+</ui:composition>

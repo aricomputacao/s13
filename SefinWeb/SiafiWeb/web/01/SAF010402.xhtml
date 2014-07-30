@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+    <ui:define name="corpo" >
+        <p:panel id="pnlCategoria" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.categoria'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Cadastro de Categoria"/>
+                <h:outputText value="Página - 010402" style="float: right;"/>
+            </f:facet>
+            <p:focus/>
+            <h:panelGrid width="100%">
+                <h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Nome" title="Nome da categoria"/>
+                        <p:message for="catNome"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:inputText id="catNome" size="50" value="#{categoriaMB.categoria.nome}" required="true" requiredMessage="Informe o nome da categoria."/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellspacing="30">
+                    <comp:commandButton_salvar acao_butao="#{categoriaMB.salvar()}" rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.categoria'])}"/> 
+                    <comp:commandbutton_navegar_consulta acao_butao="#{beanNavegacaoMB.redirecionar(navegacao['listar.categoria'])}" />
+                    <comp:commandButton_limpar />
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <persistence-unit name="GuardiaoPU" transaction-type="JTA">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <!--<provider>org.hibernate.service.jta.platform.spi.JtaPlatform</provider>-->
+        <jta-data-source>jdbc/Guardiao</jta-data-source>
+        <class>br.com.guardiao.modelo.AreaAdministrativa</class> 
+        <class>br.com.guardiao.modelo.Cargo</class>
+        <class>br.com.guardiao.modelo.Exercicio</class>
+        <class>br.com.guardiao.modelo.Modulo</class>
+        <class>br.com.guardiao.modelo.Orgao</class>
+        <class>br.com.guardiao.modelo.Permissao</class>
+        <class>br.com.guardiao.modelo.Sistema</class>
+        <class>br.com.guardiao.modelo.SistemaConfiguracao</class>
+        <class>br.com.guardiao.modelo.Tarefa</class>
+        <class>br.com.guardiao.modelo.UnidadeAdministrativa</class>
+        <class>br.com.guardiao.modelo.UnidadeOrcamentaria</class>
+        <class>br.com.guardiao.modelo.Usuario</class>
+        <class>br.com.sefin.auditoria.modelo.EntidadeRevisional</class>
+
+
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <!--            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>-->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <!-- EHCACHE -->
+            <property name="hibernate.cache.provider_class" value="org.hibernate.cache.ehcache.EhCacheProvider"/>
+            <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <!-- Query Cache -->
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+            <!-- Query Cache -->
+        </properties>
+    </persistence-unit>
+</persistence>

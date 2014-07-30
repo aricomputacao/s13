@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sef="http://sefin.ce.gov.br">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+            </f:facet>
+            <link rel="shortcut icon" href="imagens/logo.ico" />
+            <link rel="icon" type="image/png" href="imagens/logo.ico" />
+            <h:outputStylesheet name="/css/default.css"/>
+            <title>#{navegacao['sistema.nome']}</title>
+        </h:head>
+        <h:body style="background: white">
+            <p:layout fullPage="true"  >
+                <p:layoutUnit id="top"   position="north" size="50">
+                    <sef:cabecalho/>
+                </p:layoutUnit>
+                <p:layoutUnit id="center" position="center">
+                    <center>
+                        <p:panel style="border-color: white" header="#{navegacao['sistema.nome']}"  >
+                            <ui:insert name="corpo"  >Content</ui:insert>
+                        </p:panel>
+                    </center>
+                </p:layoutUnit>
+                <p:layoutUnit id="bottom" position="south" size="50">
+                    <sef:rodape/>
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+    </f:view>
+</html>

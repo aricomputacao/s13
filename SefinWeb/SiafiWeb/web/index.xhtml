@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                template="/modelo/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo">
+        <p:outputLabel value="Ops! Essa página não foi encontrada no servidor!" title="você pode contactar o administrador do sistema para verificar o erro." styleClass="erro404" rendered="#{param.erro404}"/>
+
+        <h:form id="painel" rendered="#{not usuarioMB.navegadorMobile}">
+            <p:fieldset legend="* Informativo " style="text-align: left;width: 900px;min-height: 300px;" styleClass="painelPadrao">
+                <p:panel style="background: #ff9999;" rendered="#{informacaoMB.encaminhamentosNaoRecebidos > 0}">
+                    <p:commandLink value="Atenção você tem #{informacaoMB.encaminhamentosNaoRecebidos} processos a serem recebidos!" rendered="#{informacaoMB.encaminhamentosNaoRecebidos > 1}}" title="ver" action="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.receber_processo'] )}"/>
+                    <p:commandLink value="Atenção você tem 1 processo a ser recebido!" rendered="#{informacaoMB.encaminhamentosNaoRecebidos == 1}" title="ver" action="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.receber_processo'] )}"/>
+
+                </p:panel>
+                <p:panel>
+                    <p:panel>
+                        <p:commandButton value="Encaminhar Processos" action="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.encaminar_processo'])}" icon="ui-icon-circle-arrow-e" iconPos="rigth"/>
+                    </p:panel>
+                    <p:dataTable value="#{informacaoMB.dtos}" var="d" emptyMessage="Você não tem processos." rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+
+                        <p:column headerText="Situação">
+                            <h:outputText value="#{d.situacaoSolicitacao}"/>
+                        </p:column>
+                        <p:column headerText="Quantidade de Processos" width="250">
+                            <h:outputText value="#{d.quantidade}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <h:panelGrid >
+                        <h:outputText value="Total de Processos: #{informacaoMB.totalProcessos - informacaoMB.encaminhamentosEncaminhados}"/>
+                        <h:outputText value="Total de Processos Encaminhados: #{informacaoMB.encaminhamentosEncaminhados}"/>
+                        <h:outputText value="Total de Geral de Processos: #{informacaoMB.totalProcessos}"/>
+
+                    </h:panelGrid>
+
+                </p:panel>
+
+            </p:fieldset>
+        </h:form>
+
+
+        <p:panel style="min-height: 350px; border-color: white;" rendered="#{usuarioMB.navegadorMobile}" >
+
+            <h:form rendered="#{usuarioMB.navegadorMobile}">
+                <h:panelGrid width="100%">
+                    <p:panel header="Menu Mobile" style="max-width: 350px;min-width: 250px;;min-height: 400px;">
+                        <p:commandButton style="width: 300px;margin-bottom: 5px;" value="Autorizar Solicitação" rendered="#{usuarioMB.permissaoIncluir(navegacao['solicitacao.financeira.autorizar'])}" action="#{beanNavegacaoMB.redirecionar(navegacao['solicitacao.financeira.autorizar'])}"/>
+                        <p:commandButton style="width: 300px;margin-bottom: 5px;" value="Autorizar Pagamento de Empenho" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.autorizarPagamento'])}" action="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.autorizarPagamento'])}"/>
+                        <p:commandButton style="width: 300px;margin-bottom: 5px;" value="Relatório de Centro de Custo" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.centro_custo'])}" action="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.centro_custo'])}"/>
+                        <p:commandButton style="width: 300px;margin-bottom: 5px;" value="Relatório de Custeio Total" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.custeio'])}" action="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.custeio'])}"/>
+                        <p:commandButton style="width: 300px;margin-bottom: 5px;" value="Relatório de Despesa por mes" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.despesa_unidade_mensal'])}" action="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.despesa_unidade_mensal'])}"/>
+                        <p:commandButton style="width: 300px;margin-bottom: 5px;" value="Sair" action="#{beanNavegacaoMB.logout()}"/>
+                    </p:panel>
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+
+    </ui:define>
+    <ui:define name="dialogs">
+
+    </ui:define>
+</ui:composition>
+

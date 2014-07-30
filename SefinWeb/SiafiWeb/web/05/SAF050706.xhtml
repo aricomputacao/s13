@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo">
+        <h:outputScript name="script/navegacao.js"/>
+        <p:panel styleClass="painelPadrao2" id="pnlGeral" style="max-width: 1200px;" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.despesa_unidade_mensal'])}">
+            <p:blockUI block="pnlGeral" widgetVar="bui" trigger="btnConsulta">
+                <p:graphicImage value="/resources/imagens/carregar.gif"/>
+            </p:blockUI>
+
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Grafico - Despesa por Unidade Orçamentária"/>
+                <h:outputText value="Página - 050706" style="float: right;"/>
+            </f:facet>
+
+            <h:panelGrid width="100%">
+
+                <h:panelGrid columns="4">
+                    <h:panelGrid>
+                        <h:outputText value="Exercicio"/>
+                        <p:selectOneMenu value="#{custoUnidadeDespesaMB.exercicio}" converter="#{indexConverter}" style="width: 100px;">
+                            <f:selectItems value="#{custoUnidadeDespesaMB.exercicioList}" var="e" itemLabel="#{e.ano}" itemValue="#{e}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Unidade Orçamentária"/>
+                        <p:selectOneMenu value="#{custoUnidadeDespesaMB.unidadeOrcamentaria}"  converter="#{indexConverter}" style="width: 400px;">
+                            <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.orgao.id.id}#{orc.unidadeOrcamentariaPK.id} - #{orc.nome}" itemValue="#{orc}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="15"/>
+                        <p:commandButton value="Pesquisar" action="#{custoUnidadeDespesaMB.montaCusteio()}" id="btnConsulta" update="tab:chart, tab:despesas, tab:tbl" icon="ui-icon-search" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+            <p:tabView id="tab" dynamic="true" style="max-width: 1200px;">
+                <p:tab title="Tabela" >
+                    <h:panelGrid id="despesas" width="100%" style="text-align: right;">
+                        <h:panelGrid style="text-align: right;" columns="13" width="100%">
+                            <h:panelGrid>
+                                <p:commandLink value="Janeiro" style="text-decoration: underline;font-weight: bold; margin-right: 10px;" update="tbl" action="#{custoUnidadeDespesaMB.selecionaMesTabela(0)}"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.janeiro}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </h:panelGrid>
+
+                            <h:panelGrid>
+                                <p:commandLink value="Fevereiro" style="text-decoration: underline;font-weight: bold; margin-right: 10px;" update="tbl" action="#{custoUnidadeDespesaMB.selecionaMesTabela(1)}"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.fevereiro}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </h:panelGrid>
+
+                            <h:panelGrid>
+                                <p:commandLink value="Março" style="text-decoration: underline;font-weight: bold; margin-right: 10px;" update="tbl" action="#{custoUnidadeDespesaMB.selecionaMesTabela(2)}"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.marco}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </h:panelGrid>
+
+                            <h:panelGrid>
+                                <p:commandLink value="Abril" style="text-decoration: underline;font-weight: bold; margin-right: 10px;" update="tbl" action="#{custoUnidadeDespesaMB.selecionaMesTabela(3)}"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.abril}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </h:panelGrid>
+
+
+                            <h:panelGrid>
+                                <p:commandLink value="Maio" style="text-decoration: underline;font-weight: bold; margin-right: 10px;" update="tbl" action="#{custoUnidadeDespesaMB.selecionaMesTabela(4)}"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.maio}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </h:panelGrid>
+
+
+                            <h:panelGrid>
+                                <p:commandLink value="Julho" style="text-decoration: underline;font-weight: bold; margin-right: 10px;" update="tbl" action="#{custoUnidadeDespesaMB.selecionaMesTabela(5)}"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.junho}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </h:panelGrid>
+
+                            <h:panelGrid>
+                                <p:commandLink value="Julho" style="text-decoration: underline;font-weight: bold; margin-right: 10px;" update="tbl" action="#{custoUnidadeDespesaMB.selecionaMesTabela(6)}"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.julho}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </h:panelGrid>
+
+
+                            <h:panelGrid>
+                                <p:commandLink value="Agosto" style="text-decoration: underline;font-weight: bold; margin-right: 10px;" update="tab" action="#{custoUnidadeDespesaMB.selecionaMesTabela(7)}"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.agosto}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </h:panelGrid>
+
+
+
+                            <h:panelGrid>
+                                <p:commandLink value="Setembro" style="text-decoration: underline;font-weight: bold; margin-right: 10px;" update="tbl" action="#{custoUnidadeDespesaMB.selecionaMesTabela(8)}"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.setembro}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </h:panelGrid>
+
+
+
+                            <h:panelGrid>
+                                <p:commandLink value="Outubro" style="text-decoration: underline;font-weight: bold; margin-right: 10px;" update="tbl" action="#{custoUnidadeDespesaMB.selecionaMesTabela(9)}"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.outubro}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+
+                            </h:panelGrid>
+
+
+                            <h:panelGrid>
+                                <p:commandLink value="Novembro" style="text-decoration: underline;font-weight: bold; margin-right: 10px;" update="tbl" action="#{custoUnidadeDespesaMB.selecionaMesTabela(10)}"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.novembro}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+
+                            </h:panelGrid>
+
+                            <h:panelGrid>
+                                <p:commandLink value="Dezembro" style="text-decoration: underline;font-weight: bold; margin-right: 10px;" update="tbl" action="#{custoUnidadeDespesaMB.selecionaMesTabela(11)}"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.dezembro}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </h:panelGrid>
+
+                            <h:panelGrid>
+                                <h:outputText value="Total" style="text-decoration: underline;font-weight: bold; margin-right: 10px;"/>
+                                <h:outputText value="#{custoUnidadeDespesaMB.custeioDto.total}" style="text-align: right;">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid id="tbl" width="100%">
+                        <p:dataTable value="#{custoUnidadeDespesaMB.centroCustoDtoLista}" var="c" emptyMessage="Clique em um mes para ver os valores"
+                                     rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                            <f:facet name="header">
+                                <h:outputText value="Despesas de #{custoUnidadeDespesaMB.mes}"/>
+                            </f:facet>
+
+                            <p:column headerText="Centro Custo">
+                                <h:outputText value="#{c.centroCusto.nome}"/>
+                            </p:column>
+                            <p:column headerText="Total">
+                                <h:outputText value="#{c.total}">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Graficos">
+                    <h:panelGrid id="chart" width="100%">
+                        <p:pieChart id="pieChart" rendered="#{custoUnidadeDespesaMB.graficoDespesaMensal != null}" value="#{custoUnidadeDespesaMB.graficoDespesaMensal}" legendPosition="ne" shadow="true" legendRows="6"
+                                    showDataLabels="true" title="Custeio Unidade Orçamentaria" diameter="350"  style="width:100%;height:400px">
+                            <p:ajax event="itemSelect" listener="#{custoUnidadeDespesaMB.selecionaDet}" update="chart" />
+                        </p:pieChart>
+
+                        <p:barChart title="Grafico de Despesas #{custoUnidadeDespesaMB.mes}" rendered="#{custoUnidadeDespesaMB.graficoDescritivoCusteioMensal != null}" id="grfMes" value="#{custoUnidadeDespesaMB.graficoDescritivoCusteioMensal}" legendPosition="ne" animate="true" legendRows="6"
+                                    min="0" max="#{custoUnidadeDespesaMB.totalDetalhe}"   style="width:100%;height:400px"/>
+                    </h:panelGrid>
+                </p:tab>
+            </p:tabView>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+    </ui:define>
+</ui:composition>

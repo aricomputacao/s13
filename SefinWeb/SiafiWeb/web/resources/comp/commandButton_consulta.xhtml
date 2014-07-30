@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:composite="http://java.sun.com/jsf/composite">
+
+    <composite:interface>
+        <composite:attribute name="acao_butao" required="true"  method-signature="java.lang.Void action()"/>
+        <composite:attribute name="immediate" default="false" />
+        <composite:attribute name="update" default="@form" />
+        <composite:attribute name="block" default="block" />
+    </composite:interface>
+    <composite:implementation>
+        <p:commandButton icon="ui-icon-search" actionListener="#{cc.attrs.acao_butao}" value="Listar" update="#{cc.attrs.update}" immediate="#{cc.attrs.immediate}"  onclick="#{cc.attrs.block}.show()" oncomplete="#{cc.attrs.block}.hide()" title="Consultar" />
+    </composite:implementation>
+</ui:composition>
+
+

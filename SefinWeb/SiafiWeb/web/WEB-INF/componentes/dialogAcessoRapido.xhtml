@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:form id="frmAlt" rendered="#{not usuarioMB.navegadorMobile}">
+        <h:panelGrid  columns="2" width="100%"  rendered="#{not usuarioMB.navegadorMobile}">
+            <h:panelGrid title="Emitir Solicitação" rendered="#{usuarioMB.permissaoIncluir(navegacao['solicitacao.financeira.emitir'])}">
+                <p:commandLink  action="#{beanNavegacaoMB.redirecionar(navegacao['solicitacao.financeira.emitir'])}">
+                    <p:graphicImage cache="true" width="40" height="40" value="/resources/imagens/solicitacao.png"/>
+                </p:commandLink>
+
+            </h:panelGrid>
+            <h:panelGrid title="Ordem de Compra" rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.emitir.ordem_compra'])}">
+                <p:commandLink  action="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.emitir.ordem_compra'])}">
+                    <p:graphicImage cache="true" width="40" height="40" value="/resources/imagens/ordemCompra.png"/>
+                </p:commandLink>
+
+            </h:panelGrid>
+            <h:panelGrid title="Encaminhar" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.encaminar_processo'])}">
+                <p:commandLink  action="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.encaminar_processo'])}">
+                    <p:graphicImage cache="true" width="40" height="40" value="/resources/imagens/encaminhar.png"/>
+                </p:commandLink>
+
+            </h:panelGrid>
+
+            <h:panelGrid title="Receber" rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.receber_processo'])}">
+                <p:commandLink  action="#{beanNavegacaoMB.redirecionar(navegacao['protocolo.receber_processo'])}">
+                    <p:graphicImage cache="true" width="40" height="40" value="/resources/imagens/receber.png"/>
+                </p:commandLink>
+            </h:panelGrid>
+
+            <h:panelGrid title="Relatório Tesouraria" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.solicitacao_tesouraria'])}">
+                <p:commandLink  action="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.solicitacao_tesouraria'])}">
+                    <p:graphicImage cache="true" width="40" height="40" value="/resources/imagens/relTesou.png"/>
+                </p:commandLink>
+            </h:panelGrid>
+
+            <h:panelGrid title="Relatório Centro de Custo"  rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.custeio'])}" >
+                <p:commandLink action="#{beanNavegacaoMB.redirecionar(navegacao['relatorio.custeio'])}">
+                    <p:graphicImage cache="true" width="40" height="40" value="/resources/imagens/relCentroCusto.png"/>
+                </p:commandLink>
+            </h:panelGrid>
+
+
+            <h:panelGrid title="Alterar senha">
+                <p:commandLink onclick="alt.show();" immediate="true">
+                    <p:graphicImage cache="true" width="40" height="40" value="/resources/imagens/senha.png"/>
+                </p:commandLink>
+
+            </h:panelGrid>
+
+        </h:panelGrid>
+    </h:form>
+</ui:component>

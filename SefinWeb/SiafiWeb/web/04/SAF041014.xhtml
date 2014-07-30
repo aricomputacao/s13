@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/modelo/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:define name="corpo">
+        <p:panel rendered="#{importarOrcamentoMB.exercicio == null}">
+            <h:outputText value="Não há nenhum exercicio cadastrado. Cadastre um exercicio padrão para poder realizar a importação."/>
+        </p:panel>
+        <p:panel rendered="#{importarOrcamentoMB.orcamento == null}">
+            <h:outputText value="Não há nenhum orcamento cadastrado. Cadastre um orçamento válido para poder realizar a importação."/>
+        </p:panel>
+        <p:panel styleClass="painelPadrao" id="pnimportacao" rendered="#{usuarioMB.permissaoConsultar(navegacao['orcamento.importacao']) and importarOrcamentoMB.orcamento != null}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Importação de Orçamento"/>
+                <h:outputText value="Página - 041014" style="float: right;"/>
+            </f:facet>
+            <p:focus/>
+            <p:blockUI block="pnimportacao" widgetVar="bui" >
+                <p:graphicImage value="/resources/imagens/carregar.gif"/>
+            </p:blockUI>
+            <p:ajaxStatus onstart="bui.show();" oncomplete="bui.hide();" />
+            <h:panelGrid columns="4" width="100%" >
+                <p:panel header="Orçamento" style="min-height: 450px;">
+                    <h:panelGrid>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarFuncao()}" value="importar Função"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarSubFuncao()}" value="importar Sub-Função"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarPrograma()}" value="importar Programa"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarProjetoAtividade()}" value="importar Projeto Atividade"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarSubElementoDespesa()}" value="importar Sub-Elemento de Despesa"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarGrupoNaturezaDespesa()}" value="importar Grupo de Natureza de Despesa"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarCategoriaDespesa()}" value="importar Categoria de Despesa"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarModalidadeAplicacaoDepesa()}" value="importar Modalidade Aplicação"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarElementoDespesa()}" value="importar Elemento de Despesa"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarNaturezaDespesa()}" value="importar Natureza de Despesa"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarTipoFonteRecurso()}" value="importar Tipo Fonte Recurso"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarFonteRecurso()}" value="importar Fonte Recurso"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarDotacao()}" value="importar Dotação"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarOrdenadorUnidadeOrcamentaria()}" value="importar Ordenador"/>
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel header="Licitação" style="min-height: 450px;">
+                    <h:panelGrid>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarUnidadeMedida()}" value="importar Unidade de Medida" />
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarGrupoItem()}" value="importar Grupo Item" />
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarItem()}" value="importar Item"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarCredor()}" value="importar Credor"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarLicitacao()}" value="importar Licitacao "/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarItemLicitacao()}" value="importar item Licitacao"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarContrato()}" value="Importação Contrato"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarAditivo()}" value="Importação Aditivo"/>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarLicitacaoDotacao()}" value="importar Licitacao Dotacao" />
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarConta()}" value="importar Contas" />
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarCentroCusto()}" value="importar Centro de Custo"/>
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel header="Importar Creditos Adicionais" style="min-height: 450px;">
+                    <h:panelGrid>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importaCreditoAdicional()}" value="Credito Adicional" />
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importaCreditoAdicionalDetalhe()}" value="Credito Adicional Detalhe" />
+
+
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel header="Importar Movimentações Bancarias" style="min-height: 450px;">
+                    <h:panelGrid>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarMovimentacaoBanco()}" value="Transferências" />
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel header="Importações Restos a pagar" rendered="false" style="min-height: 450px;">
+                    <h:panelGrid>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarRpOrgao()}" value="importar Órgão" />
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarRpUnidadesOrcamentarias()}" value="importar Unidade Orçamentária" />
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarRpProjetoAtividade()}" value="importar Projeto Atividade" />
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarRpEmpenho()}" value="importar Empenhos" />
+                        <p:commandButton actionListener="#{importarOrcamentoMB.importarRpLiquidacao()}" value="importar Liquidação" />
+                    </h:panelGrid>
+                </p:panel>
+
+            </h:panelGrid>
+            <h:panelGrid width="100%" rendered="false">
+                <p:panel>
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Exercicio Vigente: " style="font-weight: bold;"/>
+                        <h:outputText value="#{importarMB.exercicio.ano}"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Orçamento Atual: " style="font-weight: bold;"/>
+                        <h:outputText value="#{importarMB.orcamento.descricao}"/>
+                    </h:panelGrid>
+                </p:panel>
+                <h:panelGrid width="100%">
+                    <h:outputText value="Arquivos a serem importados"/>
+                    <p:inputTextarea value="#{importarMB.arquivosImportar}" style="width: 100%;" autoResize="false" readonly="true" rows="15" cols="100"  />
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <p:commandButton value="Atualizar" update="pnimportacao" icon="ui-icon-refresh" action="#{importarMB.listarArquivos()}"/>
+                    <p:commandButton value="Importar Arquivos" onclick="confirmar.show();" icon="ui-icon-key"/>
+                </h:panelGrid>
+            </h:panelGrid>
+
+
+            <p:dialog widgetVar="confirmar" resizable="false" showEffect="Fade" header="Confirmar Operação">
+                <p:panel>
+                    <h:panelGrid style="text-align: center;">
+                        <h:outputText value="Confirmar operação de importação" />
+                        <h:outputText value="Essa operação pode demorar algum tempo." escape="true" />
+                    </h:panelGrid>
+                    <p:blockUI block="pnimportacao" trigger="confBtn">
+                        <p:graphicImage value="/resources/imagens/carregar.gif"/>
+                    </p:blockUI>
+                </p:panel>
+                <p:panel>
+                    <p:commandButton style="width: 100px;" id="confBtn" icon="ui-icon-check" action="#{importarMB.importarArquivos()}" value="Confirmar" update="pnimportacao" onclick="confirmar.hide();"/>
+                    <p:spacer width="50" height="5"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-circle-close" update="pnimportacao" immediate="true" onclick="confirmar.hide();" style="width: 100px;"/>
+                </p:panel>
+            </p:dialog>
+        </p:panel>
+
+    </ui:define>
+
+</ui:composition>

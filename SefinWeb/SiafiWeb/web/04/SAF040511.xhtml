@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp"
+                xmlns:scgb="http://sefin.ce.gov.br">
+    <ui:define name="corpo" >
+        <p:panel header="Listagem de Dotações Cadastradas" styleClass="painelPadrao" id="pnlGeral" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.programa'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Dotações Cadastradas"/>
+                <h:outputText value="Página - 040511" style="float: right;"/>
+            </f:facet>
+            <p:blockUI block="pnlGeral" trigger="btnListar,btnImpressao"  >
+                <p:graphicImage value="/resources/imagens/carregar.gif"/>
+            </p:blockUI>
+            <p:panel>
+                <h:panelGrid width="100%">
+                    <h:panelGrid columns="6">
+                        <h:panelGrid >
+                            <h:outputText value="Unidade Orçamentária"/>
+                            <p:selectOneMenu value="#{dotacaoMB.unidadeOrcamentaria}"  converter="#{indexConverter}"
+                                             style="width: 250px;">
+                                <f:selectItem itemValue="#{null}"  itemLabel=""/>
+                                <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.unidadeOrcamentariaPK} - #{orc.abreviacao}" itemValue="#{orc}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Exercicio"/>
+                            <p:selectOneMenu value="#{dotacaoMB.exercicio}"  converter="#{indexConverter}"
+                                             style="width: 100px;">
+                                <f:selectItems value="#{dotacaoMB.listaExercicios}" var="exe" itemLabel="#{exe.ano}" itemValue="#{exe}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid id="projeto">
+                            <comp:consulta_input_button nome_dialog="consultaProjetoAtividade" value_input="#{dotacaoMB.projetoAtividade.tipo}#{dotacaoMB.projetoAtividade.acao}" nome_label="Projeto Atividade" />
+                        </h:panelGrid>
+                        <h:panelGrid id="natureza">
+                            <comp:consulta_input_button nome_dialog="consultaNaturezaDespesa" value_input="#{dotacaoMB.naturezaDespesa.id}" nome_label="Natureza Despesa" />
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:spacer width="15"/>
+                            <p:commandButton value="Listar" title="Listar" id="btnListar" icon="ui-icon-search" action="#{dotacaoMB.listar()}" update="tblDot"/>
+                        </h:panelGrid>
+                        <h:panelGrid >
+                            <p:spacer width="15"/>
+                            <p:commandButton id="btnImpressao" value="Imprimir" title="Imprimir relatório" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.dotacao'])}" icon="ui-icon-print"  action="#{dotacaoMB.impressao()}" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf')" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <p:dataTable id="tblDot" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma dotações" var="item" value="#{dotacaoMB.listaDotacaoDtos}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                <p:column headerText="PA">
+                    <h:outputText value="#{item.dotacao.projetoAtividade.tipo}#{item.dotacao.projetoAtividade.acao}"/>
+                </p:column>
+                <p:column headerText="Projeto" sortBy="#{item.dotacao.projetoAtividade.nome}">
+                    <h:outputText title="#{item.dotacao.projetoAtividade.nome}" value="#{item.dotacao.projetoAtividade.abreviacao}"/>
+                </p:column>
+                <p:column headerText="Natureza" sortBy="#{item.dotacao.naturezaDespesa.id}">
+                    <h:outputText title="#{item.dotacao.naturezaDespesa.nome}" value="#{item.dotacao.naturezaDespesa.id}"/>
+                </p:column>
+                <p:column headerText="Unidade Orçamentária" sortBy="#{item.dotacao.projetoAtividade.unidadeOrcamentaria.abreviacao}">
+                    <h:outputText value="#{item.dotacao.projetoAtividade.unidadeOrcamentaria.abreviacao}"/>
+                </p:column>
+                <p:column headerText="Valor" style="text-align: right; font-weight: bold;">
+                    <h:outputText value="#{item.dotacao.valor}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Saldo" style="text-align: right; font-weight: bold;">
+                    <h:outputText value="#{item.saldo}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Ação">
+                    <p:commandButton actionListener="#{dotacaoMB.seleciona(item.dotacao)}" oncomplete="resumo.show();" icon="ui-icon-check" title="Visualizar Resumo da Dotação" update=":frmResumo:panel"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+        <comp:dialog_consulta header="Consulta de Projeto Atividade" var="consultaProjetoAtividade">
+            <h:form id="frmConsultaProjeto">
+                <scgb:consultaProjetoAtividade/>
+            </h:form>
+        </comp:dialog_consulta>
+        <comp:dialog_consulta header="Consulta de Natureza" var="consultaNaturezaDespesa">
+            <h:form id="frmConsultaNatureza">
+                <scgb:consultaNaturezaDespesa/>
+            </h:form>
+        </comp:dialog_consulta>
+        <h:form id="frmResumo">
+            <p:dialog header="Resumo da Dotação" width="1000" height="600" widgetVar="resumo" showEffect="fade" modal="true">
+                <p:fieldset id="panel">
+                    <p:fieldset legend="Dotação">
+                        <h:panelGrid columns="2">
+                            <h:panelGrid columns="2">
+                                <h:outputText value="Orçamento:" style="font-weight: bold;"/>
+                                <h:outputText value="#{dotacaoMB.dotacao.orcamento.exercicio.ano}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="Categoria Despesa:" style="font-weight: bold;"/>
+                                <h:outputText value="#{dotacaoMB.dotacao.naturezaDespesa.categoriaDespesa.nome}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="Modalidade Despesa:" style="font-weight: bold;"/>
+                                <h:outputText value="#{dotacaoMB.dotacao.naturezaDespesa.modalidadeAplicacaoDespesa.nome}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="Grupo Despesa:" style="font-weight: bold;"/>
+                                <h:outputText value="#{dotacaoMB.dotacao.naturezaDespesa.grupoNaturezaDespesa.nome}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="Elemento Despesa: " style="font-weight: bold;"/>
+                                <h:outputText value="#{dotacaoMB.dotacao.naturezaDespesa.elementoDespesa.nome}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="Natureza Despesa: " style="font-weight: bold;"/>
+                                <h:outputText value="#{dotacaoMB.dotacao.naturezaDespesa.id} - #{dotacaoMB.dotacao.naturezaDespesa.nome}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="Projeto Atividade: " style="font-weight: bold;"/>
+                                <h:outputText value="#{dotacaoMB.dotacao.projetoAtividade.tipo}#{dotacaoMB.dotacao.projetoAtividade.acao} - #{dotacaoMB.dotacao.projetoAtividade.nome}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <p:fieldset legend="Creditos Adicionais">
+                        <p:dataTable value="#{dotacaoMB.listaCreditosAdicionaisDetalhes}" emptyMessage="sem suplementações ou anulações" var="c" rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" rows="10" paginator="true" paginatorAlwaysVisible="false">
+                            <p:column headerText="Fonte" rendered="false">
+                                <h:outputText value="#{c.fonte}"/>
+                            </p:column>
+                            <p:column headerText="Tipo">
+                                <h:outputText value="#{c.tipo}"/>
+                            </p:column>
+                            <p:column headerText="Valor">
+                                <comp:outputText value="#{c.valor}" tipo="c"/>
+                            </p:column>
+                            <p:column headerText="Anulação">
+                                <comp:outputText value="#{c.anulacao}" tipo="c"/>
+                            </p:column>
+                            <p:column headerText="Credito">
+                                <comp:outputText value="#{c.credito}" tipo="c"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:fieldset>
+                    <p:fieldset legend="Solicitações Financeiras">
+                        <p:dataTable  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{dotacaoMB.listaSolicitacaoFinanceiras}"
+                                      rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+
+                            <p:column style="width: 2%;">
+                                <p:rowToggler id="x"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header" >
+                                    <h:outputText value="Número" />
+                                </f:facet>
+                                <h:outputLabel value="#{item.id}" title="#{item.cota.unidadeOrcamentaria}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Empenho"/>
+                                </f:facet>
+                                <h:outputLabel value="#{item.empenho}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Data de Solicitação"/>
+                                </f:facet>
+                                <h:outputText value="#{item.dataSolicitacao}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Valor"/>
+                                </f:facet>
+                                <h:outputText value="#{item.valor}">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Situação"/>
+                                </f:facet>
+                                <h:outputText value="#{item.situacaoSolicitacao}"/>
+                            </p:column>
+                            <p:rowExpansion>
+                                <h:panelGrid frame="none">
+                                    <h:outputText value="Usuário: #{item.usuario.pessoa.nome}"/>
+                                    <h:outputText value="Unidade Orçamentaria: #{item.cota.unidadeOrcamentaria.nome}"/>
+                                    <h:outputText value="Localização: #{item.local.nome}"/>
+                                    <h:outputText value="Vínculo: #{item.vinculo}"/>
+                                    <h:outputText value="Contrato: #{item.contrato.numero}#{item.ordemCompra.contrato.numero}"/>
+                                    <h:outputText value="Ordem de Compra: #{item.ordemCompra.id}"/>
+                                    <h:outputText value="Categoria: #{item.cota.categoria.nome}"/>
+                                    <h:outputText value="Despesa: #{item.cota.despesa.nome} (#{item.cota.despesa.elementoDespesa.nome})" />
+                                    <h:outputText value="PA: #{item.dotacao.projetoAtividade.nome}" />
+                                    <h:outputText value="Competência: #{item.mesCompetencia.asNumero(item.mesCompetencia)}-#{item.anoCompetencia}"/>
+                                    <h:outputText value="Credor: #{item.credor.pessoa.nome}"/>
+                                    <h:outputText value="Autorizado por: #{item.usuarioAutorizou.pessoa.nome}"/>
+                                    <h:outputLabel value="Data Autorização: ">
+                                        <h:outputText value="#{item.dataAutorizacao}">
+                                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                        </h:outputText>
+                                    </h:outputLabel>
+                                    <h:outputText value="NotaFiscal: #{item.notaFiscal}"/>
+                                    <h:outputText value="Histórico:"/>
+                                    <p:inputTextarea value="#{item.historico}" style="width: 100%;color: #000;" rows="3" readonly="true" autoResize="true" cols="100"/>
+                                </h:panelGrid>
+                            </p:rowExpansion>
+                        </p:dataTable>
+                    </p:fieldset>
+                </p:fieldset>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+    <ui:define name="acaoProjetoAtividade">
+        <comp:consulta_confirm_button alvo="#{dotacaoMB.projetoAtividade}" componente_to_update=":frmGeral:projeto" nome_dialog="consultaProjetoAtividade" valor="#{item}"/>
+    </ui:define>
+    <ui:define name="acaoNaturezaDespesa">
+        <comp:consulta_confirm_button alvo="#{dotacaoMB.naturezaDespesa}" componente_to_update=":frmGeral:natureza" nome_dialog="consultaNaturezaDespesa" valor="#{nad}"/>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo">
+        <h:outputScript name="script/navegacao.js"/>
+        <p:blockUI block="pnlGeral" widgetVar="bui">
+            <p:graphicImage value="/resources/imagens/carregar.gif"/>
+        </p:blockUI>
+        <p:panel styleClass="painelPadrao" id="pnlGeral" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.ordem_compra'])}" >
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Ordens de Compra"/>
+                <h:outputText value="Página - 020509" style="float: right;"/>
+            </f:facet>
+            <p:panel>
+                <p:blockUI block="pnlGeral" trigger="btnListar"  >
+                    <p:graphicImage value="/resources/imagens/carregar.gif"/>
+                </p:blockUI>
+                <h:panelGrid width="100%">
+                    <h:panelGrid  columns="6" >
+                        <h:panelGrid >
+                            <p:outputLabel value="Unidade Orçamentária"/>
+                            <p:selectOneMenu  id="solUnidade" value="#{ordemCompraMB.unidadeOrcamentaria}" converter="#{indexConverter}" style="width: 300px;">
+                                <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="i" itemLabel="#{i}"   itemValue="#{i}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid >
+                            <p:outputLabel value="Status"/>
+                            <p:selectOneMenu value="#{ordemCompraMB.statusOrdemCompra}" style="width: 200px;">
+                                <f:selectItem itemLabel="Todos" itemValue="#{null}"/>
+                                <f:selectItems value="#{ordemCompraMB.listStatusOrdemCompra}" var="s" itemLabel="#{s}" itemValue="#{s}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+
+                        <h:panelGrid>
+                            <h:outputText value="Data de Emissão"/>
+                            <h:panelGrid columns="2">
+                                <p:calendar effect="fade" showButtonPanel="true" size="15" navigator="true" value="#{ordemCompraMB.dateInicial}" pattern="dd/MM/yyyy"/>
+                                <p:calendar effect="fade" showButtonPanel="true" size="15" navigator="true"  value="#{ordemCompraMB.dataFinal}" pattern="dd/MM/yyyy"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:spacer width="10"/>
+                            <p:commandButton value="Listar" title="Listar" id="btnListar" icon="ui-icon-search" action="#{ordemCompraMB.listar()}" update="tblLista" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.ordem_compra'])}" onclick="bui.show();" oncomplete="bui.hide();"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:spacer width="10"/>
+                            <p:commandButton value="Emitir" title="Emitir nova solicitação" icon="ui-icon-plus" action="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.emitir.ordem_compra'])}" immediate="true"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <h:panelGrid id="tblLista" width="100%">
+                <p:dataTable  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="item" value="#{ordemCompraMB.ordemCompraLista}"
+                              rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+
+                    <p:column headerText="Id" sortBy="#{item.id}">
+                        <h:outputText value="#{item.id}"/>
+                    </p:column>
+                    <p:column headerText="Status" sortBy="#{item.status}">
+                        <h:outputText value="#{item.status}"/>
+                    </p:column>
+                    <p:column headerText="Emissão" sortBy="#{item.dataEmissao}">
+                        <h:outputText value="#{item.dataEmissao}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Credor" sortBy="#{item.credor.pessoa.nome}">
+                        <h:outputText value="#{item.credor.pessoa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Total">
+                        <h:outputText value="#{item.valorTotal}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Emissor" sortBy="#{item.emissor.pessoa.nome}">
+                        <h:outputText value="#{item.emissor.pessoa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Itens">
+                        <p:commandButton onclick="itensOrdemCompra.show();" update=":frmItensOrdemCompra" title="ver itens" icon="ui-icon-search" action="#{ordemCompraMB.listarItensOrdemCompra()}" style="width: 20px;height: 20px;">
+                            <f:setPropertyActionListener value="#{item}" target="#{ordemCompraMB.ordemCompra}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column   headerText="Ação">
+                        <p:commandButton update=":frmItensOrdemCompra" rendered="#{ordemCompraMB.podeEditar(item)}" title="Editar ordem de compra" icon="ui-icon-pencil" action="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.emitir.ordem_compra'], 'ordem_compra', item)}" style="width: 20px;height: 20px;"/>
+                        <p:commandButton onclick="ordemCompraCancel.show();" rendered="#{ordemCompraMB.podeEditar(item)}" update=":frmOrdemCompraCancel" title="Cancelar ordem de compra" icon="ui-icon-circle-close" style="width: 20px;height: 20px;">
+                            <f:setPropertyActionListener value="#{item}" target="#{ordemCompraMB.ordemCompra}"/>
+                        </p:commandButton>
+                        <p:commandButton  title="Imprimir ordem de compra" icon="ui-icon-print" action="#{ordemCompraMB.impressaoOrdemCompra()}" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf');bui.hide();" onclick="bui.show();" style="width: 20px;height: 20px;">
+                            <f:setPropertyActionListener value="#{item}" target="#{ordemCompraMB.ordemCompra}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid width="100%">
+                    <h:outputText value="Total de Ordens de compra encontradas: #{ordemCompraMB.ordemCompraLista.size()}" style="font-weight: bold;"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogSAF020509/>
+    </ui:define>
+</ui:composition>

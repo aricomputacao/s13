@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo" >
+        <p:panel header="Editar Centro de Custo" styleClass="painelPadrao" id="pnlGeral" >
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Editar Centro de Custo"/>
+                <h:outputText value="Página - 040215" style="float: right;"/>
+            </f:facet>
+            <p:panel>
+                <h:panelGrid columns="3" id="grdDesp">
+                    <h:panelGrid  width="100%" columns="3" >
+                        <h:panelGrid  >
+                            <h:outputText value="Nome"/>
+                            <p:inputText value="#{despesaMB.despesa.nome}" style="width: 350px" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid  >
+                            <h:outputText value="Tipo Fluxo"/>
+                            <p:selectOneMenu value="#{despesaMB.despesa.fluxo}" required="true"    style="width: 200px;">
+                                <f:selectItems value="#{despesaMB.tipoFluxo}" var="d" itemLabel="#{d}" itemValue="#{d}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid style="float: right"   width="100%" columns="1">
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Salvar" title="Salvar" id="btnSalvar" icon="ui-icon-disk" action="#{despesaMB.salvar()}" update="tblDot"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+            </p:panel>
+            <p:panel>
+                <h:panelGrid>
+                    <p:commandButton value="Listar" action="#{despesaMB.listarDespesa()}" icon="ui-icon-circle-zoomin" update="tblDot" />
+                </h:panelGrid>
+                <p:dataTable id="tblDot" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma dotações" var="item" value="#{despesaMB.listaDespesa}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+
+                    <p:column headerText="Nome" filterBy="#{item.nome}" sortBy="#{item.nome}">
+                        <h:outputText  value="#{item.nome}"/>
+                    </p:column>
+                    <p:column headerText="Elemento" sortBy="#{item.elementoDespesa.nome}">
+                        <h:outputText  value="#{item.elementoDespesa.id} -- #{item.elementoDespesa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Tipo Fluxo" sortBy="#{item.fluxo}">
+                        <h:outputText value="#{item.fluxo}"/>
+                    </p:column>
+                    <p:column headerText="Ação">
+                        <p:commandButton icon="ui-icon-check" title="Selecionar" update=":frmGeral:grdDesp">
+                            <f:setPropertyActionListener target="#{despesaMB.despesa}" value="#{item}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </p:panel>
+    </ui:define>
+</ui:composition>

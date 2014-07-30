@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog header="Busca de Convênios" showEffect="Fade" resizable="false" width="800" height="400" id="convenioBuscas" widgetVar="dialogConv">
+        <h:form>
+            <p:panel>
+                <h:panelGrid columns="6">
+                    <h:panelGrid>
+                        <h:outputText value="Numero convênio"/>
+                        <p:inputText value="#{relatorioSolicitacaoConvenioMB.numeroConvenio}"  size="50"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Procurar" update="tblLista" title="Listar" icon="ui-icon-search" action="#{relatorioSolicitacaoConvenioMB.listaConvenio()}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <p:dataTable id="tblLista" paginator="true" paginatorAlwaysVisible="false" rows="8"  emptyMessage="Nenhum registro encontrado" var="item" value="#{relatorioSolicitacaoConvenioMB.listaConvenios}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                    <p:column style="width: 2%;">
+                        <p:rowToggler id="x"/>
+                    </p:column>
+                    <p:column headerText="Id" sortBy="#{item.id}" >
+                        <h:outputText value="#{item.id}"/>
+                    </p:column>
+                    <p:column headerText="Número" sortBy="#{item.numero}" >
+                        <h:outputText value="#{item.numero}" title="#{item.numero}"/>
+
+                    </p:column>
+                    <p:column headerText="Data de Início" sortBy="#{item.dataInicio}">
+                        <h:outputText value="#{item.dataInicio}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Credor" sortBy="#{item.credor.pessoa.nome}">
+                        <h:outputText value="#{item.credor.pessoa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Sel">
+                        <p:commandButton style="width: 20px; height: 20px;" icon="ui-icon-check" immediate="true" oncomplete="dialogConv.hide();" update=":frmGeral:convenio">
+                            <f:setPropertyActionListener value="#{item}" target="#{relatorioSolicitacaoConvenioMB.convenio}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:rowExpansion>
+                        <h:panelGrid frame="none">
+                            <h:outputText value="Objetivo: #{item.objetivo}"/>
+                            <h:outputText value="Unidade Orçamentaria: #{item.unidadeOrcamentaria.unidadeOrcamentariaPK.idOrgao}#{item.unidadeOrcamentaria.unidadeOrcamentariaPK.id} - #{item.unidadeOrcamentaria.nome}"/>
+                        </h:panelGrid>
+                    </p:rowExpansion>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </p:dialog>
+</ui:component>

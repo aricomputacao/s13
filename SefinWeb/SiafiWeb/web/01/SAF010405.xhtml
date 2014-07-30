@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition template="/modelo/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/maskMoney.js" />
+        <h:outputScript name="script/edtMoeda.js" />
+        <h:outputScript name="script/navegacao.js" />
+        <p:panel id="pnlSolicitacao" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoIncluir(navegacao['solicitacao.financeira.emitir'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Emitir Solicitação Financeira"/>
+                <h:outputText value="Página - 010405" style="float: right;"/>
+            </f:facet>
+            <p:focus/>
+            <h:panelGrid width="100%">
+                <h:panelGrid columns="5">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Código"/>
+                        </h:panelGrid>
+                        <p:inputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.id}" readonly="true" size="10"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Data de emissão"/>
+                        </h:panelGrid>
+                        <p:inputText value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.dataSolicitacao}" readonly="true" size="15">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:inputText>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Ano Competência"/>
+                            <p:message for="solAnoCompetencia"/>
+                        </h:panelGrid>
+                        <p:inputMask id="solAnoCompetencia" readonly="true" value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.anoCompetencia}" size="15" mask="9999" required="true" requiredMessage="Informe o ano de competencia"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Mês"/>
+                            <p:message for="solMesCompetencia"/>
+                        </h:panelGrid>
+                        <p:selectOneMenu id="solMesCompetencia" value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.mesCompetencia}" style="width: 150px;">
+                            <f:selectItems value="#{solicitacaoFinanceiraMB.listaMeses}" var="m" itemLabel="#{m}" itemValue="#{m}"/>
+                            <p:ajax event="change" update="solDespesa, solCategoria, solValor, saldo, solUnidade" immediate="true" listener="#{solicitacaoFinanceiraMB.alteraUnidadeOrcamentaria()}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+                    <h:panelGrid id="sec">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Unidade Orçamentária"/>
+                            <p:message for="solUnidade"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:inputText value="#{solicitacaoFinanceiraMB.idUnidade}" size="10" id="cod" maxlength="4">
+                                <p:ajax listener="#{solicitacaoFinanceiraMB.selecionaSecretaria()}" event="keyup" update="solUnidade, solDespesa, solCategoria, solValor, saldo, convenio, historico_cad" />
+                            </p:inputText>
+
+                            <p:selectOneMenu id="solUnidade" value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.cota.unidadeOrcamentaria}"
+                                             converter="#{indexConverter}" style="width: 400px;" required="true" requiredMessage="Informe a unidade Orçamentaria.">
+                                <f:selectItem itemLabel=" -- Selecione -- "/>
+                                <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="i" itemLabel="#{i.unidadeOrcamentariaPK.idOrgao}#{i.unidadeOrcamentariaPK.id} - #{i.nome}"  itemValue="#{i}"/>
+                                <p:ajax event="change" update="solDespesa, solCategoria, solValor, saldo, convenio, historico_cad, cod" listener="#{solicitacaoFinanceiraMB.alteraUnidadeOrcamentaria()}" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="3">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Categoria" title="Categoria"/>
+                            <p:message for="solCategoria"/>
+                        </h:panelGrid>
+                        <p:selectOneMenu id="solCategoria" value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.cota.categoria}" converter="#{indexConverter}" style="width: 250px;" required="true" requiredMessage="Informe a categoria.">
+                            <f:selectItem itemLabel=" -- Selecione -- "/>
+                            <f:selectItems value="#{solicitacaoFinanceiraMB.listaCategorias}" var="cat" itemLabel="#{cat.nome}"  itemValue="#{cat}"/>
+                            <p:ajax update="solDespesa,solValor,saldo" event="change" listener="#{solicitacaoFinanceiraMB.alterarCategoria()}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Despesa" title="Despesa"/>
+                            <p:message for="solDespesa"/>
+                        </h:panelGrid>
+                        <p:selectOneMenu id="solDespesa" value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.cota.despesa}" converter="#{indexConverter}" style="width: 735px;" required="true" requiredMessage="Selecione a despesa.">
+                            <f:selectItem itemLabel=" -- Selecione -- "/>
+                            <f:selectItems value="#{solicitacaoFinanceiraMB.listaDespesas}" var="des" itemLabel="#{des.elementoDespesa.id} - #{des.elementoDespesa.nome} -- #{des.nome}"  itemValue="#{des}"/>
+                            <p:ajax update="solValor, saldo,grdDot" event="change" listener="#{solicitacaoFinanceiraMB.alteraDespesa()}" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+                <h:panelGrid columns="4">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Credor" title="Credor"/>
+                            <p:message for="solCred"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:inputText id="solCred" readonly="true" size="53" required="true" requiredMessage="Informe credor" value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.credor.pessoa.nome}"/>
+                            <p:commandButton  immediate="true" onclick="credorBusca.show();" icon="ui-icon-circle-zoomout" title="Credor"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Vinculo" title="Vinculo"/>
+                            <p:message for="solVinculo"/>
+                        </h:panelGrid>
+                        <p:selectOneMenu id="solVinculo" value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.vinculo}" style="width: 170px;" required="true" requiredMessage="Selecione o vinculo.">
+                            <f:selectItem itemLabel=" -- Selecione -- " itemValue="#{null}"/>
+                            <f:selectItems value="#{solicitacaoFinanceiraMB.vinculos}" />
+                            <p:ajax update="pnlSolicitacao,:frmOrdemCompra"  event="change" listener="#{solicitacaoFinanceiraMB.validaVinculo()}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+                    <h:panelGrid id="pnlContrato" rendered="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.vinculo == solicitacaoFinanceiraMB.vinculoContrato}" columns="3">
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Contrato" title="Contrato"/>
+                                <p:message for="solContrato"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="4">
+                                <p:inputText id="solContrato" readonly="true" size="10" required="true" requiredMessage="Informe o contrato" value="#{solicitacaoFinanceiraMB.aditivo.contrato.numero}" title="Licitação: #{solicitacaoFinanceiraMB.aditivo.contrato.licitacao.numero}"/>
+                                <p:commandButton immediate="true" onclick="listaContratos.show();" icon="ui-icon-circle-zoomout" title="Contrato" update=":frmContrato" actionListener="#{solicitacaoFinanceiraMB.carraregarContratos()}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid rendered="#{solicitacaoFinanceiraMB.aditivo.contrato != null}">
+                            <h:outputLabel value="Saldo do Contrato"/>
+                            <p:inputText readonly="true" size="20" styleClass="dinheiro" value="#{solicitacaoFinanceiraMB.aditivo.valor}">
+                                <f:convertNumber type="currency" currencySymbol="R$"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid rendered="#{solicitacaoFinanceiraMB.aditivo.contrato.licitacao != null}">
+                            <h:outputLabel value="Licitação"/>
+                            <p:inputText readonly="true" size="15" value="#{solicitacaoFinanceiraMB.aditivo.contrato.licitacao.numero}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid id="ordemCompra" rendered="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.vinculo == solicitacaoFinanceiraMB.vinculoOrdemCompra}">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Ordem de compra" title="Ordem de compra"/>
+                            <p:message for="solOrdemCompra"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3">
+                            <p:inputText readonly="true" size="5" value="#{solicitacaoFinanceiraMB.ordemCompra.id}"/>
+                            <p:inputText id="solOrdemCompra" readonly="true" size="25" required="true" requiredMessage="Informe uma ordem de compra" value="#{solicitacaoFinanceiraMB.ordemCompra.licitacao.numero}"/>
+                            <p:commandButton  immediate="true" update="pnlSolicitacao,:frmOrdemCompra"  oncomplete="ordemCompraBusca.show();" action="#{solicitacaoFinanceiraMB.listarOrdemdeCompra()}"  icon="ui-icon-circle-zoomout" title="Ordem de compra"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid id="convenio" rendered="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.vinculo == solicitacaoFinanceiraMB.vinculoConvenio}">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Convênio" title="Convênio"/>
+                            <p:message for="solConvenio"/>
+                        </h:panelGrid>
+                        <p:commandButton immediate="true" update="pnlSolicitacao,:frmConvenio"  oncomplete="dialogConvenios.show();" action="#{solicitacaoFinanceiraMB.listarConvenios()}"  icon="ui-icon-circle-zoomout" title="Listar Convênios">
+                            <p:inputText id="solConvenio" readonly="true" size="25" required="true" requiredMessage="Selecione um convênio" value="#{solicitacaoFinanceiraMB.convenio.numero}"/>
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+                <h:panelGrid id="grdDot" columns="3">
+                    <h:panelGrid >
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Projeto Atividade" title="Projeto Atividade"/>
+                            <p:message for="solProAtivi"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:inputText readonly="true" size="5" id="tipoAcao" title="Tipo" value="#{solicitacaoFinanceiraMB.projetoAtividade.tipo}#{solicitacaoFinanceiraMB.projetoAtividade.acao}" />
+                            <p:inputText id="solProAtivi" readonly="true" size="55" required="true" requiredMessage="Informe o projeto atividade" value="#{solicitacaoFinanceiraMB.projetoAtividade.nome}"/>
+                            <p:commandButton  immediate="true"  oncomplete="listaProjAtividade.show();" update=":frmProjAtividade:tab" action="#{solicitacaoFinanceiraMB.listarProjetoAtividadeUnidadeOrcamentaria()}" icon="ui-icon-circle-zoomout" title="Projeto Atividade"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Natureza da Despesa" title="Natureza da Despesa"/>
+                            <p:message for="natDespesa"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3">
+                            <p:inputText size="10" readonly="true" value="#{solicitacaoFinanceiraMB.dotacao.naturezaDespesa.id}"/>
+                            <p:inputText id="natDespesa" readonly="true" required="true" requiredMessage="Informe a natureza da despesa" value="#{solicitacaoFinanceiraMB.dotacao.naturezaDespesa.nome}" size="55"/>
+                            <p:commandButton  immediate="true" title="Natureza Despesa" onclick="listaNaturezaDespesa.show();"  icon="ui-icon-circle-zoomout" update=":frmNaturezaDespesa"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                </h:panelGrid>
+                <h:panelGrid columns="4">
+                    <h:panelGrid id="dotSaldo">
+                        <h:outputLabel value="Saldo da Dotação"/>
+                        <h:panelGrid columns="2">
+                            <p:inputText size="5" readonly="true" value="#{solicitacaoFinanceiraMB.dotacao.dotacalPk.id_reduzido}"/>
+                            <p:inputText size="15" readonly="true" styleClass="dinheiro" value="#{solicitacaoFinanceiraMB.saldoDotacao}">
+                                <f:convertNumber type="currency" currencySymbol="R$"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Situação"/>
+                        </h:panelGrid>
+                        <p:inputText readonly="true" value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.situacaoSolicitacao}"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="saldo">
+                        <h:panelGrid columns="2" rendered="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.cota.autorizadoAutomatico}">
+                            <h:outputLabel value="Saldo Disponível" />
+                        </h:panelGrid>
+                        <h:panelGrid columns="3" rendered="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.cota.autorizadoAutomatico}">
+                            <p:inputText value="#{solicitacaoFinanceiraMB.saldoCota}" styleClass="dinheiro" readonly="true">
+                                <f:convertNumber type="currency"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Valor"/>
+                            <p:message for="solValor"/>
+                        </h:panelGrid>
+                        <p:inputText id="solValor" autocomplete="off" readonly="#{solicitacaoFinanceiraMB.checarVinculoCompra()}" validatorMessage="Valor insuficiente" validator="#{solicitacaoFinanceiraMB.validaSaldo}" onfocus="mascaraInputs();" converter="#{bigDecimalConverter}" converterMessage="Invalido" value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.valor}" styleClass="edtMoeda dinheiro"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+                <h:panelGrid width="100%" id="historico_cad">
+                    <h:panelGrid columns="4">
+                        <p:commandButton onclick="historico_padrao_cadastro.show();" icon="ui-icon-plus" immediate="true" update=":frmHistoricoPadrao" rendered="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.cota.unidadeOrcamentaria != null}">
+                            <f:setPropertyActionListener value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.cota.unidadeOrcamentaria}" target="#{historicoPadraoMB.unidadeOrcamentaria}"/>
+                        </p:commandButton>
+                        <p:commandButton onclick="historico_padrao_listagem.show();" icon="ui-icon-search" immediate="true" update=":frmHistoricoPadraoLista" rendered="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.cota.unidadeOrcamentaria != null}" >
+                            <f:setPropertyActionListener value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.cota.unidadeOrcamentaria}" target="#{historicoPadraoMB.unidadeOrcamentaria}"/>
+                        </p:commandButton>
+                        <p:watermark for="solHistorico" value="Preencha detalhadamento o histórico do processo!"/>
+                        <h:outputLabel value="Histórico"/>
+                        <p:message for="solHistorico"/>
+                    </h:panelGrid>
+                    <p:inputTextarea value="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.historico}" cols="150" id="solHistorico" required="true" requiredMessage="Informe o histórico" rows="4" style="width: 100%;"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3"  cellspacing="30" >
+                    <comp:commandButton_salvar acao_butao="#{solicitacaoFinanceiraMB.addSolicitacao()}" />
+                    <comp:commandbutton_navegar_consulta acao_butao="#{beanNavegacaoMB.redirecionar(navegacao['solicitacao.financeira.listar'])}" />
+                    <comp:commandButton_limpar/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogSAF010405/>
+        <scgb:dialogConsultaCredor/>
+    </ui:define>
+    <ui:define name="acaoCredor">
+        <p:column headerText="Ação">
+            <p:commandButton style="width: 20px; height: 20px;" icon="ui-icon-check" immediate="true" oncomplete="credorBusca.hide();" update=":frmGeral:solCred,:frmGeral:solContrato, :frmOrdemCompra">
+                <f:setPropertyActionListener value="#{cred}" target="#{solicitacaoFinanceiraMB.solicitacaoFinanceira.credor}"/>
+            </p:commandButton>
+        </p:column>
+    </ui:define>
+</ui:composition>

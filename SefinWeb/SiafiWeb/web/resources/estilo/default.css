@@ -1,0 +1,190 @@
+*{
+    font-size: 12px;
+    font-family:  sans-serif;
+    margin: 0px;
+    padding: 0px;
+}
+body {
+    background-color:  #CCCCCC;
+    /**font-size: 10px; **/
+    /** font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif; **/
+    color: #000000;
+    margin: 0px;
+}
+
+a{
+    text-decoration: none;
+}
+a:link, a:visited {
+    color: #045491;
+    font-weight : bold;
+    text-decoration: none;
+}
+
+a:link:hover, a:visited:hover  {
+    color: red;
+    /*font-weight : bold;**/
+    text-decoration : none;
+}
+
+.painelPadrao{
+    min-height: 200px;
+    background: #E8E8E8;
+    width: 100%;
+    max-width: 1100px;
+    border-color: white;
+}
+
+.btnTabela{
+    max-width: 20px;
+    height: 20px;
+}
+
+.grfPadrao{
+    min-height: 300px;
+    background: #E8E8E8;
+    width: 1220px;
+    border-color: white;
+}
+
+
+.painelPadrao2{
+    min-height: 300px;
+    background: #E8E8E8;
+    width: 1290px;
+    border-color: white;
+}
+.painelPadrao3{
+    min-height: 300px;
+    background: #E8E8E8;
+    width: 1590px;
+    border-color: white;
+}
+
+
+.rodape{
+    background-color:  #d9d9d9;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    border-radius: 7px;
+}
+.cabecalho{
+    margin: 0px;
+    padding: 0px;
+    border: black solid 1px;
+    background: #FFFFFF url(../../resources/imagens/img01.gif)  repeat-x;
+
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    border-radius: 7px;
+    background-color: black;
+}
+
+.msg{
+    position: absolute;
+    top: 0px;
+    float: left;
+    left: 0px;
+    width: 100%;
+    text-align: center;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+
+}
+
+.msgAtencao{
+
+    float: left;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bolder;
+    padding: 0px 0px 0px 0px;
+    background: #ffe990;
+    -moz-border-radius: 5px; /* valor do arredondamento das pontas do botão */
+    -webkit-border-radius: 5px; /* valor do arredondamento das pontas do botão */
+    -goog-ms-border-radius: 5px; /* valor do arredondamento das pontas do botão */
+    border-radius: 5px; /* valor do arredondamento das pontas do botão */
+
+}
+
+.link-botao:link , .link-botao:visited{
+    margin: 10px;
+    text-decoration: none;
+    color: #FFF; /* cor do texto do botão */
+    background: #000; /* cor de fundo alternativo, aparecerá nos navegadores que não aceitam CSS3 */
+    background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#000000)); /* cores que formarão o gradiente de fundo, a primeira cor fica no topo do botão e a segunda na parte de baixo */
+    background: -moz-linear-gradient(top, #f2f2f2, #000000); /* repita as cores do gradiente que você escolheu */
+    border: 1px solid #000; /* cor da borda */
+    text-decoration: none;
+    padding: 10px;
+    outline: none;
+    -moz-border-radius: 3px; /* valor do arredondamento das pontas do botão */
+    -webkit-border-radius: 3px; /* valor do arredondamento das pontas do botão */
+    -goog-ms-border-radius: 3px; /* valor do arredondamento das pontas do botão */
+    border-radius: 3px; /* valor do arredondamento das pontas do botão */
+}
+
+.link-botao:hover {
+    text-decoration: none;
+    color: #FFFFFF; /* cor do texto do botão com o mouse em cima */
+    background: #FFF; /* cor de fundo alternativo com o mouse em cima */
+    background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#000)); /* gradiente de fundo com o mouse em cima */
+    background: -moz-linear-gradient(top, #fff, #000); /* gradiente de fundo com o mouse em cima */
+    border: 1px solid #000; /* cor da borda com o mouse em cima */
+    -webkit-box-shadow: 0px 0px 3px #333333; /* cor da sombra do botão quando o mouse está em cima do botão */
+    -moz-box-shadow: 0px 0px 3px #333333; /*cor da sombra do botão quando o mouse está em cima do botão */
+    box-shadow: 0px 0px 3px #333333; /*cor da sombra do botão quando o mouse está em cima do botão */
+}
+
+.link-botao:active {
+    text-decoration: none;
+    color: #FFFFFF; /* cor do texto do botão quando é clicado */
+    background: #000000; /* cor de fundo do botão quando é clicado */
+    border: 1px solid #000000; /* cor da borda do botão quando é clicado */
+}
+
+.ui-datatable .ui-datatable-data .even-row td{
+    background-color:#ffe990;
+}
+
+.ui-datatable .ui-datatable-data .odd-row td{
+    background-color:white;
+}
+
+.ui-datatable .ui-datatable-data .emcaminhar td{
+    background-color:#ff6666;
+}
+
+.ui-datatable .ui-datatable-data .Cancelada td{
+    background-color: #ff6666;
+}
+.ui-datatable .ui-datatable-data .Aprovada td{
+    background-color:cadetblue;
+}
+
+.btnHelp{
+
+    padding: 0px 5px 0px 5px;
+    margin-left: 5px;
+    margin-right: -5px;
+    border: 1px solid #d9d9d9;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.ui-layout-north {
+    z-index:20 !important;
+    overflow:visible !important;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;
+}
+
+.dinheiro{
+    text-align: right;
+}

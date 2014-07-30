@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_solicitacao_convenio" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1691a819-09ec-4d7f-b148-e16bb88aec10">
+	<property name="ireport.zoom" value="1.7715610000000035"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="zebra">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean( $V{REPORT_COUNT}.intValue() % 2 == 0 )]]></conditionExpression>
+			<style forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Projetos\\SefinWeb\\SiafiWeb\\web\\WEB-INF\\relatorios\\sub_relatorios\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="relatorio" class="java.lang.String"/>
+	<parameter name="img" class="java.lang.String"/>
+	<parameter name="rodapeEmail" class="java.lang.String"/>
+	<parameter name="img1" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="anoCompetencia" class="java.lang.Integer">
+		<fieldDescription><![CDATA[anoCompetencia]]></fieldDescription>
+	</field>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="contrato" class="br.com.siafi.modelo.Contrato">
+		<fieldDescription><![CDATA[contrato]]></fieldDescription>
+	</field>
+	<field name="convenio" class="br.com.siafi.modelo.Convenio">
+		<fieldDescription><![CDATA[convenio]]></fieldDescription>
+	</field>
+	<field name="cota" class="br.com.siafi.modelo.Cota">
+		<fieldDescription><![CDATA[cota]]></fieldDescription>
+	</field>
+	<field name="credor" class="br.com.siafi.modelo.Credor">
+		<fieldDescription><![CDATA[credor]]></fieldDescription>
+	</field>
+	<field name="dataAutorizacao" class="java.util.Date">
+		<fieldDescription><![CDATA[dataAutorizacao]]></fieldDescription>
+	</field>
+	<field name="dataPagamento" class="java.util.Date">
+		<fieldDescription><![CDATA[dataPagamento]]></fieldDescription>
+	</field>
+	<field name="dataSolicitacao" class="java.util.Date">
+		<fieldDescription><![CDATA[dataSolicitacao]]></fieldDescription>
+	</field>
+	<field name="dotacao" class="br.com.siafi.modelo.Dotacao">
+		<fieldDescription><![CDATA[dotacao]]></fieldDescription>
+	</field>
+	<field name="empenho" class="java.lang.String">
+		<fieldDescription><![CDATA[empenho]]></fieldDescription>
+	</field>
+	<field name="exercicio" class="br.com.guardiao.modelo.Exercicio">
+		<fieldDescription><![CDATA[exercicio]]></fieldDescription>
+	</field>
+	<field name="fonteRecurso" class="br.com.siafi.modelo.FonteRecurso">
+		<fieldDescription><![CDATA[fonteRecurso]]></fieldDescription>
+	</field>
+	<field name="historico" class="java.lang.String">
+		<fieldDescription><![CDATA[historico]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.String">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="inss" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[inss]]></fieldDescription>
+	</field>
+	<field name="irrf" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[irrf]]></fieldDescription>
+	</field>
+	<field name="iss" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[iss]]></fieldDescription>
+	</field>
+	<field name="justificativa" class="java.lang.String">
+		<fieldDescription><![CDATA[justificativa]]></fieldDescription>
+	</field>
+	<field name="licitacao" class="br.com.siafi.modelo.Licitacao">
+		<fieldDescription><![CDATA[licitacao]]></fieldDescription>
+	</field>
+	<field name="local" class="br.com.guardiao.modelo.AreaAdministrativa">
+		<fieldDescription><![CDATA[local]]></fieldDescription>
+	</field>
+	<field name="mesCompetencia" class="br.com.sefin.enumerated.Mes">
+		<fieldDescription><![CDATA[mesCompetencia]]></fieldDescription>
+	</field>
+	<field name="notaFiscal" class="java.lang.String">
+		<fieldDescription><![CDATA[notaFiscal]]></fieldDescription>
+	</field>
+	<field name="observacao" class="java.lang.String">
+		<fieldDescription><![CDATA[observacao]]></fieldDescription>
+	</field>
+	<field name="ordemCompra" class="br.com.siafi.modelo.OrdemCompra">
+		<fieldDescription><![CDATA[ordemCompra]]></fieldDescription>
+	</field>
+	<field name="situacaoSolicitacao" class="br.com.sefin.enumerated.SituacaoSolicitacao">
+		<fieldDescription><![CDATA[situacaoSolicitacao]]></fieldDescription>
+	</field>
+	<field name="usuario" class="br.com.guardiao.modelo.Usuario">
+		<fieldDescription><![CDATA[usuario]]></fieldDescription>
+	</field>
+	<field name="usuarioAutorizou" class="br.com.guardiao.modelo.Usuario">
+		<fieldDescription><![CDATA[usuarioAutorizou]]></fieldDescription>
+	</field>
+	<field name="valor" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[valor]]></fieldDescription>
+	</field>
+	<field name="valorLiquido" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[valorLiquido]]></fieldDescription>
+	</field>
+	<field name="vinculo" class="br.com.sefin.enumerated.Vinculo">
+		<fieldDescription><![CDATA[vinculo]]></fieldDescription>
+	</field>
+	<variable name="valor_1" class="java.math.BigDecimal" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<variable name="valor_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<variable name="valor_3" class="java.math.BigDecimal" resetType="Group" resetGroup="Convenio" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<group name="Convenio">
+		<groupExpression><![CDATA[$F{convenio}]]></groupExpression>
+		<groupHeader>
+			<band height="42">
+				<textField>
+					<reportElement uuid="67b34c5c-1c06-44d9-a6c5-562c4f948ac1" x="71" y="0" width="100" height="20"/>
+					<box leftPadding="3">
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{convenio}.getNumero()]]></textFieldExpression>
+				</textField>
+				<frame>
+					<reportElement uuid="de940083-1783-40d1-b7d1-8f37b3e4ed43" mode="Opaque" x="0" y="21" width="802" height="20" forecolor="#FFFFFF" backcolor="#FFFFFF"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+					</box>
+					<staticText>
+						<reportElement uuid="59ad344e-712a-4fcc-9d1c-33d6efe525df" x="0" y="0" width="71" height="20"/>
+						<box leftPadding="3"/>
+						<textElement verticalAlignment="Middle">
+							<font size="11" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Número]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="951d55a9-1efd-4d2e-b591-a9372101e67c" x="71" y="0" width="100" height="20"/>
+						<box leftPadding="3"/>
+						<textElement verticalAlignment="Middle">
+							<font size="11" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Competência]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="b4a4f504-cf8d-49c0-9681-abcc14317455" x="171" y="0" width="75" height="20"/>
+						<box leftPadding="3"/>
+						<textElement verticalAlignment="Middle">
+							<font size="11" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Situação]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="eb0d6900-be07-4c87-8885-9224b737eee1" x="555" y="0" width="247" height="20"/>
+						<box leftPadding="3" rightPadding="3"/>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="11" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Valor]]></text>
+					</staticText>
+				</frame>
+				<staticText>
+					<reportElement uuid="81b8389e-b6ff-4a40-8793-9f36ea671d3e" x="0" y="0" width="71" height="20"/>
+					<box leftPadding="3">
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[CONVENIO:]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="1e514eac-56d6-4b7a-8611-c8fc2a6b269d" x="171" y="0" width="316" height="20"/>
+					<box>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[""+$F{convenio}.getCredor().getPessoa().getNome()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="217f8de0-cd78-4bcf-b51a-82877c31c0c2" x="246" y="21" width="100" height="20"/>
+					<box leftPadding="3"/>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Empenho]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="2eb3c392-ea76-4d64-9d41-3ed5d8dc0911" x="487" y="0" width="315" height="20"/>
+					<box>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{convenio}.getUnidadeOrcamentaria().getUnidadeOrcamentariaPK().getIdOrgao() +$F{convenio}.getUnidadeOrcamentaria().getUnidadeOrcamentariaPK().getId()+"-"+$F{convenio}.getUnidadeOrcamentaria().getNome()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="c91e6530-3312-4391-8c4b-f1f53bf45a5e" x="346" y="20" width="209" height="21"/>
+					<box leftPadding="3"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Local]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<textField pattern="¤ #,##0.00">
+					<reportElement uuid="7e74b1f0-d1e4-4d05-a830-46ddda6b0692" x="676" y="0" width="126" height="20"/>
+					<box rightPadding="3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{valor_3}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="15bdeb57-eda3-4e4d-9fcb-5991283c62d9" x="0" y="0" width="676" height="20"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Sub-total:]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="84808450-d9b2-4f96-8230-248dd2e9a825" x="0" y="0" width="802" height="50"/>
+				<subreportParameter name="img1">
+					<subreportParameterExpression><![CDATA[$P{img1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="img">
+					<subreportParameterExpression><![CDATA[$P{img}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="relatorio">
+					<subreportParameterExpression><![CDATA[$P{relatorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cabecalho_paisagem.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="23" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="a2790b2d-78ff-4c9b-91c7-2b0fec02bce1" style="zebra" x="0" y="0" width="802" height="15"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="c56c52b1-977f-4f27-9c61-e57e9ea5c530" x="0" y="0" width="71" height="15"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="19bd13b9-831a-4017-a3a8-4332ebc91cc7" x="71" y="0" width="100" height="15"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[""+$F{mesCompetencia}+"/"+$F{exercicio}.getAno()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="054a5a21-862b-4b4a-97cc-fc877a27300d" x="171" y="0" width="75" height="15"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[""+$F{situacaoSolicitacao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="58cff476-1d44-47f0-9733-c217f6516305" x="555" y="0" width="247" height="15"/>
+				<box leftPadding="0" rightPadding="3">
+					<bottomPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="5682ff04-5a2b-4142-a601-bb32f00e159c" x="246" y="0" width="100" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{empenho}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="edf3ecf4-b455-45ff-8766-73d51c53f46c" x="346" y="0" width="209" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[""+$F{local}.getNome()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="55">
+			<subreport>
+				<reportElement uuid="70a9013e-26b3-4152-869a-e348e7ed9911" x="0" y="0" width="802" height="55"/>
+				<subreportParameter name="pg">
+					<subreportParameterExpression><![CDATA[$V{PAGE_NUMBER}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="rodapeEmail">
+					<subreportParameterExpression><![CDATA[$P{rodapeEmail}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rodape_paisa.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="a0441b98-039a-456c-9934-76c5d65f188c" x="713" y="0" width="89" height="22"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="0eca8373-c7d7-4a83-90b6-365b48129f1d" x="676" y="0" width="126" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{valor_2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="449c8061-dc9d-4490-92b1-f445e8ee47ef" x="0" y="0" width="676" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rel_movimentacao_bancaria" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="20e8630d-88f6-41d9-bdc2-4e6765fd76d6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="zebra">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean( $V{REPORT_COUNT}.intValue() % 2 == 0 )]]></conditionExpression>
+			<style forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Projetos\\SefinWeb\\SiafiWeb\\web\\WEB-INF\\relatorios\\sub_relatorios\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="relatorio" class="java.lang.String"/>
+	<parameter name="img" class="java.lang.String"/>
+	<parameter name="rodapeEmail" class="java.lang.String"/>
+	<parameter name="img1" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="contaDestino" class="br.com.siafi.modelo.Conta">
+		<fieldDescription><![CDATA[contaDestino]]></fieldDescription>
+	</field>
+	<field name="contaOrigem" class="br.com.siafi.modelo.Conta">
+		<fieldDescription><![CDATA[contaOrigem]]></fieldDescription>
+	</field>
+	<field name="data" class="java.util.Date">
+		<fieldDescription><![CDATA[data]]></fieldDescription>
+	</field>
+	<field name="valor" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[valor]]></fieldDescription>
+	</field>
+	<field name="oficio" class="java.lang.String">
+		<fieldDescription><![CDATA[oficio]]></fieldDescription>
+	</field>
+	<title>
+		<band height="65" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="ef73cabb-d16d-4e86-b826-94774c75e8c1" x="0" y="0" width="802" height="65"/>
+				<subreportParameter name="img1">
+					<subreportParameterExpression><![CDATA[$P{img1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="img">
+					<subreportParameterExpression><![CDATA[$P{img}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="relatorio">
+					<subreportParameterExpression><![CDATA[$P{relatorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cabecalho_paisagem.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="478b9e52-72e4-43c3-a9df-bd05c8f9e3a3" x="0" y="2" width="56" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ofício]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="85b4c2ea-0621-44ea-ae4f-30d5876b2abc" x="57" y="2" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Origem]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2ff44d97-b076-4ad1-8fc4-cf276fb202ba" x="321" y="2" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Destino]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d2ab3689-0ecf-4800-a1cd-f0dd652f52e5" x="603" y="2" width="87" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8ea6dc8c-5f18-4584-b2c8-4c8ac45bc935" x="691" y="2" width="111" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="d4075387-2f09-4d71-aa3e-b548611ea5f2" x="0" y="21" width="802" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="6d05c6c5-2757-4458-a3e5-68175d6c428d" style="zebra" x="0" y="0" width="802" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="58467028-cd12-4d82-8591-98a53f817abd" x="0" y="0" width="56" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{oficio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2e9f3b4b-edad-45c3-93a9-a9e3be7bbbc1" x="321" y="0" width="263" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{contaOrigem}.getNomeclatura()]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="833d61d4-c4d4-4954-91e4-36549bf27076" x="603" y="0" width="87" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="03d31d18-62d7-4138-b133-26d941a330c4" x="691" y="0" width="111" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="336f719a-93ec-44d4-aa50-248af668ae2f" x="57" y="0" width="253" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{contaDestino}.getNomeclatura()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="40" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="c8a406cf-a590-431c-aba3-55193175577a" x="0" y="0" width="804" height="40"/>
+				<subreportParameter name="num">
+					<subreportParameterExpression><![CDATA[$V{PAGE_COUNT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pg">
+					<subreportParameterExpression><![CDATA[$V{PAGE_NUMBER}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="rodapeEmail">
+					<subreportParameterExpression><![CDATA[$P{rodapeEmail}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rodape_paisa.jasper"]]></subreportExpression>
+			</subreport>
+			<textField evaluationTime="Report">
+				<reportElement uuid="63f0e33d-3d0d-47bb-aa84-a86fb17e41be" x="722" y="1" width="59" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="50">
+			<line>
+				<reportElement uuid="3d0785f6-6eca-4f0e-be2d-ccb5a5e2da06" x="105" y="46" width="180" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="879dfa14-e3a7-4013-b7a9-1b45a7be4faf" x="0" y="30" width="105" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Recebido em:]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="e8e34eec-4f1f-4bad-b961-8044a9408a13" x="437" y="45" width="365" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="088c7330-9a5d-4e20-9fdb-172c70f80083" x="349" y="30" width="88" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Assinatura:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

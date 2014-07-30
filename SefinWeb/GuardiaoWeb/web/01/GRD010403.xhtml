@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel id="pnlMod" header="Cadastro de Tarefas" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.tarefa'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Cadastro de Tarefas"/>
+                    <h:outputText value="Página - 010403" style="float: right;"/>
+                </f:facet>
+                <p:focus/>
+                <h:panelGrid cellspacing="5" width="100%">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="nomeModulo" value="Nome"/>
+                            <p:message for="nomeModulo" />
+                        </h:panelGrid>
+                        <p:inputText id="nomeModulo" size="50" value="#{tarefaMB.tarefaSelecionada.nome}" required="true" requiredMessage="Preencher campo nome!"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="Sistema / Módulo" for="mod"/>
+                            <p:message for="mod"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:selectOneMenu id="mod" value="#{tarefaMB.tarefaSelecionada.modulo}" converter="#{indexConverter}"
+                                             styleClass="listas" style="width: 300px" required="true" requiredMessage="Selecione um módulo" >
+                                <f:selectItem itemLabel="" />
+                                <f:selectItems value="#{tarefaMB.listModulos}" itemValue="#{modu}" itemLabel="#{modu.sistema.sigla} / #{modu.nome}" var="modu" />
+                                <p:ajax event="change" update="mne, mnemonicoModulo, pagina"/>
+                            </p:selectOneMenu>
+                            <p:commandButton icon="ui-icon-plus" onclick="window.open('/GuardiaoWeb/01/${navegacao['cadastro.modulo']}.xhtml');" rendered="false" immediate="true"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="5">
+                        <h:panelGrid>
+                            <p:outputLabel value="Mnemônico do modulo"/>
+                            <h:panelGrid columns="2">
+                                <p:inputText id="mne" readonly="true" size="20" value="#{tarefaMB.tarefaSelecionada.modulo.sistema.mnemonico}#{tarefaMB.tarefaSelecionada.modulo.mnemonico}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:outputLabel for="ac" value="Ação"/>
+                            <p:selectOneMenu id="ac" value="#{tarefaMB.acao}" requiredMessage="Selecione a ação" required="true">
+                                <f:selectItem itemLabel="" itemValue=""/>
+                                <f:selectItem itemLabel="Menu" itemValue="00"/>
+                                <f:selectItem itemLabel="Cadastrar" itemValue="01"/>
+                                <f:selectItem itemLabel="Editar" itemValue="02"/>
+                                <f:selectItem itemLabel="Excluir" itemValue="03"/>
+                                <f:selectItem itemLabel="Cadastrar / Editar" itemValue="04"/>
+                                <f:selectItem itemLabel="Listar" itemValue="05"/>
+                                <f:selectItem itemLabel="Listar/ Excluir" itemValue="06"/>
+                                <f:selectItem itemLabel="Relatorio" itemValue="07"/>
+                                <f:selectItem itemLabel="Cadastrar/ Editar / Excluir / Listar" itemValue="08"/>
+                                <f:selectItem itemLabel="Gerenciar Status" itemValue="09"/>
+                                <f:selectItem itemLabel="Importar" itemValue="10"/>
+                                <p:ajax event="change" update="mnemonicoModulo, pagina" listener="#{tarefaMB.gerarMnemonico()}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:outputLabel for="modelo" value="Modelo" />
+                            <p:inputMask mask="99" id="modelo" size="5" value="#{tarefaMB.modelo}" required="true" requiredMessage="informe o codigo do modelo.">
+                                <p:ajax event="keyup" update="mnemonicoModulo, pagina" listener="#{tarefaMB.gerarMnemonico()}"/>
+                            </p:inputMask>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:outputLabel for="mnemonicoModulo" value="Mnemonico"/>
+                            <p:inputText id="mnemonicoModulo" readonly="true" value="#{tarefaMB.tarefaSelecionada.mnemonico}" size="10" required="true" requiredMessage="Preencher campo Mnemonico!"/>
+                        </h:panelGrid>
+                        <h:panelGrid id="pagina">
+                            <h:outputText value="Mnemonico final da Página"/>
+                            <p:inputText value="#{tarefaMB.tarefaSelecionada.mnemonico}" readonly="true"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid width="100%">
+                        <h:panelGrid>
+                            <h:outputText value="Descrição da Tarefa"/>
+                            <p:message for="tar_desc" />
+                        </h:panelGrid>
+                        <p:inputTextarea value="#{tarefaMB.tarefaSelecionada.descricao}" id="tar_desc" style="width: 100%" rows="5" />
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellspacing="30" cellpadding="10">
+                    <p:commandButton icon="ui-icon-disk" action="#{tarefaMB.salvar()}" ajax="true" value="Salvar" update="pnlMod" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.tarefa'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.tarefa'])}" value="Listar" immediate="true" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.tarefa'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" type="reset" ajax="false" value="Limpar"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

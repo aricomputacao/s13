@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <!-- ================================================= Inicio Dialog Logout ================================ -->
+    <!--    <p:dialog widgetVar="log" modal="true" header="Sistema de Controle de Acessos" width="400" closable="false" draggable="false" resizable="false" showEffect="Fade"  >
+            <p:panel>
+                <h:panelGrid style="text-align: center;">
+                    <h:outputText value="Sua sessão expirou"/>
+                    <h:outputText value="Efetue Login Novamente"/>
+                    <h:form>
+                        <a href="{navegacaoGuardiaoMB.nomeSistema}/j_spring_security_logout" style="text-decoration: none;padding: 10px;"  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-icon-person">Clique Aqui</a>
+                    </h:form>
+                </h:panelGrid>
+            </p:panel>
+        </p:dialog>-->
+    <!-- ================================================= Fim Dialog Órgãos ================================ -->
+
+    <!-- ================================================= Inicio Dialog Órgãos ================================ -->
+    <p:dialog appendToBody="true" id="confirmDialogDelOrgao"  modal="true" dynamic="true"  closable="true"   header="GRD - Sistema de Controle de Acessos"
+              widgetVar="confirmationDelOrg" showEffect="Fade">
+        <center>
+
+            <h:form id="formOrg" prependId="false">
+                <h:outputText value="Tem certeza que deseja remover o órgão?" style="font-size: 12px;font-weight: bold" />
+                <p:separator/>
+                <h:panelGrid columns="2" >
+                    <p:commandButton icon="ui-icon-close" onclick="confirmationDelOrg.hide();" value="Não"/>
+                    <p:commandButton  style="margin-left: 150px" onclick="confirmationDelOrg.hide();"  icon="ui-icon-check" action="#{unidadeAdministrativaMB.delOrg()}" value="Sim"/>
+                </h:panelGrid>
+            </h:form>
+        </center>
+    </p:dialog>
+    <!-- ================================================= Fim Dialog Órgãos ================================ -->
+
+
+</ui:component>

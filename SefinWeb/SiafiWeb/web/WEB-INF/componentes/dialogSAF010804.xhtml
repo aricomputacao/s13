@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:form>
+        <center>
+            <p:dialog widgetVar="excluirCota" modal="true" width="400" header="#{label['nome.sistema']}" closable="false"
+                      draggable="false" resizable="false" showEffect="Fade">
+                <h:outputText style="font-size: 15px;font-style: normal" value="Remover registro do sistema?"/>
+
+                <h:panelGrid style="margin-top: 30px" columns="2">
+                    <h:panelGrid width="150"  style="text-align: center;">
+                        <p:commandButton value="Sim" action="#{cotaMB.excluir()}" icon="ui-icon-check" update=":frmGeral:pnlCota" oncomplete="excluirCota.hide()"/>
+
+                    </h:panelGrid>
+                    <h:panelGrid width="150"  style="text-align: center;">
+                        <p:commandButton value="Não" icon="ui-icon-circle-close" onclick="excluirCota.hide()"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+            </p:dialog>
+        </center>
+    </h:form>
+
+
+    <h:form>
+        <center>
+            <p:dialog widgetVar="centroCusto" modal="true"  header="#{label['nome.sistema']}" closable="true"
+                      draggable="false" resizable="false" showEffect="Fade">
+                <p:panel header="Listagem de Despesas cadastrados" style="max-width: 950px" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.despesa'])}">
+
+                    <p:dataTable id="tblDespesa"  scrollable="true"  scrollHeight="400"  style="max-width: 900px"  emptyMessage="Nenhuma despesa encontrado" var="item" value="#{cotaMB.listaDespesas}"
+                                 rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+
+                        <p:column sortBy="#{item.id}" filterBy="#{item.nome}" width="5%" headerText="id">
+                            <h:outputLabel value="#{item.id}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.nome}" filterBy="#{item.nome}" headerText="Nome">
+                            <h:outputLabel value="#{item.nome}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.elementoDespesa.id}" width="5%" filterBy="#{item.elementoDespesa.id}" headerText="Id">
+                            <h:outputLabel value="#{item.elementoDespesa.id}"/>
+                        </p:column>
+                        <p:column  sortBy="#{item.elementoDespesa.nome}" filterBy="#{item.elementoDespesa.nome}" headerText="Elemento de Despesa">
+                            <h:outputLabel title="#{item.elementoDespesa.especificacao}" value="#{item.elementoDespesa.nome}"/>
+                        </p:column>
+                        <p:column  headerText="Ação" width="5%">
+                            <p:commandButton title="Selecionar despesa" style="width: 20px;height: 20px" icon="ui-icon-circle-check" onclick="centroCusto.hide();" update=":frmGeral:cotDespesa" >
+                                <f:setPropertyActionListener target="#{cotaMB.cota.despesa}" value="#{item}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+
+            </p:dialog>
+        </center>
+    </h:form>
+</ui:component>

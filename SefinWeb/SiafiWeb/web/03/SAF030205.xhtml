@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/maskMoney.js" />
+        <h:outputScript name="script/edtMoeda.js" />
+        <!--<h:outputScript name="script/navegacao.js" />-->
+        <p:blockUI block="pnlGeral" widgetVar="bui">
+            <p:graphicImage value="/resources/imagens/carregar.gif"/>
+        </p:blockUI>
+        <p:panel id="pnlGeral" styleClass="painelPadrao" style="width: 1200px" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.receber_solicitacao_liquidacao'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Receber Solicitaçao de Liquidaçao"/>
+                <h:outputText value="Página - 030205" style="float: right;"/>
+            </f:facet>
+            <h:panelGrid width="100%">
+                <h:panelGrid columns="5">
+                    <h:panelGrid id="un">
+                        <p:outputLabel value="Unidade Orçamentária"/>
+                        <h:panelGrid columns="2">
+                            <p:inputText value="#{receberEncaminhamentoLiquidacaoMB.idUnidade}" size="10" id="cod" maxlength="4" autocomplete="off">
+                                <p:ajax listener="#{receberEncaminhamentoLiquidacaoMB.selecionaSecretaria()}" event="keyup" update="und" />
+                            </p:inputText>
+                            <p:selectOneMenu value="#{receberEncaminhamentoLiquidacaoMB.unidadeOrcamentaria}" id="und" converter="#{indexConverter}" style="width: 400px;">
+                                <f:selectItem itemValue="#{null}" itemLabel=" -- Selecionar -- "/>
+                                <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.unidadeOrcamentariaPK} - #{orc.nome}" itemValue="#{orc}"/>
+                                <p:ajax event="change" update="und, cod" listener="#{receberEncaminhamentoLiquidacaoMB.alteraUnidadeOrcamentaria()}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid id="status">
+                        <h:outputText value="Status"/>
+                        <p:selectOneMenu value="#{receberEncaminhamentoLiquidacaoMB.situacaoSolicitacao}" style="width: 180px;">
+                            <f:selectItem itemValue="" itemLabel="#{null}"/>
+                            <f:selectItems value="#{receberEncaminhamentoLiquidacaoMB.listaStatus}" var="s" itemLabel="#{s}" itemValue="#{s}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="18"/>
+                        <p:commandButton action="#{receberEncaminhamentoLiquidacaoMB.listaReceber()}" id="btnListar" value="Buscar" icon="ui-icon-search" onclick="bui.show();" oncomplete="bui.hide();" update="tblSolicitacao"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="acoes">
+                        <p:spacer width="18" />
+                        <p:commandButton  value="Receber" title="Receber processos selecionados" icon="ui-icon-arrowreturnthick-1-s" actionListener="#{receberEncaminhamentoLiquidacaoMB.salvarSelecionados()}" update="tblSolicitacao" oncomplete="bui.hide();" onclick="bui.show();">
+                            <p:confirm header="Receber Processos" message="Receber todos os processos selecionados?" icon="ui-icon-alert"/>
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+
+            <h:panelGrid width="100%" id="tblSolicitacao">
+                <p:dataTable scrollHeight="400" scrollable="true" rowKey="#{item.id}"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{receberEncaminhamentoLiquidacaoMB.encaminhamentoDataList}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" selection="#{receberEncaminhamentoLiquidacaoMB.encaminhamentosArray}">
+                    <p:column selectionMode="multiple" headerText="Todos" width="5%" >
+                    </p:column>
+                    <p:column  headerText="Numero" width="20%">
+                        <h:outputLabel title="#{item.solicitacaoLiquidacao.documento}" value="#{item.solicitacaoLiquidacao.documento}"/>
+                    </p:column>
+                    <p:column sortBy="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.id}" filterBy="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.id}" headerText="Solicitação" width="100">
+                        <h:outputLabel value="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.id}"/>
+                    </p:column>
+                    <p:column headerText="Empenho" sortBy="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.empenho}" width="100" filterBy="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.empenho}">
+                        <h:outputLabel value="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.empenho}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.valor}" width="100" headerText="Valor Sol">
+                        <h:outputText value="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.valor}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column sortBy="#{item.solicitacaoLiquidacao.valor}" width="100" headerText="Valor Liq.">
+                        <h:outputText value="#{item.solicitacaoLiquidacao.valor}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="max-width: 200px" sortBy="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.credor.pessoa.nome}">
+                        <f:facet name="header">
+                            <h:outputText value="Credor" />
+                        </f:facet>
+                        <h:outputText style="max-width: 200px" value="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.credor.pessoa.nome}" title="#{item.solicitacaoLiquidacao.solicitacaoFinanceira.credor.pessoa.nome}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+</ui:composition>

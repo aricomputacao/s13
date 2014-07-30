@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel id="pnlUsu" header="Cadastro de Usuário" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.usuario'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Cadastro de Usuário"/>
+                    <h:outputText value="Página - 010409" style="float: right;"/>
+                </f:facet>
+                <p:focus/>
+                <h:panelGrid width="100%">
+                    <h:panelGrid columns="4">
+                        <h:panelGrid>
+                            <h:panelGrid>
+                                <h:outputText value="Documento"/>
+                            </h:panelGrid>
+                            <p:selectOneMenu value="#{usuarioMB.docCpf}" disabled="#{usuarioMB.usuarioSelecionado.documento != null}">
+                                <f:selectItem itemValue="#{false}" itemLabel="Matricula"/>
+                                <f:selectItem itemValue="#{true}" itemLabel="CPF"/>
+                                <p:ajax event="change" immediate="true" update="matricula"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid id="matricula">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="matricUsu" value="Matricula" rendered="#{not usuarioMB.docCpf}"/>
+                                <p:outputLabel for="matricUsuCpf" value="CPF" rendered="#{usuarioMB.docCpf}"/>
+                                <p:message for="matricUsu" rendered="#{not usuarioMB.docCpf}"/>
+                                <p:message for="matricUsuCpf" rendered="#{usuarioMB.docCpf}"/>
+                            </h:panelGrid>
+                            <p:inputMask id="matricUsuCpf" mask="999.999.999-99" size="15" validator="#{usuarioMB.validate}" disabled="#{usuarioMB.usuarioSelecionado.documento != null}" value="#{usuarioMB.usuarioSelecionado.documento}" required="true" requiredMessage="O campo matrícula é obrigatório." rendered="#{usuarioMB.docCpf}"/>
+                            <p:inputMask id="matricUsu" mask="9999999" size="7" value="#{usuarioMB.usuarioSelecionado.documento}" required="true" disabled="#{usuarioMB.usuarioSelecionado.documento != null}" requiredMessage="O campo matrícula é obrigatório." rendered="#{not usuarioMB.docCpf}"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="nomeUsu" value="Nome"/>
+                                <p:message for="nomeUsu"/>
+                            </h:panelGrid>
+                            <p:inputText id="nomeUsu" size="35" value="#{usuarioMB.pessoa.nome}" required="true" requiredMessage="Preencher campo nome!"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="carg" value="Cargo"/>
+                                <p:message for="carg" id="msgCargoDesc"/>
+                            </h:panelGrid>
+                            <p:selectOneMenu id="carg" value="#{usuarioMB.usuarioSelecionado.cargo}" converter="#{indexConverter}" styleClass="listas" required="true" requiredMessage="Selecione um cargo" >
+                                <f:selectItem itemLabel=""/>
+                                <f:selectItems value="#{usuarioMB.listaCargo}" itemValue="#{car}" itemLabel="#{car.nome}" var="car" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel  value="Orgão" for="sis"/>
+                                <p:message for="sis" id="msgOrgaoDesc"/>
+                            </h:panelGrid>
+                            <p:selectOneMenu id="sis" value="#{usuarioMB.usuarioSelecionado.orgao}" style="width: 440px;" converter="#{indexConverter}" styleClass="listas" required="true" requiredMessage="Selecione um orgão" >
+                                <f:selectItem itemLabel=""/>
+                                <f:selectItems value="#{usuarioMB.listaOrgao}" itemValue="#{o}" itemLabel="#{o.id.id} - #{o.nome}" var="o" />
+                                <p:ajax  event="change" listener="#{usuarioMB.listarAreasAdministrativa()}" update="area"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel  value="Área Administrativa" for="area"/>
+                                <p:message for="area"/>
+                            </h:panelGrid>
+                            <p:selectOneMenu id="area" value="#{usuarioMB.usuarioSelecionado.areaAdministrativa}" converter="#{indexConverter}" styleClass="listas">
+                                <f:selectItem itemLabel=""/>
+                                <f:selectItems value="#{usuarioMB.listaAreasAdministrativas}" itemValue="#{o}" itemLabel="#{o.nome}" var="o" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel  value="Telefone"/>
+                                <p:message for="telUsu"/>
+                            </h:panelGrid>
+                            <p:inputMask id="telUsu" mask="(99)9999-9999" value="#{usuarioMB.pessoa.telefone}"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel  value="Email"/>
+                                <p:message for="emailUsu"/>
+                            </h:panelGrid>
+                            <p:inputText id="emailUsu" size="40" value="#{usuarioMB.pessoa.email}"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel  value="Ativo"/>
+                                <p:message for="usuAtv"/>
+                            </h:panelGrid>
+                            <p:selectOneRadio id="usuAtv" value="#{usuarioMB.usuarioSelecionado.acesso}" >
+                                <f:selectItem itemLabel="Sim" itemValue="#{true}"/>
+                                <f:selectItem itemLabel="Não"  itemValue="#{false}"/>
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="3">
+
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="senhaUsu" value="Senha:"/>
+                                <p:message for="senhaUsu" />
+                            </h:panelGrid>
+                            <p:password id="senhaUsu" goodLabel="Boa" strongLabel="Ótima" promptLabel="Infome uma senha" validatorMessage="As senhas não conferem" required="true" match="senhaUsu2" requiredMessage="Informe uma senha" feedback="true" maxlength="20" weakLabel="Fraca" value="#{usuarioMB.usuarioSelecionado.senha}"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid>
+                                <p:outputLabel for="senhaUsu2"  value="Confirmar Senha:"/>
+                            </h:panelGrid>
+                            <p:password id="senhaUsu2" required="true" requiredMessage="Informe uma senha" maxlength="20" weakLabel="Fraca" value="#{usuarioMB.usuarioSelecionado.senha}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellspacing="10" cellpadding="10">
+                    <p:commandButton icon="ui-icon-disk" action="#{usuarioMB.salvar()}" value="Salvar" update="pnlUsu" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.usuario'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.usuario'])}" value="Listar" immediate="true" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.usuario'])}"/>
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-e" type="reset" ajax="false" value="Limpar"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

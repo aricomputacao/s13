@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo" >
+        <p:blockUI block="pnlGeral" trigger="btnListar">
+            <p:graphicImage value="/resources/imagens/carregar.gif"/>
+        </p:blockUI>
+        <p:panel id="pnlGeral" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.receber_processo'])}">
+
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Processo Encaminhados"/>
+                <h:outputText value="Página - 030501" style="float: right;"/>
+            </f:facet>
+            <h:panelGrid width="100%">
+                <h:panelGrid id="un"  columns="4">
+                    <h:panelGrid >
+                        <h:outputText value="Unidade Orçamentária"/>
+                        <p:selectOneMenu value="#{receberEncaminhamentoMB.unidadeOrcamentaria}"  converter="#{indexConverter}" style="width: 400px;">
+                            <f:selectItem itemValue="#{null}" itemLabel=" -- Selecionar -- "/>
+                            <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.orgao.id.id}#{orc.unidadeOrcamentariaPK.id} - #{orc.nome}" itemValue="#{orc}"/>
+                            <p:ajax event="change" update="un"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" >
+                        <p:commandButton icon="ui-icon-circle-zoomin" update="tblRecebimento" id="btnListar" value="Pesquisar" action="#{receberEncaminhamentoMB.listaReceber()}" title="Consultar Processo"  rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.receber_processo'])}" />
+                        <p:commandButton icon="ui-icon-arrowreturnthick-1-s" title="Receber Processo" id="btnReceber" update="pnlGeral" onclick="confirmaTodos.show();" value="Receber"  rendered="#{usuarioMB.permissaoIncluir(navegacao['protocolo.receber_processo'])}" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid width="100%" id="tblRecebimento">
+                <p:dataTable rowKey="#{item.id}"  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum encaminhamento encontrado" var="item" value="#{receberEncaminhamentoMB.encaminhamentoDataList}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" selection="#{receberEncaminhamentoMB.encaminhamentosArray}">
+                    <p:column style="width: 2%;">
+                        <p:rowToggler id="x"/>
+                    </p:column>
+                    <p:column selectionMode="multiple" headerText="Marcar Todos" width="8%" >
+                    </p:column>
+                    <p:column headerText="Número" filterBy="#{item.solicitacaoFinanceira.id}">
+                        <h:outputLabel value="#{item.solicitacaoFinanceira.id}"/>
+                    </p:column>
+                    <p:column headerText="Origem">
+                        <h:outputText value="#{item.solicitacaoFinanceira.cota.unidadeOrcamentaria.unidadeOrcamentariaPK.idOrgao}#{item.solicitacaoFinanceira.cota.unidadeOrcamentaria.unidadeOrcamentariaPK.id} - #{item.solicitacaoFinanceira.cota.unidadeOrcamentaria.nome}"/>
+                    </p:column>
+                    <p:column headerText="Data do Encaminhamento">
+                        <h:outputText value="#{item.dataEncaminhamento}">
+                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Valor">
+                        <h:outputText value="#{item.solicitacaoFinanceira.valor}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Situação">
+                        <h:outputText value="#{item.solicitacaoFinanceira.situacaoSolicitacao}"/>
+                    </p:column>
+                    <p:rowExpansion>
+                        <h:panelGrid frame="none">
+                            <h:outputText value="Emissor: #{item.usuarioEncaminhou.pessoa.nome}"/>
+                            <h:outputText value="Encaminhado de : #{item.usuarioEncaminhou.areaAdministrativa.nome}"/>
+                            <h:outputText value="Destino: #{item.destino.nome}"/>
+                            <h:outputText value="Credor: #{item.solicitacaoFinanceira.credor.pessoa.nome}"/>
+                            <h:outputText value="Número da Nota: #{item.solicitacaoFinanceira.notaFiscal}"/>
+                            <h:outputText value="Número do Empenho: #{item.solicitacaoFinanceira.empenho}"/>
+                            <p:inputTextarea value="Histórico: #{item.observacao}" style="width: 100%;color: #000;" rows="3" readonly="true" autoResize="true" cols="100"/>
+                        </h:panelGrid>
+                    </p:rowExpansion>
+                </p:dataTable>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogSAF030201/>
+    </ui:define>
+
+</ui:composition>

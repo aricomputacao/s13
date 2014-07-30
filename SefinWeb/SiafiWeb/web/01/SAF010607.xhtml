@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="corpo" >
+        <p:panel header="Listagem de Categorias cadastrados" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['pendencia.liberar'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Categorias cadastrados"/>
+                <h:outputText value="Página - 010502" style="float: right;"/>
+            </f:facet>
+            <p:panel>
+                <h:panelGrid columns="6">
+
+                    <h:panelGrid>
+                        <h:outputText value="Campo"/>
+                        <p:selectOneMenu value="#{pendenciaMB.campoBusca}" style="width: 190px">
+                            <f:selectItem  itemValue="documento"  itemLabel="CPF/CNPJ" />
+                            <f:selectItem itemValue="credorNome"  itemLabel="NOME" />
+
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Pesquisar por"/>
+                        <p:inputText value="#{pendenciaMB.valorBusca}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Listar" title="Listar" icon="ui-icon-search" action="#{pendenciaMB.listar()}" update="tblPendencia"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <p:dataTable id="tblPendencia" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma categoria encontrada" var="item" value="#{pendenciaMB.listaPendencias}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                <p:column headerText="Documento">
+                    <h:outputText value="#{item.documento}"/>
+                </p:column>
+                <p:column headerText="Nome">
+                    <h:outputText value="#{item.credorNome}"/>
+                </p:column>
+                <p:column width="5%" headerText="Ações">                
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" >
+                        <h:panelGrid columns="2" width="100%" >
+                            <p:commandButton value="Sim" type="button"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                            <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/> 	
+                        </h:panelGrid>
+                    </p:confirmDialog>
+                    <p:commandButton icon="ui-icon-trash" update=":frmGeral"  actionListener="#{pendenciaMB.remover(item)}"  rendered="#{usuarioMB.permissaoExcluir(navegacao['pendencia.liberar'])}" title="Remover" >
+                        <p:confirm header="#{label['nome.sistema']}" message="Confirma a exclusão?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </ui:define>
+</ui:composition>

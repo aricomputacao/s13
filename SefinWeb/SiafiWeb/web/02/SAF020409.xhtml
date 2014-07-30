@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/maskMoney.js" />
+        <h:outputScript name="script/edtMoeda.js" />
+        <p:panel styleClass="painelPadrao" id="painelPadrao" header="Emissão de Ordem de Compra" rendered="#{usuarioMB.permissaoIncluir(navegacao['licitacao.emitir.ordem_compra'])}" >
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Emitir Ordem de Compra"/>
+                <h:outputText value="Página - 020409" style="float: right" />
+            </f:facet>
+            <h:panelGrid width="100%">
+                <h:panelGrid columns="5">
+                    <h:panelGrid>
+                        <h:outputText value="Id"/>
+                        <p:inputText value="#{ordemCompraMB.ordemCompra.id}" size="10" readonly="true"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Data de Emissão"/>
+                        <p:inputText value="#{ordemCompraMB.ordemCompra.dataEmissao}" size="15" readonly="true">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:inputText>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Emissor"/>
+                        <p:inputText value="#{ordemCompraMB.ordemCompra.emissor.pessoa.nome}" size="40" readonly="true"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Status"/>
+                        <p:inputText value="#{ordemCompraMB.ordemCompra.status}" size="20" readonly="true"/>
+                    </h:panelGrid>
+
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Unidade Orçamentária"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:selectOneMenu id="solUnidade" disabled="#{ordemCompraMB.salvo or ordemCompraMB.ordemCompra.id != null}" value="#{ordemCompraMB.unidadeOrcamentaria}"
+                                             converter="#{indexConverter}" style="width: 325px;" required="true" requiredMessage="Informe a unidade Orçamentaria.">
+                                <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="i" itemLabel="#{i.orgao.id.id}#{i.unidadeOrcamentariaPK.id} - #{i.nome}"  itemValue="#{i}"/>
+                                <p:ajax event="change" update="solUnidade, painelPadrao, :itensLicitacaoListView,  :frmListlicitacao" listener="#{ordemCompraMB.limparLicitacao()}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="4">
+                    <h:panelGrid id="credor">
+                        <h:outputText value="Credor"/>
+                        <h:panelGrid columns="2">
+                            <p:inputText value="#{ordemCompraMB.credor.pessoa.nome}" readonly="true" size="45" required="true" requiredMessage="Selecione um credor"/>
+                            <p:commandButton icon="ui-icon-search" onclick="credorBusca.show();" immediate="true" disabled="#{ordemCompraMB.salvo or ordemCompraMB.ordemCompra.id != null}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid id="licitacao"  >
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Contrato" title="Contrato"/>
+                            <p:message for="solContrato"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:inputText id="solContrato" readonly="true" size="25" required="true" value="#{ordemCompraMB.aditivo.contrato.numero}" requiredMessage="Informe o contrato" />
+                            <p:commandButton immediate="true" oncomplete="listaContratos.show();" action="#{ordemCompraMB.listarContratos()}" update=":frmContrato" icon="ui-icon-circle-zoomout" title="Contrato" disabled="#{ordemCompraMB.salvo or ordemCompraMB.ordemCompra.id != null}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid>
+                        <h:outputText value="Total" />
+                        <h:panelGrid>
+                            <p:inputText id="total" value="#{ordemCompraMB.ordemCompra.valorTotal}" readonly="true">
+                                <f:convertNumber type="currency"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid width="100%">
+                    <h:panelGrid columns="4" id="itemLic">
+                        <h:panelGrid>
+                            <h:outputText value="Item"/>
+                            <h:panelGrid columns="2">
+                                <p:inputText value="#{ordemCompraMB.itemLicitacao.item.id}" size="10" readonly="true"/>
+                                <p:inputText value="#{ordemCompraMB.itemLicitacao.item.nome}" size="60" readonly="true"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Valor Uni."/>
+                            <p:inputText value="#{ordemCompraMB.valorInitario}" required="true" requiredMessage="Informe o valor" rendered="false"/>
+                            <p:inputText autocomplete="off" validatorMessage="Valor insuficiente" onfocus="mascaraInputs();" lang="pt-BR" value="#{ordemCompraMB.valorInitario}" styleClass="edtMoeda" >
+                                <f:convertNumber type="currency"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Quantidade"/>
+                            <p:inputText value="#{ordemCompraMB.quantidade}" required="true" requiredMessage="Informe o valor" rendered="false"/>
+                            <p:inputText autocomplete="off" validatorMessage="Valor insuficiente" onfocus="mascaraQuantidadeInteira();" lang="pt-BR" value="#{ordemCompraMB.quantidade}" styleClass="edtQtdInt" >
+                                <f:convertNumber pattern="#,####0.0000"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:spacer width="15"/>
+                            <h:panelGrid columns="2">
+                                <p:commandButton title="Incluir item" actionListener="#{ordemCompraMB.addItem()}" icon="ui-icon-circle-check" update="itensOrdemCompra, itemLic, total" disabled="#{ordemCompraMB.itemLicitacao.item == null}"/>
+                                <p:commandButton title="Selecionar item" onclick="itensLicitacaoView.show();" update="total" disabled="#{ordemCompraMB.salvo}" icon="ui-icon-search"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <p:dataTable value="#{ordemCompraMB.itensLista}" paginator="true" paginatorAlwaysVisible="false" rows="10" draggableColumns="true" emptyMessage="Adicione um item" var="i" id="itensOrdemCompra"
+                                 rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                        <f:facet name="header">
+                            <h:outputText value="Itens solicitados"/>
+                        </f:facet>
+                        <p:column headerText="Ord.">
+                            <h:outputText value="#{i.itemOrdemCompraPk.ordem}"/>
+                        </p:column>
+                        <p:column headerText="Id">
+                            <h:outputText value="#{i.itemLicitacao.item.id}"/>
+                        </p:column>
+                        <p:column headerText="Nome" style="max-width: 250px;">
+                            <h:outputText value="#{i.itemLicitacao.item.nome}"/>
+                        </p:column>
+                        <p:column headerText="Quantidade">
+                            <h:outputText value="#{i.quantidade}"/>
+                        </p:column>
+                        <p:column headerText="Valor">
+                            <h:outputText value="#{i.valorUnitario}" >
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Total">
+                            <h:outputText value="#{i.valorUnitario * i.quantidade}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Acao">
+                            <p:commandButton icon="ui-icon-minus" actionListener="#{ordemCompraMB.removeItem(i)}" disabled="#{ordemCompraMB.salvo}"  immediate="true" update=":frmGeral:itensOrdemCompra, :frmGeral:total"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid columns="5" width="100%" >
+
+                <comp:commandButton_salvar  acao_butao="#{ordemCompraMB.salvar()}"  rendered="#{not ordemCompraMB.salvo}"/>
+                <comp:commandbutton_navegar_consulta acao_butao="#{beanNavegacaoMB.redirecionar(navegacao['licitacao.listar.ordem_compra'])}" />
+
+                <p:commandButton icon="ui-icon-pencil" action="#{ordemCompraMB.editar()}"  value="Alterar" update="painelPadrao" disabled="#{not ordemCompraMB.salvo}"/>
+                <p:commandButton icon="ui-icon-arrowrefresh-1-w" action="#{ordemCompraMB.novo()}" value="Limpar"  update="painelPadrao, :itensLicitacaoListView, :frmCredor,:frmContrato">
+                    <p:resetInput target="painelPadrao"/>
+                </p:commandButton>
+                <comp:commandButton_imprimir rendered="#{ordemCompraMB.salvo}" acao_butao="#{ordemCompraMB.impressaoOrdemCompra()}" />
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogSAF020409/>
+        <scgb:dialogConsultaCredor/>
+    </ui:define>
+    <ui:define name="acaoCredor">
+        <p:column headerText="Sel">
+            <p:commandButton styleClass="btnTabela" icon="ui-icon-circle-check" immediate="true" oncomplete="credorBusca.hide();" update=":frmGeral:credor,:frmContrato">
+                <f:setPropertyActionListener value="#{cred}" target="#{ordemCompraMB.credor}"/>
+            </p:commandButton>
+        </p:column>
+    </ui:define>
+</ui:composition>

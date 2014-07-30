@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/maskMoney.js" />
+        <h:outputScript name="script/edtMoeda.js" />
+        <h:outputScript name="script/navegacao.js" />
+        <p:panel id="pnlGeral" styleClass="painelPadrao"  style="width: 1200px" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.listar_solicitacao_liquidacao'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Consulta Liquidações"/>
+                <h:outputText value="Página - 030704" style="float: right;"/>
+            </f:facet>
+
+            <h:panelGrid width="100%">
+                <h:panelGrid id="un"  columns="4">
+                    <h:panelGrid >
+                        <h:outputText value="Unidade Orçamentária"/>
+                        <p:selectOneMenu value="#{solicitacaiLiquidacaoMB.unidadeOrcamentaria}"  converter="#{indexConverter}" style="width: 400px;">
+                            <f:selectItem itemValue="#{null}" itemLabel=" -- Selecionar -- "/>
+                            <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.orgao.id.id}#{orc.unidadeOrcamentariaPK.id} - #{orc.nome}" itemValue="#{orc}"/>
+                            <p:ajax event="change" update="un"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <comp:consulta_input_button id="cre" nome_dialog="credorBusca" value_input="#{solicitacaiLiquidacaoMB.credor.pessoa.nome}"  nome_label="Credor" size="50"  form_to_update="@form"/>
+                    <h:panelGrid columns="1">
+                        <h:outputText value="Número"/>
+                        <p:inputText value="#{solicitacaiLiquidacaoMB.campoBusca}"/>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="1"  >
+                        <p:spacer width="15"/>
+                        <h:panelGrid columns="4">
+                            <comp:commandButton_consulta rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.listar_solicitacao_liquidacao'])}" acao_butao="#{solicitacaiLiquidacaoMB.listarPorNumeroSolicitacaoTesouraria()}"  />
+                            <!--<comp:commandButton_imprimir acao_butao="#{solicitacaiLiquidacaoMB.impressaoEncaminhamentos()}" />-->
+                            <comp:commandButton_imprimir acao_butao="#{solicitacaiLiquidacaoMB.impressao()}" />
+
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid width="100%" id="tblRecebimento">
+                <p:dataTable rowKey="#{item.id}"  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="#{mensagens['lista_vazia']}" var="item" value="#{solicitacaiLiquidacaoMB.listaSolicitacaoLiquidacaos}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+
+                    <p:column headerText="Solicitação">
+                        <h:outputLabel value="#{item.solicitacaoFinanceira.id}"/>
+                    </p:column>
+                    <p:column headerText="Credor">
+                        <h:outputLabel value="#{item.solicitacaoFinanceira.credor.pessoa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Origem">
+                        <h:outputText value="#{item.solicitacaoFinanceira.cota.unidadeOrcamentaria.unidadeOrcamentariaPK.idOrgao}#{item.solicitacaoFinanceira.cota.unidadeOrcamentaria.unidadeOrcamentariaPK.id} - #{item.solicitacaoFinanceira.cota.unidadeOrcamentaria.nome}"/>
+                    </p:column>
+                    <p:column headerText="Local">
+                        <h:outputText value="#{item.areaAdministrativa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Nota">
+                        <h:outputText value="#{item.documento}"/>
+                    </p:column>
+                    <p:column headerText="Valor">
+                        <h:outputText value="#{item.valor}">
+                            <f:convertNumber type="currency" maxFractionDigits="2" minFractionDigits="2" minIntegerDigits="1" locale="pt_BR" currencyCode="BRL" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Situação">
+                        <h:outputText value="#{item.statusSolicitacaoLiquidacao}"/>
+                    </p:column>
+                   
+                </p:dataTable>
+            </h:panelGrid>
+
+        </p:panel>
+
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogEditarLiquidacao/>
+        <scgb:dialogConsultaCredor/>
+    </ui:define>
+    <ui:define name="acaoCredor">       
+        <comp:consulta_confirm_button alvo="#{solicitacaiLiquidacaoMB.credor}" componente_to_update=":frmGeral:un" nome_dialog="credorBusca" valor="#{cred}" />
+    </ui:define>
+
+
+</ui:composition>

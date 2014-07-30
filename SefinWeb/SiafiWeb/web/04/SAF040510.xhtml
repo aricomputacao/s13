@@ -1,0 +1,19 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo">
+        <p:panel header="Listagem de Tipo de Fonte de Recursos" id="pnlGeral" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.tipo_fonte_recurso'])}" >
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Natureza de Despesa"/>
+                <h:outputText value="Página - 040510" style="float: right;"/>
+            </f:facet>
+            <scgb:consultaNaturezaDespesa/>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo" >
+        <p:panel styleClass="painelPadrao" id="pnlGeral" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.licitacao'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Licitações"/>
+                <h:outputText value="Página - 020505" style="float: right;"/>
+            </f:facet>
+            <p:panel>
+                <p:blockUI block="pnlGeral" trigger="btnListar"  >
+                    <p:graphicImage value="/resources/imagens/carregar.gif"/>
+                </p:blockUI>
+
+                <h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:panelGrid id="unidades">
+                            <h:outputText value="Unidade Orçamentaria"/>
+                            <p:selectOneMenu value="#{licitacaoMB.unidadeOrcamentaria}" converter="#{indexConverter}" style="width: 350px">
+                                <f:selectItem itemValue="#{null}" itemLabel=" -- Todos -- "/>
+                                <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="c" itemLabel="#{c.orgao.id.id}#{c.unidadeOrcamentariaPK.id} - #{c.nome}" itemValue="#{c}"/>
+                                <p:ajax event="change" update="unidades"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Número"/>
+                            <p:inputText value="#{licitacaoMB.numero}"  size="25" onkeyup="$(this).val($(this).val().toUpperCase());"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <h:panelGrid id="credor">
+                            <h:outputLabel value="Credor" title="Credor"/>
+                            <h:panelGrid columns="2">
+                                <p:inputText size="60" readonly="true" value="#{licitacaoMB.credor.pessoa.nome}" rendered="#{licitacaoMB.credor.id != null}"/>
+                                <p:inputText size="60" readonly="true" rendered="#{licitacaoMB.credor.id == null}"/>
+                                <p:commandButton  immediate="true" onclick="credorBusca.show();" icon="ui-icon-circle-zoomout" title="Credor"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:spacer width="10"/>
+                            <p:commandButton value="Listar" id="btnListar" title="Listar" icon="ui-icon-search" action="#{licitacaoMB.listar()}" update="pnlGeral" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.licitacao'])}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+            </p:panel>
+            <p:dataTable id="tblLista" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="item" value="#{licitacaoMB.licitacoes}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                <p:column headerText="Id" sortBy="#{item.id}">
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+                <p:column headerText="Número" sortBy="#{item.numero}">
+                    <h:outputText value="#{item.numero}"/>
+                </p:column>
+                <p:column headerText="Data" sortBy="#{item.data}">
+                    <h:outputText value="#{item.data}">
+                        <f:convertDateTime parent="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Modalidade" sortBy="#{item.modalidadeLicitacao.nome}">
+                    <h:outputText value="#{item.modalidadeLicitacao.nome}"/>
+                </p:column>
+                <p:column headerText="Tipo de Licitação" sortBy="#{item.tipoLicitacao.nome}">
+                    <h:outputText value="#{item.tipoLicitacao.nome}"/>
+                </p:column>
+                <p:column headerText="Valor Orçado" sortBy="#{item.valorOrcado}">
+                    <h:outputText value="#{item.valorOrcado}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Valor Limit" sortBy="#{item.valorLimite}">
+                    <h:outputText value="#{item.valorLimite}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogConsultaCredor/>
+    </ui:define>
+    <ui:define name="acaoCredor">
+        <p:column headerText="">
+            <p:commandButton style="width: 20px; height: 20px;" icon="ui-icon-check" immediate="true" oncomplete="credorBusca.hide();" update=":frmGeral:credor">
+                <f:setPropertyActionListener value="#{cred}" target="#{licitacaoMB.credor}"/>
+            </p:commandButton>
+        </p:column>
+    </ui:define>
+</ui:composition>

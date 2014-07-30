@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/navegacao.js" />
+
+        <p:blockUI block="pnlGeral" widgetVar="block">
+            <p:graphicImage value="/resources/imagens/carregar.gif"/>
+        </p:blockUI>
+
+        <p:panel id="pnlGeral" header="Listagem de Encaminhamento por Período" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.processos_encaminhados_periodo'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Encaminhamento por Período"/>
+                <h:outputText value="Página - 050709" style="float: right;"/>
+            </f:facet>
+
+            <p:panel>
+                <h:panelGrid width="100%" >
+                    <h:panelGrid columns="3">
+                        <h:panelGrid>
+                            <p:outputLabel for="org" value="Órgão"/>
+                            <p:selectOneMenu id="org" value="#{relatorioEncaminhadoMB.orgao}" converter="#{indexConverter}" styleClass="listas" style="width: 300px;">
+                                <f:selectItem itemLabel="" />
+                                <f:selectItems value="#{relatorioEncaminhadoMB.listaOrgaos}" itemValue="#{orgao}" itemLabel="#{orgao.id.id}-#{orgao.nome}" var="orgao" />
+                                <p:ajax event="change" update="area"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid id="area">
+                            <h:outputText value="Destino"/>
+                            <p:selectOneMenu value="#{relatorioEncaminhadoMB.destino}"  converter="#{indexConverter}" style="width: 220px;">
+                                <f:selectItem itemValue="#{null}" itemLabel=" -- Selecionar -- "/>
+                                <f:selectItems value="#{relatorioEncaminhadoMB.areas()}" var="a" itemLabel="#{a.nome}" itemValue="#{a}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="Credor" title="Credor"/>
+                            <h:panelGrid columns="2">
+                                <p:inputText id="credor" readonly="true" size="30" value="#{relatorioEncaminhadoMB.credor.pessoa.nome}"/>
+                                <p:commandButton onclick="credorBusca.show();" icon="ui-icon-circle-zoomout" title="Credor"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" width="100%">
+                        <h:panelGrid>
+                            <h:outputText value="Período"/>
+                            <h:panelGrid columns="3">
+                                <p:calendar showButtonPanel="true" effect="fade" navigator="true" size="20" value="#{relatorioEncaminhadoMB.dataInicio}" pattern="dd/MM/yyyy HH:mm:ss"/>
+                                <p:spacer width="10"/>
+                                <p:calendar showButtonPanel="true" effect="fade" navigator="true" size="20" value="#{relatorioEncaminhadoMB.dataFinal}" pattern="dd/MM/yyyy HH:mm:ss"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3" style="float: right;">
+                            <p:commandButton value="Consultar" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.processos_encaminhados_periodo'])}" title="Listar" icon="ui-icon-search" action="#{relatorioEncaminhadoMB.listar()}" update="tabela" onclick="block.show();" oncomplete="block.hide();"/>
+                            <p:spacer width="10"/>
+                            <p:commandButton onclick="block.show();" oncomplete="block.hide();popup('/SiafiWeb/RelatorioServlet.pdf');" value="Imprimir" title="Imprimir relatório" rendered="#{usuarioMB.permissaoConsultar(navegacao['relatorio.processos_encaminhados_periodo'])}" icon="ui-icon-print"  action="#{relatorioEncaminhadoMB.impressao()}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <h:panelGrid width="100%">
+                <p:dataTable id="tabela" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{relatorioEncaminhadoMB.encaminhamentosList}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+                    <p:column headerText="Número" sortBy="#{item.solicitacaoFinanceira.id}">
+                        <h:outputLabel value="#{item.solicitacaoFinanceira.id}"/>
+                    </p:column>
+                    <p:column headerText="Credor" sortBy="#{item.solicitacaoFinanceira.credor.pessoa.nome}">
+                        <h:outputLabel value="#{item.solicitacaoFinanceira.credor.pessoa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Secretaria" sortBy="#{item.solicitacaoFinanceira.cota.unidadeOrcamentaria.abreviacao}" >
+                        <h:outputLabel value="#{item.solicitacaoFinanceira.cota.unidadeOrcamentaria.abreviacao}"/>
+                    </p:column>
+                    <p:column headerText="Destino" sortBy="#{item.destino.nome}">
+                        <h:outputText value="#{item.destino.nome}"/>
+                    </p:column>
+                    <p:column headerText="Data do Encaminhamento">
+                        <h:outputText value="#{item.dataEncaminhamento}">
+                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Valor">
+                        <h:outputText value="#{item.solicitacaoFinanceira.valor}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </p:panel>
+
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogConsultaCredor/>
+    </ui:define>
+    <ui:define name="acaoCredor">
+        <p:column >
+            <p:commandButton style="width: 20px; height: 20px;" icon="ui-icon-check" oncomplete="credorBusca.hide();" update=":frmGeral:credor">
+                <f:setPropertyActionListener value="#{cred}" target="#{relatorioEncaminhadoMB.credor}"/>
+            </p:commandButton>
+        </p:column>
+    </ui:define>
+
+</ui:composition>

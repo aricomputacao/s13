@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:composite="http://java.sun.com/jsf/composite">
+
+    <composite:interface>
+        <composite:attribute name="value_input" required="false" />
+        <composite:attribute name="nome_label" required="true" default="Label"/>
+        <composite:attribute name="nome_dialog" required="true"/>
+        <composite:attribute name="size" default="10"/>
+
+        <composite:attribute name="required" default="false"/>
+        <composite:attribute name="acao_butao" method-signature="java.lang.String "/>
+        <composite:attribute name="form_to_update" default="" displayName="TESTE" shortDescription="O Id do form que recebera o update quando clicado"/>
+
+    </composite:interface>
+    <composite:implementation>
+        <h:panelGrid>
+            <p:outputLabel value="#{cc.attrs.nome_label}" for="input_componente"/>
+            <h:panelGrid columns="2">
+                <p:inputText value="#{cc.attrs.value_input}" id="input_componente" required="true" size="#{cc.attrs.size}" readonly="true"/>
+                <p:commandButton icon="ui-icon-search"  onclick="#{cc.attrs.nome_dialog}.show();" immediate="true"  update="#{cc.attrs.form_to_update}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </composite:implementation>
+</ui:composition>
+
+

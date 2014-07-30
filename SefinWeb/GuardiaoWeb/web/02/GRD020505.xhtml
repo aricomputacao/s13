@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/modelo/frmModPadrao.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="corpo">
+        <h:form id="frm01">
+            <p:panel header="Listagem de Orgão" styleClass="painelPadrao" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['listar.orgao'])}">
+                <f:facet name="header">
+                    <p:spacer height="10" width="100"/>
+                    <h:outputText value="Listagem de Orgãos"/>
+                    <h:outputText value="Página - 020505" style="float: right;"/>
+                </f:facet>
+                <h:panelGrid columns="6">
+                    <h:panelGrid>
+                        <h:outputText value="Ordenar"/>
+                        <p:selectOneMenu value="#{orgaoMB.campoOrdem}" style="width: 190px">
+                            <f:selectItems value="#{orgaoMB.campos}" var="c" itemLabel="#{c}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Campo"/>
+                        <p:selectOneMenu value="#{orgaoMB.campoBusca}" style="width: 190px">
+                            <f:selectItems value="#{orgaoMB.camposString}" var="c" itemLabel="#{c}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Pesquisar por"/>
+                        <p:inputText value="#{orgaoMB.valorBusca}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Pesquisar" icon="ui-icon-circle-zoomin" update="tblOrg" action="#{orgaoMB.listar()}"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Novo" icon="ui-icon-plus" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.orgao'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.orgao'])}"/>
+                    </h:panelGrid>
+
+
+                </h:panelGrid>
+                <p:dataTable id="tblOrg" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Órgãos não encontrados" var="item" value="#{orgaoMB.listaOrgaos}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                    <p:column>
+                        <f:facet name="header">
+                            Id
+                        </f:facet>
+                        <h:outputText value="#{item.id.id}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nome"/>
+                        </f:facet>
+                        <h:outputText value="#{item.nome}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Abreviação"/>
+                        </f:facet>
+                        <h:outputText value="#{item.abreviacao}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Ativo"/>
+                        </f:facet>
+                        <h:outputText rendered="#{item.ativo}" value="Sim"/>
+                        <h:outputText rendered="#{!item.ativo}" value="Não"/>
+                    </p:column>
+                    <p:column headerText="Ações">
+                        <p:commandButton id="btnEditOrgao" icon="ui-icon-pencil" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.orgao'],'orgao',item)}" title="Editar" rendered="#{usuarioLogadoMB.permissaoEditar(navegacao['cadastro.orgao'])}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

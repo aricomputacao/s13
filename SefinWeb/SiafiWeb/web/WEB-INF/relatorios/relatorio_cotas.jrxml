@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_cotas" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ef8fdde0-b928-4bf5-ab68-e1304a9a56ca">
+	<property name="ireport.zoom" value="1.3310000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="ativo" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[ativo]]></fieldDescription>
+	</field>
+	<field name="autorizadoAutomatico" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[autorizadoAutomatico]]></fieldDescription>
+	</field>
+	<field name="categoria" class="br.com.siafi.modelo.Categoria">
+		<fieldDescription><![CDATA[categoria]]></fieldDescription>
+	</field>
+	<field name="despesa" class="br.com.siafi.modelo.Despesa">
+		<fieldDescription><![CDATA[despesa]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Long">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="unidadeOrcamentaria" class="br.com.guardiao.modelo.UnidadeOrcamentaria">
+		<fieldDescription><![CDATA[unidadeOrcamentaria]]></fieldDescription>
+	</field>
+	<field name="valor" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[valor]]></fieldDescription>
+	</field>
+	<variable name="valor_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Categoria" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<variable name="valor_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<group name="Categoria">
+		<groupExpression><![CDATA[$F{categoria}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement uuid="8abb9d69-082d-46d5-8780-b704473b0190" x="0" y="0" width="555" height="20" backcolor="#CCFFFF"/>
+					<box leftPadding="3">
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Categoria: " + $F{categoria}.getNome()]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<textField pattern="¤ #,##0.00">
+					<reportElement uuid="6ead56c2-6a73-4a0e-8cfe-81e72ada6b5b" x="440" y="0" width="115" height="20"/>
+					<box rightPadding="3">
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{valor_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="b546bb1b-326c-4746-8136-8d39a831599e" x="0" y="0" width="440" height="20"/>
+					<box rightPadding="3">
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[VALOR TOTAL DAS COTAS POR CATEGORIA]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="69" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f74bd5bc-ce7a-403c-b114-ae14e9db849f" x="0" y="0" width="555" height="69"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="22" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Relatório de Cotas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="4f618a46-a9d0-4d59-95ca-047ab0ed6886" x="0" y="0" width="555" height="30" backcolor="#E8E8E8"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="70cf6ba2-d3c1-41e6-bb48-60d1bd499122" x="0" y="0" width="555" height="30"/>
+				<box leftPadding="5">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cotas da Unidade Orçamentaria: " + $F{unidadeOrcamentaria}.getNome()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="ca34c30d-338b-4d2e-9fa7-183119c50958" x="396" y="0" width="44" height="20"/>
+				<box leftPadding="3">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ativo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="62ab6214-8070-472f-908f-525a549ad56e" x="0" y="0" width="208" height="20" backcolor="#CCCCCC"/>
+				<box leftPadding="3" rightPadding="0">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Despesa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="632a56bd-03d7-4015-b96f-146ffd7aefaf" x="208" y="0" width="188" height="20"/>
+				<box leftPadding="3">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Autorizado Automaticamente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="26bb6aec-c3f7-4e9d-9f6a-870bbc3ae721" x="440" y="0" width="115" height="20"/>
+				<box rightPadding="3">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor liberado]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement uuid="deddd721-93f6-40e4-8fac-49c15834460f" x="0" y="0" width="208" height="15"/>
+				<box leftPadding="3" rightPadding="0">
+					<leftPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{despesa}.getNome()]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="fed2b4d2-b345-4816-b979-b9876338f804" x="440" y="0" width="115" height="15"/>
+				<box leftPadding="0" rightPadding="3">
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a1487db7-6983-45cd-8826-e92f9dbe8b78" x="208" y="0" width="188" height="15">
+					<printWhenExpression><![CDATA[$F{autorizadoAutomatico}]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="3"/>
+				<textElement/>
+				<text><![CDATA[SIM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1b9f0f11-538f-4a23-a880-14537dfd6e65" x="208" y="0" width="188" height="15">
+					<printWhenExpression><![CDATA[!$F{autorizadoAutomatico}]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="3"/>
+				<textElement/>
+				<text><![CDATA[NÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="318c628a-4b7d-457c-9a5e-5d9bf24df2df" x="396" y="0" width="44" height="15">
+					<printWhenExpression><![CDATA[$F{ativo}]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="3"/>
+				<textElement/>
+				<text><![CDATA[SIM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d8228518-43d5-4895-b04e-048c16ecb22a" x="396" y="0" width="44" height="15">
+					<printWhenExpression><![CDATA[!$F{ativo}]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="3"/>
+				<textElement/>
+				<text><![CDATA[NÃO]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="19" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="ff3b3d1e-3b71-448d-869c-edba9115d6f2" x="0" y="0" width="80" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="61b7a40d-48ac-4c28-a475-1707dc5e4850" x="80" y="0" width="475" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="30" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="64449b2b-9e33-47f5-a48a-d03c55999beb" x="0" y="0" width="555" height="30" backcolor="#E8E8E8"/>
+			</rectangle>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="b5d69954-ea52-4682-86db-6296123319bf" x="440" y="0" width="115" height="30"/>
+				<box rightPadding="3">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{valor_2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="765021da-0949-4773-a45c-9bde95295799" x="0" y="0" width="440" height="30"/>
+				<box rightPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VALOR TOTAL DAS COTAS]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

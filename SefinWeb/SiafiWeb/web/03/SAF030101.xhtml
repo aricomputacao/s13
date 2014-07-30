@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/maskMoney.js" />
+        <h:outputScript name="script/edtMoeda.js" />
+        <h:outputScript name="script/navegacao.js" />
+
+        <p:panel id="pnlGeral" styleClass="painelPadrao"   rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.encaminar_processo'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Encaminhamento de Processos"/>
+                <h:outputText value="Página - 030101" style="float: right;"/>
+            </f:facet>
+            <h:panelGrid width="100%">
+                <h:panelGrid columns="5">
+                    <h:panelGrid id="un">
+                        <p:outputLabel value="Unidade Orçamentária" for="und"/>
+                        <h:panelGrid columns="2">
+                            <p:inputText value="#{encaminhamentoMB.idUnidade}" size="10" id="cod" maxlength="4">
+                                <p:ajax listener="#{encaminhamentoMB.selecionaSecretaria()}" event="keyup" update="und" />
+                            </p:inputText>
+                            <p:selectOneMenu value="#{encaminhamentoMB.unidadeOrcamentaria}" converter="#{indexConverter}" style="width: 400px;" required="true" id="und" requiredMessage="Selecione a unidade Orçamentaria">
+                                <f:selectItem itemValue="#{null}" itemLabel=" -- Selecionar -- "/>
+                                <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="orc" itemLabel="#{orc.unidadeOrcamentariaPK} - #{orc.nome}" itemValue="#{orc}"/>
+                                <p:ajax event="change" update="cod" listener="#{encaminhamentoMB.ajustaCodigo()}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid id="status">
+                        <h:outputText value="Status"/>
+                        <p:selectOneMenu value="#{encaminhamentoMB.situacaoSolicitacao}" style="width: 180px;">
+                            <f:selectItem itemLabel="Aprovado" itemValue="Aprovado"/>
+                            <f:selectItem itemLabel="Empenhado" itemValue="Empenhado"/>
+                            <f:selectItem itemLabel="DocumentaçãoLiberada" itemValue="DocumentaçãoLiberada"/>
+                            <f:selectItem itemLabel="Liquidado" itemValue="Liquidado"/>
+                            <f:selectItem itemLabel="AutorizadoPagamento" itemValue="AutorizadoPagamento"/>
+                            <f:selectItem itemLabel="Pago" itemValue="Pago"/>
+                            <p:ajax update="status" event="change"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="18"/>
+                        <comp:commandButton_consulta acao_butao="#{encaminhamentoMB.listarSolicitacoes()}" update="@form:pnlGeral"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="acoes">
+
+                        <p:spacer width="28" rendered="#{encaminhamentoMB.podeEncaminhar}"/>
+                        <p:commandButton  value="Encaminhar" icon="ui-icon-circle-arrow-e" actionListener="#{encaminhamentoMB.selecionaSolicitacoesEncaminhar()}" oncomplete="encaminar_lista.show();bui.hide();" update=":encaminharListaForm" rendered="#{encaminhamentoMB.podeEncaminhar}" />
+                        <p:spacer width="28" rendered="#{encaminhamentoMB.podeEmpenhar}"/>
+                        <p:commandButton value="Empenhar" icon="ui-icon-circle-arrow-e" actionListener="#{encaminhamentoMB.selecionaSolicitacoesEmpenhar()}" oncomplete="empenhar_lista.show();bui.hide();" update=":empenharListaForm" rendered="#{encaminhamentoMB.podeEmpenhar}" />
+                        <p:spacer width="28" rendered="#{encaminhamentoMB.podeLiberarDocumentacao}"/>
+                        <p:commandButton value="Liberar" icon="ui-icon-circle-arrow-e" actionListener="#{encaminhamentoMB.selecionaSolicitacoesLiberarDocumentacao()}" oncomplete="liberar_lista.show();bui.hide();" update=":liberarListaForm" rendered="#{encaminhamentoMB.podeLiberarDocumentacao}" />
+                        <p:spacer width="28" rendered="#{encaminhamentoMB.podeLiquidar}"/>
+                        <p:commandButton value="Liquidar" icon="ui-icon-circle-arrow-e" actionListener="#{encaminhamentoMB.selecionaSolicitacoesLiquidar()}" oncomplete="liquidar_lista.show();bui.hide();" update=":liquidarListaForm" rendered="#{encaminhamentoMB.podeLiquidar}" />
+                        <p:spacer width="28" rendered="#{encaminhamentoMB.podeLiquidarContabilidade}"/>
+                        <p:commandButton value="Liquidar" icon="ui-icon-circle-arrow-e" actionListener="#{encaminhamentoMB.selecionaSolicitacoesLiquidar()}" oncomplete="liquidar_contabilidade_lista.show();bui.hide();" update=":liquidarContabilidadeListaForm" rendered="#{encaminhamentoMB.podeLiquidarContabilidade}" />
+                        <p:spacer width="28" rendered="#{encaminhamentoMB.podeConcluir}"/>
+                        <p:commandButton icon="ui-icon-circle-arrow-e" value="Concluir" oncomplete="concluir_lista.show();bui.hide();" update=":concluirListaForm" rendered="#{encaminhamentoMB.podeConcluir}" />
+                        <h:panelGrid columns="2">
+                            <h:panelGrid>
+                                <p:spacer width="18" rendered="#{encaminhamentoMB.podePagar}"/>
+                                <p:commandButton value="Pagar"  rendered="#{encaminhamentoMB.podePagar}" actionListener="#{encaminhamentoMB.selecionaSolicitacoesPagar()}" oncomplete="pagar_lista.show();bui.hide();" update=":pagarListaForm"  icon="ui-icon-calculator" />
+                            </h:panelGrid>
+                            <h:panelGrid>
+                                <p:spacer width="18" rendered="#{encaminhamentoMB.podeEncaminharTesouraria}"/>
+                                <p:commandButton rendered="#{encaminhamentoMB.podeEncaminharTesouraria}" icon="ui-icon-circle-arrow-e"  value="Encaminhar Tesouraria" actionListener="#{encaminhamentoMB.selecionaSolicitacoesEncaminhar()}" oncomplete="encaminar_lista.show();bui.hide();" update=":encaminharListaForm"  />
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid id="imp">
+                        <p:spacer width="18"/>
+                        <p:commandButton id="btnImpressao" action="#{encaminhamentoMB.impressao()}" rendered="#{encaminhamentoMB.podeImprimir}" value="Imprimir" icon="ui-icon-print" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf');"/>
+                        <comp:commandButton_imprimir acao_butao="#{encaminhamentoMB.impressao()}"  rendered="#{encaminhamentoMB.podeImprimir}"/>
+
+
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid width="100%" id="tblSolicitacao">
+                <p:dataTable paginator="true" paginatorAlwaysVisible="false" rows="10" rowKey="#{item.id}"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{encaminhamentoMB.solicitacaoFinanceiraDataList}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" selection="#{encaminhamentoMB.solicitacoesList}">
+                    <p:column style="width: 2%;" >
+                        <p:rowToggler id="x"/>
+                    </p:column>
+                    <p:column selectionMode="multiple" headerText="Todos" width="2%" >
+                    </p:column>
+                    <p:column sortBy="#{item.id}" width="5%" filterBy="#{item.id}">
+                        <f:facet name="header">
+                            <h:outputText value="Número"/>
+                        </f:facet>
+                        <h:outputLabel value="#{item.id}"/>
+                    </p:column>
+                    <p:column headerText="Empenho" width="2%" sortBy="#{item.empenho}" filterBy="#{item.empenho}">
+                        <h:outputLabel value="#{item.empenho}"/>
+                    </p:column>
+                    <p:column sortBy="#{item.dataSolicitacao}" width="2%">
+                        <f:facet name="header">
+                            <h:outputText value="Emissão"/>
+                        </f:facet>
+                        <h:outputText value="#{item.dataSolicitacao}">
+                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column sortBy="#{item.valor}" width="10%">
+                        <f:facet name="header">
+                            <h:outputText value="Valor"/>
+                        </f:facet>
+                        <h:outputText value="#{item.valor}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column sortBy="#{item.notaFiscal}" rendered="false">
+                        <f:facet name="header">
+                            <h:outputText value="Nota Fiscal" />
+                        </f:facet>
+                        <h:outputText value="#{item.notaFiscal}"/>
+                    </p:column>
+                    <p:column sortBy="#{item.situacaoSolicitacao}">
+                        <f:facet name="header" >
+                            <h:outputText value="Situação" />
+                        </f:facet>
+                        <h:outputText value="#{item.situacaoSolicitacao}"/>
+                    </p:column>
+                    <p:column style="max-width: 200px" sortBy="#{item.credor.pessoa.nome}">
+                        <f:facet name="header">
+                            <h:outputText value="Credor" />
+                        </f:facet>
+                        <h:outputText style="max-width: 200px" value="#{item.credor.pessoa.nome}" title="#{item.credor.pessoa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Ações" width="10%">
+                        <p:commandButton icon="ui-icon-document-b" styleClass="btnTabela" update=":frmEdtNota" disabled="#{not solicitacaoFinanceiraMB.liberarEditarNota(item)}"  onclick="edtNota.show();"
+                                         title="Editar Nota Fiscal e Histórico" >
+                            <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.solicitacaoFinanceira}" value="#{item}"/>
+                        </p:commandButton>
+                        <p:commandButton title="Imprimir Capa" styleClass="btnTabela" icon="ui-icon-extlink" action="#{solicitacaoFinanceiraMB.impressaoComprovanteEcaminhamento(item)}" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf');bui.hide();" onclick="bui.show()"/>
+                        <p:commandButton icon="ui-icon-circle-arrow-w" styleClass="btnTabela" onclick="devolverEncaminhamento.show();" title="Devolver Solicitação" action="#{encaminhamentoMB.selecionaSolicitacaoDevolucao(item)}" rendered="#{encaminhamentoMB.btnDevolver(item)}" update=":dev_form"/>
+                        <p:commandButton icon="ui-icon-calculator" styleClass="btnTabela" oncomplete="pagar.show();" title="Pagar" actionListener="#{encaminhamentoMB.selecionaSolicitacaoPagamento(item)}" update=":pag_form"  rendered="#{encaminhamentoMB.btnPagar(item)}"/>
+                        <p:commandButton icon="ui-icon-calculator" styleClass="btnTabela" oncomplete="pagarContabilidade.show();" title="Pagar na contabilidade" actionListener="#{solicitacaoFinanceiraMB.selecionaSolicitacaoPagamento(item)}" update=":pag_form2"  rendered="#{solicitacaoFinanceiraMB.checarFluxoContabilidadePagar(item)}"/>
+
+                    </p:column>
+                    <p:rowExpansion>
+                        <h:panelGrid frame="none">
+                            <h:outputText value="Unidade Orçamentaria: #{item.cota.unidadeOrcamentaria.unidadeOrcamentariaPK.idOrgao}#{item.cota.unidadeOrcamentaria.unidadeOrcamentariaPK.id} - #{item.cota.unidadeOrcamentaria.nome}"/>
+                            <h:outputText value="Usuário: #{item.usuario.pessoa.nome}"/>
+                            <h:outputText value="Credor: #{item.credor.pessoa.nome}"/>
+                            <h:outputText value="Categoria: #{item.cota.categoria.nome}"/>
+                            <h:outputText value="Despesa: #{item.cota.despesa.nome}"/>
+                            <h:outputText value="Local: #{item.local.nome}"/>
+                            <h:outputText value="Competência: #{item.mesCompetencia.asNumero(item.mesCompetencia)}#{item.anoCompetencia}"/>
+                            <h:outputText value="Autorizado por: #{item.usuarioAutorizou.pessoa.nome}"/>
+                            <h:outputLabel value="Data Autorização: ">
+                                <h:outputText value="#{item.dataAutorizacao}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                </h:outputText>
+                            </h:outputLabel>
+                            <h:outputText value="Empenho: #{item.empenho}"/>
+                            <h:outputText value="Historico"/>
+                            <p:inputTextarea value="#{item.historico}" readonly="true" rows="3" cols="120" style="width: 100%"/>
+                        </h:panelGrid>
+                    </p:rowExpansion>
+                </p:dataTable>
+            </h:panelGrid>
+        </p:panel>
+
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogEmpenhar/>
+        <scgb:dialogEncaminhar/>
+        <scgb:dialogLiberarDocumentacao/>
+        <scgb:dialogLiquidar/>
+        <scgb:dialogLiquidarContabilidade/>
+        <scgb:dialogConcluir/>
+        <scgb:dialogPagar/>
+        <scgb:dialogEditarNota/>
+        <scgb:dialogSAF030101/>
+
+    </ui:define>
+
+</ui:composition>

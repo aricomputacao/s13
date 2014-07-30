@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rel_encaminhamento_liquidacao" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="63f5a74a-9770-4ff8-a00a-fc4bd87cc15b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Projetos\\SefinWeb\\SAE\\web\\WEB-INF\\relatorios\\sub_relatorios\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="img" class="java.lang.String"/>
+	<parameter name="img1" class="java.lang.String"/>
+	<parameter name="relatorio" class="java.lang.String"/>
+	<parameter name="rodapeEmail" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="dataEncaminhamento" class="java.util.Date">
+		<fieldDescription><![CDATA[dataEncaminhamento]]></fieldDescription>
+	</field>
+	<field name="dataRecebimento" class="java.util.Date">
+		<fieldDescription><![CDATA[dataRecebimento]]></fieldDescription>
+	</field>
+	<field name="destino" class="br.com.guardiao.modelo.AreaAdministrativa">
+		<fieldDescription><![CDATA[destino]]></fieldDescription>
+	</field>
+	<field name="observacao" class="java.lang.String">
+		<fieldDescription><![CDATA[observacao]]></fieldDescription>
+	</field>
+	<field name="solicitacaoLiquidacao" class="br.com.siafi.modelo.SolicitacaoLiquidacao">
+		<fieldDescription><![CDATA[solicitacaoLiquidacao]]></fieldDescription>
+	</field>
+	<field name="usuarioEncaminhou" class="br.com.guardiao.modelo.Usuario">
+		<fieldDescription><![CDATA[usuarioEncaminhou]]></fieldDescription>
+	</field>
+	<field name="usuarioRecebeu" class="br.com.guardiao.modelo.Usuario">
+		<fieldDescription><![CDATA[usuarioRecebeu]]></fieldDescription>
+	</field>
+	<group name="solicitacao">
+		<groupExpression><![CDATA[$F{solicitacaoLiquidacao}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<rectangle>
+					<reportElement uuid="0f953d4e-7f17-41d2-8e42-e9bdb2dfcf7d" x="0" y="0" width="554" height="20" backcolor="#CCCCCC"/>
+				</rectangle>
+				<staticText>
+					<reportElement uuid="147fab1a-13f9-41fc-ac35-2086f5f842fe" x="1" y="0" width="63" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Empenho:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="c8ab1167-27f3-4fa3-8d5f-6c499300593d" x="195" y="0" width="63" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nota Fiscal:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="c07b2593-9e72-4f1b-ad82-a03365b6082e" x="367" y="0" width="88" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Encaminhamento:]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement uuid="26fac462-f6dc-446e-a43d-7d9a0dd297fb" x="455" y="0" width="100" height="20"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{dataEncaminhamento}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="b981fb9c-000a-4c4b-8652-a9f8d8d405bb" x="50" y="0" width="145" height="20"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{solicitacaoLiquidacao}.getSolicitacaoFinanceira().getEmpenho()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="8ab0cc2b-5684-4a73-943e-171c3bbe5813" x="258" y="0" width="100" height="20"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{solicitacaoLiquidacao}.getDocumento()]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="65" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="bc4d40a8-df09-4fec-aed7-b8718a0e4bf1" x="0" y="0" width="555" height="65"/>
+				<subreportParameter name="img1">
+					<subreportParameterExpression><![CDATA[$P{img1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="img">
+					<subreportParameterExpression><![CDATA[$P{img}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="relatorio">
+					<subreportParameterExpression><![CDATA[$P{relatorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cabecalho_retrato.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<detail>
+		<band height="126">
+			<rectangle>
+				<reportElement uuid="54772b86-6628-4757-9679-1cd292f3abc4" x="0" y="0" width="554" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="9fb46b31-e0d0-4ccc-a688-57f5cb3b8cb2" x="1" y="0" width="47" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Origem:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="529251dd-cf77-498b-9c87-08b79974da9b" x="0" y="20" width="554" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="5e3ca4d1-4cf0-4ccf-9ca2-372b403259f8" x="193" y="0" width="45" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Destino:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="16293f18-4b2e-4f55-b997-f8bb2e7140f6" x="0" y="20" width="63" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Credor:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="5d68c201-58fe-44d5-944a-30f0feabd662" x="0" y="40" width="554" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="98e809ee-fdb2-4ab6-84e7-abb13f610cc1" x="1" y="40" width="66" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vl. Empenho:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="aed903aa-86a7-4de2-a48a-0af653716cb8" x="402" y="40" width="53" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vl. Nota:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="6595def3-803c-4a8e-bb84-7265bcadd0d2" x="238" y="0" width="115" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{destino}.getNome()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e86ae8ff-64e8-4d74-b56d-faa3b1be810c" x="48" y="0" width="145" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{usuarioEncaminhou}.getAreaAdministrativa().getNome()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e3b549b0-41ad-4179-9574-91e4c27beb1e" x="48" y="20" width="305" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{solicitacaoLiquidacao}.getSolicitacaoFinanceira().getCredor().getPessoa().getNome()]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="7424aa36-447d-461b-8550-49de15609b10" x="67" y="40" width="92" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{solicitacaoLiquidacao}.getSolicitacaoFinanceira().getValor()]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="2a458862-ee50-4909-801d-e817786f0ed8" x="455" y="40" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{solicitacaoLiquidacao}.getValor()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="d772a587-944b-4dfd-9d0c-45d1f7e19f30" x="0" y="60" width="554" height="66"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="33d738d0-4011-4b72-95c6-9ff46b9f9f88" x="1" y="60" width="66" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Observação:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="870eedda-d3e5-4997-8e36-67210b1c9bbd" x="67" y="65" width="488" height="61"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{observacao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="47" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="a5306b65-ab7c-49ab-9fe3-b6a3ee8f5d78" x="-2" y="0" width="557" height="47"/>
+				<subreportParameter name="rodapeEmail">
+					<subreportParameterExpression><![CDATA[$P{rodapeEmail}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rodape_retrato.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="d839fced-c841-4fb8-9a3b-124bfbc62d71" x="480" y="2" width="39" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

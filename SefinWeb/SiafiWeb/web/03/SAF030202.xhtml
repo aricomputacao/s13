@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br">
+
+    <ui:define name="corpo" >
+        <h:outputScript name="script/maskMoney.js" />
+        <h:outputScript name="script/edtMoeda.js" />
+        <p:blockUI block="pnlGeral" trigger="btnListar,btnAutorizar" widgetVar="bui">
+            <p:graphicImage value="/resources/imagens/carregar.gif"/>
+        </p:blockUI>
+        <p:panel id="pnlGeral" styleClass="painelPadrao" style="width: 1400px" rendered="#{usuarioMB.permissaoConsultar(navegacao['protocolo.autorizarPagamento'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Autorizar Pagamento de Liquidações"/>
+                <h:outputText value="Página - 030202" style="float: right;"/>
+            </f:facet>
+            <h:panelGrid  columns="2">
+                <h:panelGrid id="un">
+                    <p:outputLabel value="Unidade Orçamentária" for="und"/>
+                    <p:selectOneMenu value="#{autorizarPagamentoLiquidacaoMB.unidadeOrcamentaria}" converter="#{indexConverter}" style="width: 400px;" id="und">
+                        <f:selectItem itemValue="#{null}" itemLabel=" -- Selecionar -- "/>
+                        <f:selectItems value="#{autorizarPagamentoLiquidacaoMB.unidades}" var="orc" itemLabel="#{orc.unidadeOrcamentariaPK} - #{orc.nome}" itemValue="#{orc}"/>
+                        <p:ajax event="change" update="un"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGrid  columns="2" id="acoes">
+                    <p:spacer width="10"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton actionListener="#{autorizarPagamentoLiquidacaoMB.listarSolicitacoes()}" id="btnListar" value="Buscar" icon="ui-icon-search" update="grdLiqui"/>
+                    <p:commandButton id="btnAutorizar" value="Autorizar"   actionListener="#{autorizarPagamentoLiquidacaoMB.autorizarPagamento()}"  update=":frmGeral" icon="ui-icon-circle-check"  />
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid width="100%" id="grdLiqui">
+                <p:dataTable var="i" value="#{autorizarPagamentoLiquidacaoMB.empenhoDetalheDataList}" rowKey="#{i.id}" emptyMessage="Nenhum resultado encontrado" paginatorAlwaysVisible="false"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"  selection="#{autorizarPagamentoLiquidacaoMB.empenhoDetalhesList}" rowIndexVar="rowIx">
+                    <p:column style="width: 2%;" >
+                        <p:rowToggler id="x"/>
+                    </p:column>
+                    <p:column selectionMode="multiple" headerText="Todos" width="8%" >
+                    </p:column>
+                    <p:column headerText="Solicitação" filterBy="#{i.solicitacaoFinanceira.id}">
+                        <h:outputText value="#{i.solicitacaoFinanceira.id}"/>
+                    </p:column>
+                    <p:column headerText="Empenho" filterBy="#{i.empenho}" filterValue="#{i.empenho}">
+                        <h:outputText value="#{i.empenho}"/>
+                    </p:column>
+                    <p:column headerText="Unidade Orc" sortBy="#{i.solicitacaoFinanceira.cota.unidadeOrcamentaria.nome}">
+                        <h:outputText value="#{i.solicitacaoFinanceira.cota.unidadeOrcamentaria.nome}"/>
+                    </p:column>                  
+                    <p:column headerText="Credor" sortBy="#{i.solicitacaoFinanceira.credor.pessoa.nome}">
+                        <h:outputText value="#{i.solicitacaoFinanceira.credor.pessoa.nome}"/>
+                    </p:column>
+
+                    <p:column headerText="Valor" sortBy="#{i.valor}">
+                        <h:outputText value="#{i.valor}" >
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+
+
+                    <p:rowExpansion>
+                        <h:panelGrid frame="none">
+                            <h:outputText value="Categoria: #{i.solicitacaoFinanceira.cota.categoria.nome}"/>
+                            <h:outputText value="Despesa: #{i.solicitacaoFinanceira.cota.despesa.nome}"/>
+                            <h:outputText value="Projeto Atividae: #{i.solicitacaoFinanceira.dotacao.projetoAtividade.nome}"/>
+                            <h:outputText value="Natureza da Despesa: #{i.solicitacaoFinanceira.dotacao.naturezaDespesa.nome}"/>
+                            <h:outputText value="Credor: #{i.solicitacaoFinanceira.credor.pessoa.nome}"/>
+                            <p:inputTextarea value="Histórico: #{item.historico}" style="width: 100%;color: #000;" rows="3" readonly="true" autoResize="true" cols="100"/>
+                        </h:panelGrid>
+
+                    </p:rowExpansion>
+
+                </p:dataTable>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogSAF030202/>
+    </ui:define>
+
+</ui:composition>

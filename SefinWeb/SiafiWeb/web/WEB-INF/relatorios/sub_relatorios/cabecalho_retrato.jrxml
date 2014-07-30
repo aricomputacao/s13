@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cabecalho_retrato" language="groovy" pageWidth="555" pageHeight="802" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0dd5f318-3dc6-470f-ba84-df395d48b067">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="relatorio" class="java.lang.String"/>
+	<parameter name="img" class="java.lang.String"/>
+	<parameter name="img1" class="java.lang.String"/>
+	<noData>
+		<band height="65">
+			<frame>
+				<reportElement uuid="fbd7bade-f682-4656-8072-5a3bdd4dccb4" mode="Opaque" x="0" y="0" width="555" height="65" forecolor="#FFFFFF" backcolor="#FFFFFF"/>
+				<frame>
+					<reportElement uuid="9ba9a430-a986-4a27-94c6-d8ea12084bc7" mode="Opaque" x="0" y="0" width="553" height="65" forecolor="#FFFFFF" backcolor="#FFFFFF"/>
+					<textField>
+						<reportElement uuid="d7af5dc1-3b32-4198-9fb9-8d04eb6dd62e" x="61" y="43" width="298" height="20" backcolor="#000000"/>
+						<textElement>
+							<font size="14" isItalic="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$P{relatorio}]]></textFieldExpression>
+					</textField>
+					<line>
+						<reportElement uuid="6c4ab1c5-10d7-477b-bc59-2793206928fd" x="0" y="63" width="553" height="1"/>
+					</line>
+					<line>
+						<reportElement uuid="50a7cad0-a8bb-4b59-815c-c0308bf94da7" x="0" y="1" width="553" height="1"/>
+					</line>
+					<line>
+						<reportElement uuid="bab142a6-885a-4124-81f6-f115ba2aa1d4" x="552" y="2" width="1" height="61"/>
+					</line>
+					<line>
+						<reportElement uuid="d8b2e5d4-a7a0-4d83-a03f-582d7c3a8d25" x="0" y="2" width="1" height="61"/>
+					</line>
+					<staticText>
+						<reportElement uuid="c1ac50c9-50ac-4e0e-82e8-5bd7ae4ddd87" x="61" y="2" width="54" height="24" forecolor="#333333" backcolor="#000000"/>
+						<textElement verticalAlignment="Bottom">
+							<font fontName="SansSerif" size="16" isBold="true" isItalic="true"/>
+						</textElement>
+						<text><![CDATA[SIAFI]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="32467076-5524-4837-9568-68a06616e189" x="61" y="27" width="298" height="18" forecolor="#333333" backcolor="#000000"/>
+						<textElement verticalAlignment="Top">
+							<font fontName="SansSerif" size="12" isBold="true" isItalic="true"/>
+						</textElement>
+						<text><![CDATA[Sistema de Administração Financeira]]></text>
+					</staticText>
+					<image>
+						<reportElement uuid="d7e09308-58a3-4c77-baa2-9a482294034a" x="365" y="7" width="187" height="51"/>
+						<imageExpression><![CDATA[$P{img}]]></imageExpression>
+					</image>
+					<image>
+						<reportElement uuid="a6209b9f-23a9-41bd-8e75-ce7a7b2d216b" x="1" y="4" width="60" height="57"/>
+						<imageExpression><![CDATA[$P{img1}]]></imageExpression>
+					</image>
+				</frame>
+			</frame>
+		</band>
+	</noData>
+</jasperReport>

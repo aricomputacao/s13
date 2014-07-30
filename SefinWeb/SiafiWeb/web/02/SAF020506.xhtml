@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <ui:define name="corpo" >
+        <p:blockUI block="@form" widgetVar="bui">
+            <p:graphicImage value="/resources/imagens/carregar.gif"/>
+        </p:blockUI>
+        <p:panel styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['licitacao.listar.contrato'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Contratos"/>
+                <h:outputText value="Página - 020506" style="float: right;"/>
+            </f:facet>
+            <p:panel>
+                <h:panelGrid columns="4">
+                    <h:panelGrid >
+                        <h:outputText value="Unidade Orçamentaria"/>
+                        <p:selectOneMenu value="#{contratoMB.unidadeOrcamentaria}" converter="#{indexConverter}" style="width: 400px">
+                            <f:selectItems value="#{usuarioMB.usuarioSelecionado.unidadeOrcamentarias}" var="c" itemLabel="#{c.unidadeOrcamentariaPK.idOrgao}#{c.unidadeOrcamentariaPK.id} - #{c.nome}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid id="credor">
+                        <h:panelGrid>
+                            <h:outputText value="Credor"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:inputText value="#{contratoMB.credor.pessoa.nome}" readonly="true" size="40"/>
+                            <p:commandButton onclick="credorBusca.show();" icon="ui-icon-search" immediate="true" title="Consultar Credor"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid >
+                        <h:outputText value="Número"/>
+                        <p:inputText value="#{contratoMB.numero}" size="10"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Listar" title="Listar" icon="ui-icon-search" action="#{contratoMB.contratoNumero()}" update="tblLista" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <p:dataTable id="tblLista" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="item" value="#{contratoMB.contratos}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                <p:column headerText="Id" sortBy="#{item.id}">
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+                <p:column headerText="Número" sortBy="#{item.numero}">
+                    <h:outputText value="#{item.numero}"/>
+                </p:column>
+                <p:column headerText="Credor" sortBy="#{item.credor.pessoa.nome}">
+                    <h:outputText value="#{item.credor.pessoa.nome}"/>
+                </p:column>
+                <p:column headerText="Licitação" sortBy="#{item.licitacao.numero}">
+                    <h:outputText value="#{item.licitacao.numero}"/>
+                </p:column>
+                <p:column headerText="Resumo">
+                    <p:commandButton style="width: 20px; height: 20px;" actionListener="#{contratoMB.selecionarContrato(item)}" title="resumo" icon="ui-icon-check" immediate="true" oncomplete="resumo.show();" update=":resumoContrato"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </ui:define>
+    <ui:define name="dialogs">
+        <scgb:dialogConsultaCredor/>
+        <p:dialog widgetVar="resumo" header="Resumo do Contrato" closable="true" position="top" style="min-height: 400px;min-width: 950px;">
+            <p:fieldset id="resumoContrato">
+                <p:tabView>
+                    <p:tab title="Aditivos do Contrato">
+                        <p:fieldset legend="Aditivos">
+                            <p:dataTable  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="a" value="#{contratoMB.contrato.aditivosList}"
+                                          rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                                <p:column headerText="Codigo" sortBy="#{a.codigo}">
+                                    <h:outputText value="#{a.codigo}" title="#{a.objetivo}"/>
+                                </p:column>
+                                <p:column headerText="Início Vigê." sortBy="#{a.dataInicio}">
+                                    <comp:outputText value="#{a.dataInicio}" tipo="d"/>
+                                </p:column>
+                                <p:column headerText="Fim Vigê." sortBy="#{a.dataFim}">
+                                    <comp:outputText value="#{a.dataFim}" tipo="d"/>
+                                </p:column>
+                                <p:column headerText="Publicação" sortBy="#{a.dataPublicacao}">
+                                    <comp:outputText value="#{a.dataPublicacao}" tipo="d"/>
+                                </p:column>
+                                <p:column headerText="Valor" styleClass="dinheiro">
+                                    <h:outputText value="#{a.valor}">
+                                        <f:convertNumber type="currency"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </p:fieldset>
+                    </p:tab>
+                    <p:tab title="Ordens de Compra">
+                        <p:fieldset legend="Ordens de compra">
+                            <h:panelGrid id="tblOrdemCompra" width="100%">
+                                <p:dataTable  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="ordem" value="#{contratoMB.ordemCompraList}"
+                                              rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                                    <f:facet name="header">Ordens de Compra Emitidas - quantidade #{contratoMB.ordemCompraList.size()}</f:facet>
+                                    <p:column headerText="Id" sortBy="#{ordem.id}">
+                                        <h:outputText value="#{ordem.id}"/>
+                                    </p:column>
+                                    <p:column headerText="Status" sortBy="#{ordem.status}">
+                                        <h:outputText value="#{ordem.status}"/>
+                                    </p:column>
+                                    <p:column headerText="Emissão" sortBy="#{ordem.dataEmissao}">
+                                        <h:outputText value="#{ordem.dataEmissao}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Credor" sortBy="#{ordem.credor.pessoa.nome}">
+                                        <h:outputText value="#{ordem.credor.pessoa.nome}"/>
+                                    </p:column>
+                                    <p:column headerText="Total" styleClass="dinheiro">
+                                        <h:outputText value="#{ordem.valorTotal}">
+                                            <f:convertNumber type="currency"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Emissor" sortBy="#{ordem.emissor.pessoa.nome}">
+                                        <h:outputText value="#{ordem.emissor.pessoa.nome}"/>
+                                    </p:column>
+                                    <p:column   headerText="Ação">
+                                        <p:commandButton  title="Imprimir ordem de compra" icon="ui-icon-print" action="#{ordemCompraMB.impressaoOrdemCompra()}" oncomplete="popup('/SiafiWeb/RelatorioServlet.pdf');bui.hide();" onclick="bui.show();" style="width: 20px;height: 20px;">
+                                            <f:setPropertyActionListener value="#{ordem}" target="#{ordemCompraMB.ordemCompra}"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:fieldset>
+                    </p:tab>
+                    <p:tab title="Resumo dos itens utilizados">
+                        <p:fieldset legend="Resumo dos itens">
+                            <p:dataTable  paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="i" value="#{contratoMB.resumoItens}"
+                                          rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                                <p:column headerText="Codigo" sortBy="#{i.item.id}">
+                                    <h:outputText value="#{i.item.id}"/>
+                                </p:column>
+                                <p:column headerText="Nome" sortBy="#{i.item.nome}">
+                                    <h:outputText value="#{i.item.nome}"/>
+                                </p:column>
+                                <p:column headerText="Valor" sortBy="#{i.itemLicitacao.valor}" styleClass="dinheiro">
+                                    <h:outputText value="#{i.itemLicitacao.valor}"/>
+                                </p:column>
+                                <p:column headerText="Quantidade total" sortBy="#{i.itemLicitacao.quantidade}" style="text-align: right;">
+                                    <comp:outputText value="#{i.itemLicitacao.quantidade}"/>
+                                </p:column>
+                                <p:column headerText="Quantidade Utilizada" sortBy="#{i.quantidade}" style="text-align: right;">
+                                    <comp:outputText value="#{i.quantidade}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:fieldset>
+                    </p:tab>
+                    <p:tab title="Solicitações Financeiras">
+                        <p:fieldset legend="Solicitações emitidas">
+                            <h:panelGrid width="100%" id="tblSolicitacao">
+                                <p:dataTable  paginator="true" paginatorAlwaysVisible="false"  rows="10" style="max-height: 400px;"  emptyMessage="Nenhuma solicitação encontrada" var="sol" value="#{contratoMB.solicitacaoFinanceiraList}"
+                                              rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+                                    <f:facet name="header">Solicitações emitidas - quantidade #{contratoMB.solicitacaoFinanceiraList.size()}</f:facet>
+                                    <p:column style="width: 2%;">
+                                        <p:rowToggler id="x"/>
+                                    </p:column>
+                                    <p:column width="5%">
+                                        <f:facet name="header" >
+                                            <h:outputText value="Número" />
+                                        </f:facet>
+                                        <comp:outputText value="#{sol.id}" />
+                                    </p:column>
+                                    <p:column width="5%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Empenho"/>
+                                        </f:facet>
+                                        <comp:outputText value="#{sol.empenho}" />
+                                    </p:column>
+                                    <p:column sortBy="#{sol.credor.pessoa.nome}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Credor"/>
+                                        </f:facet>
+                                        <comp:outputText tipo="c" value="#{sol.credor.pessoa.nome}"/>
+                                    </p:column>
+                                    <p:column width="5%" >
+                                        <f:facet name="header" >
+                                            <h:outputText value="Data Sol."/>
+                                        </f:facet>
+                                        <comp:outputText tipo="d" value="#{sol.dataSolicitacao}"/>
+                                    </p:column>
+                                    <p:column width="18%" styleClass="dinheiro">
+                                        <f:facet name="header">
+                                            <h:outputText value="Valor"/>
+                                        </f:facet>
+                                        <h:outputText value="#{sol.valor}">
+                                            <f:convertNumber pattern="#,##0.00" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column width="3%"  sortBy="#{sol.situacaoSolicitacao}" >
+                                        <f:facet name="header" >
+                                            <h:outputText value="Situação"/>
+                                        </f:facet>
+                                        <comp:outputText value="#{sol.situacaoSolicitacao}"/>
+                                    </p:column>
+                                    <p:rowExpansion>
+                                        <h:panelGrid frame="none">
+                                            <comp:outputText value="Usuário: #{sol.usuario.pessoa.nome}"/>
+                                            <comp:outputText value="Unidade Orçamentaria: #{sol.cota.unidadeOrcamentaria.nome}"/>
+                                            <comp:outputText value="Localização: #{sol.local.nome}"/>
+                                            <comp:outputText value="Vínculo: #{sol.vinculo}"/>
+                                            <comp:outputText value="Contrato: #{sol.contrato.numero}#{sol.ordemCompra.contrato.numero}"/>
+                                            <comp:outputText value="Ordem de Compra: #{sol.ordemCompra.id}"/>
+                                            <comp:outputText value="Categoria: #{sol.cota.categoria.nome}"/>
+                                            <comp:outputText value="Despesa: #{sol.cota.despesa.nome} (#{sol.cota.despesa.elementoDespesa.nome})" />
+                                            <comp:outputText value="PA: #{sol.dotacao.projetoAtividade.nome}" />
+                                            <comp:outputText value="Competência: #{sol.mesCompetencia.asNumero(sol.mesCompetencia)}-#{sol.anoCompetencia}"/>
+                                            <comp:outputText value="Credor: #{sol.credor.pessoa.nome}"/>
+                                            <comp:outputText value="Autorizado por: #{sol.usuarioAutorizou.pessoa.nome}"/>
+                                            <comp:outputText tipo="d" value="Data Autorização: #{sol.dataAutorizacao}"/>
+                                            <comp:outputText value="NotaFiscal: #{sol.notaFiscal}"/>
+                                            <comp:outputText value="Histórico:"/>
+                                            <p:inputTextarea value="#{sol.historico}" style="width: 100%;color: #000;" rows="3" readonly="true" autoResize="true" cols="100"/>
+                                        </h:panelGrid>
+                                    </p:rowExpansion>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:fieldset>
+                    </p:tab>
+                </p:tabView>
+            </p:fieldset>
+        </p:dialog>
+    </ui:define>
+    <ui:define name="acaoCredor">
+        <p:column headerText="Sel">
+            <p:commandButton style="width: 20px; height: 20px;" icon="ui-icon-check" immediate="true" oncomplete="credorBusca.hide();" update=":frmGeral:credor">
+                <f:setPropertyActionListener value="#{cred}" target="#{contratoMB.credor}"/>
+            </p:commandButton>
+        </p:column>
+    </ui:define>
+</ui:composition>

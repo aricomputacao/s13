@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <p:dialog widgetVar="alt" modal="true"  header="Sistema de Administração Financeira - SIAFI" width="400" closable="true" draggable="false" resizable="false" showEffect="Fade"  >
+        <h:form>
+            <p:panel>
+                <h:panelGrid width="100%" style="text-align: center;">
+                    <h:panelGrid   columns="2">
+                        <p:outputLabel value="Senha Atual:" for="senAt"/>
+                        <h:panelGrid columns="1">
+                            <p:password id="senAt" value="#{ultilMB.senhaAtual}"  validator="#{ultilMB.validateSenhaAtual}" required="true"  >
+                                <p:ajax event="blur" update="menSen"/>
+                            </p:password>
+                            <p:message id="menSen" showDetail="true" showSummary="true"  for="senAt"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid   columns="2">
+                        <p:outputLabel value="Nova senha:" for="senNov"/>
+                        <h:panelGrid columns="1">
+                            <p:password id="senNov" goodLabel="Boa" strongLabel="Ótima" promptLabel="Infome uma senha" validatorMessage="As senhas não conferem" required="true" match="senConf" requiredMessage="Informe uma senha" feedback="true" maxlength="20" weakLabel="Fraca" value="#{ultilMB.novaSenha}"/>
+                            <p:message for="senNov"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid   columns="2">
+                        <p:outputLabel value="Nova senha:" for="senConf"/>
+                        <h:panelGrid columns="1">
+                            <p:password id="senConf"  required="true" requiredMessage="Informe uma senha"  maxlength="20" value="#{ultilMB.confirmeSenha}"/>
+                            <p:message for="senConf"/>
+                        </h:panelGrid>
+                    </h:panelGrid>  
+                </h:panelGrid>
+                <h:panelGrid style="margin-right:  10px" columns="2" width="100%">
+                    <p:commandButton value="Salvar" icon="ui-icon-disk" action="#{ultilMB.alterarSenha()}" update=":frmAlt"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </p:dialog>
+
+
+</ui:component>

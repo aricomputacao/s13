@@ -1,0 +1,197 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:sef="http://sefin.ce.gov.br"
+                xmlns:wsosft="http://www.springframework.org/security/facelets/tags">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+        </f:facet>
+        <link rel="shortcut icon" href="../imagens/logo.ico" />
+        <link rel="icon" type="image/png" href="../imagens/logo.ico" />
+        <h:outputStylesheet name="/css/default.css"/>
+        <h:outputStylesheet name="/css/cssLayout.css"/>
+        <h:outputStylesheet name="/css/menucss.css"/>
+        <h:outputStylesheet name="/css/painelPadrao.css"/>
+        <h:outputScript name="calendario_pt_BR.js" library="js" />
+        <title>#{navegacao['sistema.nome']}</title>
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true" id="bd">
+            <p:layoutUnit id="top"   position="north" size="50">
+                <sef:cabecalho/>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" collapsible="true" header="Menu" style="text-align: center;">
+                <h:form>
+                    <p:panel>
+                        <p:slideMenu id="menu1" styleClass="menuPrincipal" backLabel="Voltar">
+                            <p:separator/>
+                            <p:separator/>
+                            <p:submenu label="Cadastro" icon="ui-icon-plusthick" >
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem  value="Sistema" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.sistema'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.sistema'])}"/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem  value="Módulo" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.modulo'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.modulo'])}"/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem  value="Tarefa" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.tarefa'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.tarefa'])}"/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem  value="Unidade Administrativa" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.unidade_adm'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.unidade_adm'])}"/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem  value="Órgão" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.orgao'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.orgao'])}"/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem  value="Unidade Orçamentária" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.unidade_orc'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.unidade_orc'])}"/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem  value="Cargo" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.cargo'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.cargo'])}"/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem  value="Área Administrativa" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.area_adm'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.area_adm'])}"/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem  value="Usuário" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['cadastro.usuario'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['cadastro.usuario'])}"/>
+                                <p:separator/>
+                                <p:separator/>
+                            </p:submenu>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:submenu label="Listas" icon="ui-icon-search" >
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Sistemas" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.sistema'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.sistema'])}"/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Módulos" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.modulo'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.modulo'])}"/>/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Tarefas" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.tarefa'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.tarefa'])}"/>/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Usuários" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.usuario'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.usuario'])}"/>/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Cargos" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.cargo'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.cargo'])}"/>/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Unidades Administrativas" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.unidade_adm'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.unidade_adm'])}"/>/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Áreas Administrativas" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.area_adm'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.area_adm'])}"/>/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem  value="Órgãos" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.orgao'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.orgao'])}"/>/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem  value="Unidades Orçamentárias" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.unidade_orc'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.unidade_orc'])}"/>/>
+                                <p:separator/>
+                                <p:separator/>
+                            </p:submenu>
+                            <p:separator/>
+                            <p:separator/>
+                            <!-- O acesso a essa pagina se dá pela listagem de usuario -->
+                            <p:submenu label="Permissões" icon="ui-icon-key">
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Permissões do Usuário"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['permissao.usuario.gerenciar'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.usuario.gerenciar'])}"/>/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Editar unidades Orçamentárias do Usuário"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['permissao.usuario.unidade_orcamentaria'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.usuario.unidade_orcamentaria'])}"/>/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Configurações do Sistema"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['permissao.configuracao.cadastro'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.configuracao.cadastro'])}"/>/>
+                                <p:separator/>
+                                <p:separator/>
+                            </p:submenu>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:submenu label="Relatórios" icon="ui-icon-note">
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Relátorio de Tarefas"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['relatorio.tarefas'])}" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['relatorio.tarefas'])}"/>/>
+                                <p:separator/>
+                                <p:separator/>
+                            </p:submenu>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:submenu label="Utilitários" icon="ui-icon-gear">
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Alterar Senha"  onclick="alt.show()" />
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Configurações do Sistema"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['util.configuracao.cadastro'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['util.configuracao.cadastro'])}"/>
+                                <p:separator/>
+                                <p:separator/>
+                                <p:menuitem value="Visulaizar Loges dos Sistemas"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['util.loges.listar'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['util.loges.listar'])}"/>
+                                <p:separator/>
+                                <p:separator/>
+                            </p:submenu>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:menuitem value="Página Inicial" icon="ui-icon-home" action="#{navegacaoGuardiaoMB.index()}"/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:menuitem icon="ui-icon-closethick" value="Sair" action="#{navegacaoGuardiaoMB.logout()}" immediate="true"/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                            <p:menuitem/>
+                        </p:slideMenu>
+                    </p:panel>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" style="text-align: center;" header="Sistema de Controle de Acessos" >
+                <h:form>
+                    <p:growl autoUpdate="true" showDetail="true" showSummary="true"/>
+                </h:form>
+
+                <p:panel footer="Usuário: #{usuarioLogadoMB.usuario.pessoa.nome}" id="formcenter" style="min-height: 400px;">
+                    <p:messages id="msg" autoUpdate="true" closable="true" showDetail="true" showSummary="true"/>
+                    <center>
+                        <ui:insert name="corpo"></ui:insert>
+                    </center>
+                </p:panel>
+
+            </p:layoutUnit>
+            <p:layoutUnit id="bottom" position="south" size="50" style="width: 100%;">
+                <sef:rodape/>
+            </p:layoutUnit>
+
+            <!--            <center>
+                            <sef:dialog/>
+                        </center>-->
+        </p:layout>
+        <ui:insert name="dialogs">
+            <sef:alterarSenha/>
+        </ui:insert>
+    </h:body>
+
+
+</ui:composition>

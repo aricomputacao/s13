@@ -1,0 +1,44 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+        <h:form id="frmCredor">
+            <p:panel>
+                <h:panelGrid columns="6">
+                    <h:panelGrid>
+                        <h:outputText value="Campo"/>
+                        <p:selectOneMenu value="#{credorMB.campoBusca}" style="width: 190px">
+                            <f:selectItem itemLabel="Nome" itemValue="pessoa.nome"/>
+                            <f:selectItem itemLabel="CPF/CNPJ" itemValue="documento"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Pesquisar por"/>
+                        <p:inputText value="#{credorMB.valorBusca}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Procurar" update="tblListaCred" title="Listar" icon="ui-icon-search" action="#{credorMB.listar()}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <p:dataTable id="tblListaCred" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum registro encontrado" var="cred" value="#{credorMB.lista}"
+                             rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                    <p:column headerText="Id" filterBy="#{cred.id}" sortBy="#{cred.id}">
+                        <h:outputText style="max-width: 50px" value="#{cred.id}"/>
+                    </p:column>
+                    <p:column headerText="CPF / CNPJ" sortBy="#{cred.documento}" filterBy="#{cred.documento}">
+                        <h:outputText value="#{cred.documento}"/>
+                    </p:column>
+                    <p:column headerText="Nome" sortBy="#{cred.pessoa.nome}">
+                        <h:outputText value="#{cred.pessoa.nome}" title="#{cred.pessoa.nome}"/>
+                    </p:column>
+                    <p:column headerText="Email" sortBy="#{cred.pessoa.email}" rendered="false">
+                        <h:outputText value="#{cred.pessoa.email}"/>
+                    </p:column>
+                    <ui:insert name="acaoCredor">
+                    </ui:insert>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+</ui:composition>

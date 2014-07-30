@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:composite="http://java.sun.com/jsf/composite"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <composite:interface>
+        <composite:attribute name="id_tabela" required="true" default="tabela"  shortDescription="Id do formulário" />
+        <composite:attribute name="cabecalho_grid" required="true" shortDescription="Cabeçalho do panelGrid" />
+        <composite:attribute name="mnemonico" required="true" shortDescription="Número do mnemonico" />
+        <composite:attribute name="acao_incluir" required="true"   method-signature="java.lang.Void action()" shortDescription="Inslusão do metodo incluir"/>
+        <composite:facet name="comandos" />
+    </composite:interface>
+    <composite:implementation>
+        <p:panel styleClass="painelPadrao">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="#{cc.attrs.cabecalho_grid}"/>
+                <h:outputText value="Página - #{cc.attrs.mnemonico}" style="float: right;"/>
+            </f:facet>
+            <p:separator/>
+            <p:menubar style="background: #d9d9d9;">
+                <p:menuitem icon="ui-icon-plus" value="Incluir" style="font-weight: bold"  actionListener="#{cc.attrs.acao_incluir}"/>
+            </p:menubar>
+            <composite:insertChildren />
+        </p:panel>
+    </composite:implementation>
+</ui:composition>
+
+

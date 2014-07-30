@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
+
+    <ui:define name="corpo" >
+
+        <p:panel header="Listagem de Exercicios cadastrados" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.exercicio'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Exercicios cadastrados"/>
+                <h:outputText value="Página - 010501" style="float: right;"/>
+            </f:facet>
+            <p:panel>
+                <h:panelGrid columns="6">
+                    <h:panelGrid>
+                        <h:outputText value="Ordenar"/>
+                        <p:selectOneMenu value="#{exercicioMB.campoOrdem}" style="width: 190px">
+                            <f:selectItems value="#{exercicioMB.campos}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Campo"/>
+                        <p:selectOneMenu value="#{exercicioMB.campoBusca}" style="width: 190px">
+                            <f:selectItems value="#{exercicioMB.camposString}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Pesquisar por"/>
+                        <p:inputText value="#{exercicioMB.valorBusca}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <comp:commandButton_consulta acao_butao="#{exercicioMB.listar()}" update="@form:tblExercicio" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.exercicio'])}" />
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <comp:commandButton_novo  rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.exercicio'])}" acao_butao="#{beanNavegacaoMB.redirecionar(navegacao['cadastro.exercicio'])}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <p:dataTable id="tblExercicio" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum exercicio encontrado" var="item" value="#{exercicioMB.listaExercicio}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                <p:column headerText="Ano">
+                    <h:outputText value="#{item.ano}"/>
+                </p:column>
+                <p:column headerText="Descrição">
+                    <h:outputText value="#{item.descricao}"/>
+                </p:column>
+                <p:column headerText="Ano de Inicio">
+                    <h:outputText value="#{item.dataInicial}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Ano de Término">
+                    <h:outputText value="#{item.dataFinal}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Padrão">
+                    <p:selectBooleanCheckbox value="#{item.padrao}" disabled="true"/>
+                </p:column>
+                <p:column headerText="Ações">
+                    <comp:commandButton_editar acao_butao="#{beanNavegacaoMB.redirecionar(navegacao['cadastro.exercicio'], 'exercicio', item)}" rendered="#{usuarioMB.permissaoEditar(navegacao['cadastro.exercicio'])}" />
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </ui:define>
+</ui:composition>

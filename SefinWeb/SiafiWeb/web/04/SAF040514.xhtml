@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="corpo" >
+        <p:panel header="Listagem de Orçamentos cadastrados" styleClass="painelPadrao" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.orcamento'])}">
+            <f:facet name="header">
+                <p:spacer height="10" width="150"/>
+                <h:outputText value="Listagem de Orçamentos cadastrados"/>
+                <h:outputText value="Página - 040514" style="float: right;"/>
+            </f:facet>
+            <p:panel>
+                <h:panelGrid columns="6">
+                    <h:panelGrid>
+                        <h:outputText value="Ordenar"/>
+                        <p:selectOneMenu value="#{orcamentoMB.campoOrdem}" style="width: 190px">
+                            <f:selectItems value="#{orcamentoMB.campos}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Campo"/>
+                        <p:selectOneMenu value="#{orcamentoMB.campoBusca}" style="width: 190px">
+                            <f:selectItems value="#{orcamentoMB.camposString}" var="c" itemLabel="#{c.toUpperCase()}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputText value="Pesquisar por"/>
+                        <p:inputText value="#{orcamentoMB.valorBusca}" size="25"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Listar" title="Listar" icon="ui-icon-search" action="#{orcamentoMB.listar()}" update="tblOrcamento" rendered="#{usuarioMB.permissaoConsultar(navegacao['listar.orcamento'])}"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Novo" title="Novo cadastro" icon="ui-icon-plus" action="#{beanNavegacaoMB.redirecionar(navegacao['cadastro.orcamento'])}" immediate="true" rendered="#{usuarioMB.permissaoIncluir(navegacao['cadastro.orcamento'])}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <p:dataTable id="tblOrcamento" paginator="true" paginatorAlwaysVisible="false" rows="10"  emptyMessage="Nenhum orçamento encontrado" var="item" value="#{orcamentoMB.listaOrcamento}"
+                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx">
+                <p:column headerText="Ano">
+                    <h:outputText value="#{item.exercicio.ano}"/>
+                </p:column>
+                <p:column headerText="Descrição">
+                    <h:outputText value="#{item.descricao}"/>
+                </p:column>
+                <p:column headerText="Ano de Inicio">
+                    <h:outputText value="#{item.exercicio.dataInicial}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Ano de Término">
+                    <h:outputText value="#{item.exercicio.dataFinal}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Padrão">
+                    <p:selectBooleanCheckbox value="#{item.exercicio.padrao}" disabled="true"/>
+                </p:column>
+                <p:column headerText="Ações">
+                    <p:commandButton icon="ui-icon-pencil" update=":frmGeral" action="#{beanNavegacaoMB.redirecionar(navegacao['cadastro.orcamento'], 'orcamento', item)}" title="Editar" rendered="#{usuarioMB.permissaoEditar(navegacao['cadastro.orcamento'])}"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </ui:define>
+</ui:composition>
