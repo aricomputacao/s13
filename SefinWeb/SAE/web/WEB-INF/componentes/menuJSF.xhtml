@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:sec="http://www.springframework.org/security/facelets/tags">
+
+    <h:form style="background: lightgray;border-radius: 5px">
+        <p:menubar autoDisplay="false" style="background: #E8E8E8;border-color: #666666">
+            <p:menuitem value="Inicio" icon="ui-icon-home" action="#{beanUtilitario.redirecionarPagina(navegacao['index'])}" immediate="true"/>
+            <sec:ifAnyGranted roles="ROLE_ADMIN">
+
+                <p:submenu label="Cadastro" icon="ui-icon-document-b">
+                    <p:separator/>
+                    <p:menuitem value="Acesso" action="#{beanUtilitario.redirecionarPagina(navegacao['cadAcesso'])}"/>
+                    <p:separator/>
+                </p:submenu>
+            </sec:ifAnyGranted>
+
+            <p:submenu label="Consultas" icon="ui-icon-document-b">
+                <sec:ifAnyGranted roles="ROLE_ADMIN">
+
+                    <p:separator/>
+                    <p:menuitem value="Acessos" action="#{beanUtilitario.redirecionarPagina(navegacao['lisAcesso'])}"/>
+                    <p:separator/>
+                </sec:ifAnyGranted>
+
+                <p:separator/>
+                <p:menuitem value="Processos" action="#{beanUtilitario.redirecionarPagina(navegacao['lisConsulta'])}"/>
+                <p:separator/>
+            </p:submenu>
+            <p:submenu label="Utilitarios" icon="ui-icon-gear" >
+                <p:menuitem value="Alterar Senha" action="#{beanUtilitario.redirecionarPagina(navegacao['altSenha'])}"/>
+            </p:submenu>
+            <p:menuitem value="Sair" immediate="true" icon="ui-icon-closethick" ajax="false" action="#{beanUtilitario.logout()}"/>
+
+
+        </p:menubar>
+    </h:form>
+    
+</ui:component>
+

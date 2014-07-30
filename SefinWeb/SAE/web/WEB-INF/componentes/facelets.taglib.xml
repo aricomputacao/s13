@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE facelet-taglib PUBLIC "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN" "https://facelets.dev.java.net/source/browse/*checkout*/facelets/src/etc/facelet-taglib_1_0.dtd">
+<facelet-taglib>
+    <namespace>http://sefin.ce.gov.br</namespace>
+    <tag>
+        <tag-name>menuJSF</tag-name>
+        <source>menuJSF.xhtml</source>
+    </tag>
+    <tag>
+        <tag-name>dialogLogout</tag-name>
+        <source>dialogLogout.xhtml</source>
+    </tag>
+    <tag>
+        <tag-name>cabecalhoJsf</tag-name>
+        <source>cabecalhoJsf.xhtml</source>
+    </tag>
+    <tag>
+        <tag-name>rodape</tag-name>
+        <source>rodape.xhtml</source>
+    </tag>
+    <tag>
+        <tag-name>dialogAlterarSenha</tag-name>
+        <source>dialogAlterarSenha.xhtml</source>
+    </tag>
+    <tag>
+        <tag-name>consultaCredor</tag-name>
+        <source>consultaCredor.xhtml</source>
+    </tag>
+
+</facelet-taglib>

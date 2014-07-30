@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/modelo/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"           
+                xmlns:sec="http://www.springframework.org/security/facelets/tags">
+
+
+    <ui:define name="corpo" rendered="false" >
+        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_FORNECEDOR">
+
+            <h:outputScript name="script/navegacao.js" />
+
+            <p:blockUI block="pnlGeral" trigger="btnImpressao, btnListar">
+                <p:graphicImage value="/resources/imagens/carregar.gif"/>
+            </p:blockUI>
+
+            <p:panel id="pnlGeral" header="Consulta de Processos" style="width: 1300px" styleClass="painelPadrao"  >
+
+                <p:panel id="pnlLisSolicitacao">
+                    <h:panelGrid width="100%" >
+
+                        <h:panelGrid columns="3">
+                            <h:panelGrid>
+                                <h:outputText value="Unidade Orçamentária"/>
+                                <p:selectOneMenu value="#{consultaMB.unidadeOrcamentaria}"  converter="#{indexConverter}"
+                                                 style="width: 400px;">
+                                    <f:selectItem itemValue="#{null}"  itemLabel="----------------- Selecione ---------------------"/>
+                                    <f:selectItems value="#{consultaMB.listaUnidadeOrcamentarias}" var="orc" itemLabel="#{orc.orgao.id.id}#{orc.unidadeOrcamentariaPK.id} - #{orc.nome}" itemValue="#{orc}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" id="panelPesq">
+                            <h:panelGrid columns="1">
+                                <h:outputText value="Inicio"/>
+                                <p:calendar showButtonPanel="true" effect="fade" navigator="true" value="#{consultaMB.dataInicial}" pattern="dd/MM/yyyy"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" >
+                                <h:outputText value="Fim"/>
+                                <p:calendar showButtonPanel="true" effect="fade" navigator="true"  value="#{consultaMB.dataFinal}" pattern="dd/MM/yyyy"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="6" style="float: right">
+                            <p:spacer width="10"/>
+                            <p:commandButton value="Listar" id="btnListar"  title="Listar" icon="ui-icon-search" action="#{consultaMB.consultar()}" update="tblSolicitacao,:frmGeral"/>
+                            <p:spacer width="10"/>
+                            <p:commandButton id="btnImpressao" value="Imprimir" title="Imprimir relatório"  icon="ui-icon-print"  action="#{consultaMB.impressao()}" oncomplete="popup('/SAE/RelatorioServlet.pdf')" />
+
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                </p:panel>
+
+                <p:separator/>
+                <h:panelGrid width="100%" id="tblSolicitacao">
+
+                    <p:dataTable  paginator="true" paginatorAlwaysVisible="false" rows="20"  emptyMessage="Nenhuma solicitação encontrada" var="item" value="#{consultaMB.listaSolicitacaoSaldoDtos}"
+                                  rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" >
+
+                        <p:column style="width: 2%;">
+                            <f:facet name="header">
+
+                            </f:facet>
+                            <p:rowToggler id="x"/>
+                        </p:column>
+                        <p:column sortBy="#{item.solicitacaoFinanceira.id}">
+                            <f:facet name="header">
+                                <h:outputText value="Número"/>
+                            </f:facet>
+                            <h:outputLabel value="#{item.solicitacaoFinanceira.id}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.solicitacaoFinanceira.cota.unidadeOrcamentaria.nome}">
+                            <f:facet name="header" >
+                                <h:outputText value="Unidade"/>
+                            </f:facet>
+                            <h:outputLabel value="#{item.solicitacaoFinanceira.cota.unidadeOrcamentaria.nome}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.solicitacaoFinanceira.situacaoSolicitacao}">
+                            <f:facet name="header">
+                                <h:outputText value="Situção"/>
+                            </f:facet>
+                            <h:outputText value="#{item.solicitacaoFinanceira.situacaoSolicitacao}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Localização"/>
+                            </f:facet>
+                            <h:outputLabel value="#{item.solicitacaoFinanceira.local.nome}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Empenho"/>
+                            </f:facet>
+                            <h:outputLabel value="#{item.solicitacaoFinanceira.empenho}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Data de Solicitação"/>
+                            </f:facet>
+                            <h:outputText value="#{item.solicitacaoFinanceira.dataSolicitacao}">
+                                <f:convertDateTime pattern="dd/MM/YYYY"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Valor"/>
+                            </f:facet>
+                            <h:outputText value="#{item.solicitacaoFinanceira.valor}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="A pagar"/>
+                            </f:facet>
+                            <h:outputText value="#{item.restoPagar}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Pago"/>
+                            </f:facet>
+                            <h:outputText value="#{item.valorPago}">
+                                <f:convertNumber type="currency"/>
+
+                            </h:outputText>
+                        </p:column>
+
+                        <p:rowExpansion>
+                            <h:panelGrid>
+                                <h:outputLabel  value="Contrato: #{item.solicitacaoFinanceira.ordemCompra.contrato.numero}" rendered="#{item.solicitacaoFinanceira.ordemCompra.contrato.numero != null}"/>
+                                <h:outputLabel  value="Contrato: #{item.solicitacaoFinanceira.contrato.numero}" rendered="#{item.solicitacaoFinanceira.contrato.numero != null}"/>
+                                <h:outputLabel value="Nota Fiscal: #{item.solicitacaoFinanceira.notaFiscal}"/>
+
+                            </h:panelGrid>
+                        </p:rowExpansion>
+                    </p:dataTable>
+                </h:panelGrid>
+            </p:panel>
+        </sec:ifAnyGranted>
+    </ui:define>
+    <ui:define name="dialogs">
+
+    </ui:define>
+
+</ui:composition>

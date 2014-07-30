@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<ui:composition template="/modelo/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="corpo">
+        <p:panel styleClass="painelPadrao" header="Lista de Acessos">
+            <p:focus/>
+            <h:panelGrid width="100%">
+                <p:fieldset legend="Consulta">
+                    <h:panelGrid columns="4">
+                        <h:panelGrid>
+                            <h:outputText value="Campo Busca"/>
+                            <p:selectOneMenu value="#{acessoCredorMB.campoBusca}" style="width: 150px"  effect="fade" >
+                                <f:selectItem itemLabel="CPF/CNPJ" itemValue="documento"/>
+                                <f:selectItem itemLabel="NOME" itemValue="nome"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputText value="Valor Busca"/>
+                            <p:inputText value="#{acessoCredorMB.valorBusca}"  size="50"/>
+                        </h:panelGrid>
+
+                        <h:panelGrid>
+                            <p:spacer width="15"/>
+                            <h:panelGrid columns="2">
+                                <p:commandButton action="#{acessoCredorMB.listar()}" update="tabela" value="Consultar" icon="ui-icon-search"/>
+                                <p:commandButton action="#{beanUtilitario.redirecionarPagina(navegacao['cadAcesso'])}" immediate="true" value="Incluir" icon="ui-icon-plus"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>
+                <p:dataTable value="#{acessoCredorMB.listaAcessoCredores}" id="tabela" paginatorAlwaysVisible="false" paginator="true" var="t" rows="10" rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}" rowIndexVar="rowIx" emptyMessage="Nenhum valor encontrado">
+                    <p:column headerText="Documento" width="60" sortBy="#{t.documento}">
+                        <h:outputText value="#{t.documento}"/>
+                    </p:column>
+                    <p:column headerText="Nome" sortBy="#{t.nome}">
+                        <h:outputText value="#{t.nome}"/>
+                    </p:column>
+                    <p:column headerText="Email" >
+                        <h:outputText value="#{t.email}"/>
+                    </p:column>
+                    <p:column headerText="Perfil" sortBy="Perfil" >
+                        <h:outputText value="#{t.perfil}"/>
+                    </p:column>
+                    <p:column headerText="Situação" sortBy="#{t.ativo}" >
+                        <p:confirmDialog global="true" width="200" showEffect="fade" hideEffect="fade">  
+                            <h:panelGrid cellspacing="10" columns="2">
+                                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+                                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>   
+                            </h:panelGrid>
+                        </p:confirmDialog>  
+                        <p:commandLink value="#{t.ativo?'Ativo':'Inativo'}" actionListener="#{acessoCredorMB.ativaDesativaAcesso(t)}" update=":frmGeral" id="ativa">
+                            <p:confirm header="Canfirmação" message="Desativar acesso?" icon="ui-icon-alert" />
+                        </p:commandLink>
+                        <p:tooltip for="ativa" value="Click para #{!t.ativo?'Ativar':'Desativar'} esse Acesso."/>
+                    </p:column>
+                    <p:column headerText="Ação" width="10%">
+                        <p:commandButton icon="ui-icon-check" style="width: 20px;height: 20px;" immediate="true" title="Editar" action="#{beanUtilitario.redirecionar(navegacao['cadAcesso'], 'acesso_credor', t)}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+</ui:composition>

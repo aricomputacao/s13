@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<ui:composition template="/modelo/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:sec="http://www.springframework.org/security/facelets/tags">
+
+    <ui:define name="corpo">
+        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_FORNECEDOR">
+            <p:panel id="pnlAcesso" header="Alterar Senha" styleClass="painelPadrao" >
+                <h:panelGrid width="100%" style="text-align: center;">
+                    <h:panelGrid   columns="2">
+                        <p:outputLabel value="Senha Atual:" for="senAt"/>
+                        <h:panelGrid columns="1">
+                            <p:password id="senAt" value="#{beanUtilitario.senhaAtual}"  validator="#{beanUtilitario.validateSenhaAtual}" required="true"  >
+                                <p:ajax event="blur" update="menSen"/>
+                            </p:password>
+                            <p:message id="menSen" showDetail="true" showSummary="true"  for="senAt"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid   columns="2">
+                        <p:outputLabel value="Nova senha:" for="senNov"/>
+                        <h:panelGrid columns="1">
+                            <p:password id="senNov" goodLabel="Boa" strongLabel="Ótima" promptLabel="Infome uma senha" validatorMessage="As senhas não conferem" required="true" match="senConf" requiredMessage="Informe uma senha" feedback="true" maxlength="20" weakLabel="Fraca" value="#{beanUtilitario.novaSenha}"/>
+                            <p:message for="senNov"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid   columns="2">
+                        <p:outputLabel value="Nova senha:" for="senConf"/>
+                        <h:panelGrid columns="1">
+                            <p:password id="senConf"  required="true" requiredMessage="Informe uma senha"  maxlength="20" value="#{beanUtilitario.confirmeSenha}"/>
+                            <p:message for="senConf"/>
+                        </h:panelGrid>
+                    </h:panelGrid>  
+                </h:panelGrid>
+                <h:panelGrid style="margin-right:  10px" columns="2" width="100%">
+                    <p:commandButton value="Salvar" icon="ui-icon-disk" action="#{beanUtilitario.alterarSenha()}" />
+                </h:panelGrid>
+            </p:panel>
+        </sec:ifAnyGranted>
+    </ui:define>
+
+</ui:composition>

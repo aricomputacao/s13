@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/security"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+    <http auto-config="true" access-denied-page="/login.xhtml">
+        <form-login login-page="/login.xhtml" authentication-failure-url="/login.xhtml?erro=true"/>
+        <intercept-url pattern="/index.xhtml" access="ROLE_ADMIN,ROLE_FORNECEDOR" />
+        <intercept-url pattern="/cad/acesso.xhtml" access="ROLE_ADMIN" />
+        <intercept-url pattern="/lis/acessos.xhtml" access="ROLE_ADMIN" />   
+
+   
+    </http>
+
+
+
+
+    <authentication-manager>
+        <authentication-provider>
+            <password-encoder hash="md5"/>
+            <jdbc-user-service data-source-ref="dataSource"
+                               users-by-username-query="SELECT u.acs_login ,u.acs_senha,u.acs_ativo from siafi.acesso_credor u
+                                                            WHERE  (u.acs_ativo = TRUE) and (u.acs_login = ?) "
+                               authorities-by-username-query="SELECT  us.acs_login,'ROLE_' || us.acs_perfil from siafi.acesso_credor us where
+                                         (us.acs_login = ?)"
+          
+            />
+         
+        </authentication-provider>
+        <authentication-provider>
+            <user-service>
+                <user name="adm" password="123" authorities="ROLE_ADMIN" />
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+   
+    <b:bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <b:property name="jndiName" value="jdbc/Siafi"/>
+    </b:bean>
+
+
+
+</b:beans>
+
+
+
