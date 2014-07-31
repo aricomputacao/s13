@@ -25,9 +25,9 @@
     </h:head>
     <h:body>
         <p:layout fullPage="true" id="bd">
-            <p:layoutUnit id="top"   position="north" size="50">
+<!--            <p:layoutUnit id="top"   position="north" size="50">
                 <sef:cabecalho/>
-            </p:layoutUnit>
+            </p:layoutUnit>-->
 
             <p:layoutUnit position="west" collapsible="true" header="Menu" style="text-align: center;">
                 <h:form>
@@ -74,44 +74,43 @@
                                 <p:menuitem value="Sistemas" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.sistema'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.sistema'])}"/>
                                 <p:separator/>
                                 <p:separator/>
-                                <p:menuitem value="Módulos" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.modulo'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.modulo'])}"/>/>
+                                <p:menuitem value="Módulos" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.modulo'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.modulo'])}"/>
                                 <p:separator/>
                                 <p:separator/>
-                                <p:menuitem value="Tarefas" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.tarefa'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.tarefa'])}"/>/>
+                                <p:menuitem value="Tarefas" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.tarefa'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.tarefa'])}"/>
                                 <p:separator/>
                                 <p:separator/>
-                                <p:menuitem value="Usuários" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.usuario'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.usuario'])}"/>/>
+                                <p:menuitem value="Usuários" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.usuario'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.usuario'])}"/>
                                 <p:separator/>
                                 <p:separator/>
-                                <p:menuitem value="Cargos" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.cargo'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.cargo'])}"/>/>
+                                <p:menuitem value="Cargos" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.cargo'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.cargo'])}"/>
                                 <p:separator/>
                                 <p:separator/>
-                                <p:menuitem value="Unidades Administrativas" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.unidade_adm'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.unidade_adm'])}"/>/>
+                                <p:menuitem value="Unidades Administrativas" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.unidade_adm'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.unidade_adm'])}"/>
                                 <p:separator/>
                                 <p:separator/>
-                                <p:menuitem value="Áreas Administrativas" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.area_adm'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.area_adm'])}"/>/>
+                                <p:menuitem value="Áreas Administrativas" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.area_adm'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.area_adm'])}"/>
                                 <p:separator/>
                                 <p:separator/>
-                                <p:menuitem  value="Órgãos" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.orgao'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.orgao'])}"/>/>
+                                <p:menuitem  value="Órgãos" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.orgao'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.orgao'])}"/>
                                 <p:separator/>
                                 <p:separator/>
-                                <p:menuitem  value="Unidades Orçamentárias" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.unidade_orc'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.unidade_orc'])}"/>/>
+                                <p:menuitem  value="Unidades Orçamentárias" action="#{navegacaoGuardiaoMB.redirecionar(navegacao['listar.unidade_orc'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['listar.unidade_orc'])}"/>
                                 <p:separator/>
                                 <p:separator/>
                             </p:submenu>
                             <p:separator/>
                             <p:separator/>
-                            <!-- O acesso a essa pagina se dá pela listagem de usuario -->
                             <p:submenu label="Permissões" icon="ui-icon-key">
                                 <p:separator/>
                                 <p:separator/>
-                                <p:menuitem value="Permissões do Usuário"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['permissao.usuario.gerenciar'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.usuario.gerenciar'])}"/>/>
+                                <p:menuitem value="Permissões do Usuário"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['permissao.usuario.gerenciar'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.usuario.gerenciar'])}"/>
                                 <p:separator/>
                                 <p:separator/>
-                                <p:menuitem value="Editar unidades Orçamentárias do Usuário"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['permissao.usuario.unidade_orcamentaria'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.usuario.unidade_orcamentaria'])}"/>/>
+                                <p:menuitem value="Editar unidades Orçamentárias do Usuário"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['permissao.usuario.unidade_orcamentaria'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.usuario.unidade_orcamentaria'])}"/>
                                 <p:separator/>
                                 <p:separator/>
-                                <p:menuitem value="Configurações do Sistema"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['permissao.configuracao.cadastro'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.configuracao.cadastro'])}"/>/>
+                                <p:menuitem value="Configurações do Sistema"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['permissao.configuracao.cadastro'])}" rendered="#{usuarioLogadoMB.permissaoIncluir(navegacao['permissao.configuracao.cadastro'])}"/>
                                 <p:separator/>
                                 <p:separator/>
                             </p:submenu>
@@ -120,7 +119,7 @@
                             <p:submenu label="Relatórios" icon="ui-icon-note">
                                 <p:separator/>
                                 <p:separator/>
-                                <p:menuitem value="Relátorio de Tarefas"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['relatorio.tarefas'])}" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['relatorio.tarefas'])}"/>/>
+                                <p:menuitem value="Relátorio de Tarefas"  action="#{navegacaoGuardiaoMB.redirecionar(navegacao['relatorio.tarefas'])}" rendered="#{usuarioLogadoMB.permissaoConsultar(navegacao['relatorio.tarefas'])}"/>
                                 <p:separator/>
                                 <p:separator/>
                             </p:submenu>
