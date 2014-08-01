@@ -192,7 +192,7 @@
 
                 </h:panelGrid>
                 <h:panelGrid columns="4">
-                    <h:panelGrid id="dotSaldo">
+                    <h:panelGrid id="dotSaldo" rendered="#{solicitacaoFinanceiraMB.mostraSaldoDotacao}">
                         <h:outputLabel value="Saldo da Dotação"/>
                         <h:panelGrid columns="2">
                             <p:inputText size="5" readonly="true" value="#{solicitacaoFinanceiraMB.dotacao.dotacalPk.id_reduzido}"/>

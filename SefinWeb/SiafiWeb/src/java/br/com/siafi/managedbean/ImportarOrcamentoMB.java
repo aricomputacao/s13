@@ -43,7 +43,6 @@ import br.com.siafi.controller.RPUnidadeOrcamentariaController;
 import br.com.siafi.controller.RpEmpenhoController;
 import br.com.siafi.controller.RpLiquidacaoController;
 import br.com.siafi.controller.RpProjetoAtividadeController;
-import br.com.siafi.modelo.MovimentacaoBanco;
 import br.com.siafi.modelo.Orcamento;
 import java.io.Serializable;
 import java.util.List;
@@ -133,7 +132,7 @@ public class ImportarOrcamentoMB implements Serializable {
     @EJB
     private UnidadeOrcamentariaController unidadeOrcamentariaController;
     @EJB
-    private MovimentacaoBancoController movimentacaoBancoController; 
+    private MovimentacaoBancoController movimentacaoBancoController;
     private Exercicio exercicio;
     private Orcamento orcamento;
 
@@ -430,8 +429,8 @@ public class ImportarOrcamentoMB implements Serializable {
             MenssagemUtil.addMessageErro("Erro ao importar", ex, this.getClass().getName());
         }
     }
-    
-     public void importarMovimentacaoBanco() {
+
+    public void importarMovimentacaoBanco() {
         try {
             movimentacaoBancoController.importar();
             MenssagemUtil.addMessageInfo("Registros importados sem erro.");

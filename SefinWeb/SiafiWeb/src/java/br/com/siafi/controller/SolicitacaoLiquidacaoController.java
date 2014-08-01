@@ -16,6 +16,7 @@ import br.com.siafi.modelo.EncaminhamentoLiquidacao;
 import br.com.siafi.modelo.SolicitacaoFinanceira;
 import br.com.siafi.modelo.SolicitacaoLiquidacao;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -47,7 +48,7 @@ public class SolicitacaoLiquidacaoController extends Controller<SolicitacaoLiqui
 
     public List<SolicitacaoLiquidacao> listarPorSolicitacao(String numero, List<UnidadeOrcamentaria> uos, UnidadeOrcamentaria uo, Credor c) {
         if (c.getId() != null) {
-            if (numero.equals("") || numero.equals(null)) {
+            if (numero == null || numero.equals("")) {
                 if (uo != null) {
                     return dao.listarPorSolicitacao(uo, c);
                 } else {
@@ -64,7 +65,7 @@ public class SolicitacaoLiquidacaoController extends Controller<SolicitacaoLiqui
 
             }
         } else {
-            if (numero.equals("") || numero.equals(null)) {
+            if (numero == null || numero.equals("")) {
                 if (uo != null) {
                     return dao.listarPorSolicitacao(uo);
                 } else {
@@ -95,7 +96,7 @@ public class SolicitacaoLiquidacaoController extends Controller<SolicitacaoLiqui
      */
     public List<SolicitacaoLiquidacao> listarPorSolicitacaoTesouraria(String numero, List<UnidadeOrcamentaria> uos, UnidadeOrcamentaria uo, Credor c) {
         if (c.getId() != null) {
-            if (numero.equals("") || numero.equals(null)) {
+            if (numero == null || numero.equals("")) {
                 if (uo != null) {
                     return dao.listarPorSolicitacaoTesouraria(uo, c);
                 } else {
@@ -112,7 +113,7 @@ public class SolicitacaoLiquidacaoController extends Controller<SolicitacaoLiqui
 
             }
         } else {
-            if (numero.equals("") || numero.equals(null)) {
+            if (numero == null || numero.equals("")) {
                 if (uo != null) {
                     return dao.listarPorSolicitacaoTesouraria(uo);
                 } else {
@@ -157,9 +158,13 @@ public class SolicitacaoLiquidacaoController extends Controller<SolicitacaoLiqui
             encaminhamentoLiquidacao = encaminhamentoLiquidacaoController.carregar(encaminhamentoLiquidacao.getId());
             encaminhamentoLiquidacaoController.excluir(encaminhamentoLiquidacao);
         }
-        
+
         sl = dao.carregar(sl.getId());
         dao.excluir(sl);
+    }
+
+    public List<SolicitacaoLiquidacao> listarPagamentos(UnidadeOrcamentaria unidadeOrcamentaria, Credor credor, List<UnidadeOrcamentaria> unidadeOrcamentarias, Date dataPagamentoInicio, Date dataPagamentoFinal) {
+        return dao.listarPagamentos(unidadeOrcamentaria, credor, unidadeOrcamentarias, dataPagamentoInicio, dataPagamentoFinal);
     }
 
 }

@@ -73,6 +73,9 @@ public class ReceberEncaminhamentoLiquidacaoMB implements Serializable {
         if (e.getUsuarioEncaminhou().getAreaAdministrativa().getTipoAreaAdm().equals(TipoAreaAdm.Tesouraria) && usuarioMb.getUsuarioSelecionado().getAreaAdministrativa().getTipoAreaAdm().equals(TipoAreaAdm.Contabilidade)) {
             e.getSolicitacaoLiquidacao().setStatusSolicitacaoLiquidacao(StatusSolicitacaoLiquidacao.Finalizado);
         }
+        if (e.getDestino().getTipoAreaAdm().equals(TipoAreaAdm.Tesouraria)) {
+            e.getSolicitacaoLiquidacao().setDataRecebidoTesouraria(new Date());
+        }
         solicitacaoControler.atualizar(e.getSolicitacaoLiquidacao());
         controler.salvarouAtualizar(e);
     }
@@ -85,8 +88,7 @@ public class ReceberEncaminhamentoLiquidacaoMB implements Serializable {
      */
     private void receberProcessoLiquidacao(EncaminhamentoLiquidacao el) {
         try {
-            Encaminhamento e = new Encaminhamento();
-            e = encaminhamentoController.buscarUltimoEncaminhamentoAbertoTesouraria(el.getSolicitacaoLiquidacao().getSolicitacaoFinanceira());
+            Encaminhamento e = encaminhamentoController.buscarUltimoEncaminhamentoAbertoTesouraria(el.getSolicitacaoLiquidacao().getSolicitacaoFinanceira());
             e.setDataRecebimento(new Date());
             e.setUsuarioRecebeu(usuarioMb.getUsuarioSelecionado());
             e.getSolicitacaoFinanceira().setLocal(usuarioMb.getUsuarioSelecionado().getAreaAdministrativa());

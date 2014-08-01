@@ -6,6 +6,7 @@ package br.com.siafi.dao;
 
 import br.com.guardiao.dao.DAO;
 import br.com.guardiao.modelo.UnidadeOrcamentaria;
+import br.com.sefin.enumerated.ModalidadeAditivo;
 import br.com.sefin.enumerated.SituacaoSolicitacao;
 import br.com.sefin.enumerated.StatusOrdemCompra;
 import br.com.siafi.modelo.Aditivo;
@@ -63,10 +64,8 @@ public class AditivoDAO extends DAO<Aditivo, Long> implements Serializable {
     }
 
     public BigDecimal valorContrato(Integer contrato) throws Exception {
-        TypedQuery<BigDecimal> q;
-        q = getEm().createQuery("SELECT SUM(ad.valor) FROM Aditivo ad WHERE AD.contrato.id = :contrato", BigDecimal.class);
-        q.setParameter("contrato", contrato);
-        return q.getSingleResult();
+        Aditivo a = (Aditivo) getEm().createQuery("SELECT ad FROM Aditivo ad WHERE AD.contrato.id = :contrato AND ad.modalidade <> :mod ORDER BY a.dataFim ASC").setParameter("contrato", contrato).setParameter("mod", ModalidadeAditivo.Tempo).getResultList();
+        return a.getValor();
 
     }
 

@@ -44,11 +44,12 @@
         <class>br.com.gestor.modelo.CreditoAdicionalDetalhe</class>
         <class>br.com.gestor.modelo.Cidade</class>
         <class>br.com.gestor.modelo.OrdenadorUnidadeOrcamentaria</class>
+        <class>br.com.gestor.modelo.MovimentacaoBanco</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.FirebirdDialect"/>
             <!--<property name="hibernate.show_sql" value="true"/>-->
-            <property name="hibernate.format_sql" value="true"/>
-    </properties>
-  </persistence-unit>
+            <!--<property name="hibernate.format_sql" value="true"/>-->
+        </properties>
+    </persistence-unit>
 </persistence>

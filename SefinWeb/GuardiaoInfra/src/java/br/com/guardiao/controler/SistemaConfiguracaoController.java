@@ -5,6 +5,7 @@
 package br.com.guardiao.controler;
 
 import br.com.guardiao.dao.SistemaConfiguracaoDAO;
+import br.com.guardiao.dao.SistemaDAO;
 import br.com.guardiao.modelo.Sistema;
 import br.com.guardiao.modelo.SistemaConfiguracao;
 import java.io.Serializable;
@@ -23,6 +24,8 @@ public class SistemaConfiguracaoController extends Controller<SistemaConfiguraca
 
     @EJB
     private SistemaConfiguracaoDAO dao;
+    @EJB
+    private SistemaDAO sistemaDAO;
 
     @Override
     @PostConstruct
@@ -48,11 +51,12 @@ public class SistemaConfiguracaoController extends Controller<SistemaConfiguraca
      *
      * @param def
      * @param nome
-     * @param sistema
+     * @param mnemonico
      * @return
      * @throws Exception
      */
-    public Serializable pegarValorConfiguracaoDef(Serializable def, String nome, Sistema sistema) throws Exception {
+    public Serializable pegarValorConfiguracaoDef(Serializable def, String nome, String mnemonico) throws Exception {
+        Sistema sistema = sistemaDAO.buscarMnemonico(mnemonico);
         return dao.pegarValorConfiguracaoDef(def, nome, sistema);
     }
 

@@ -5,6 +5,7 @@
 package br.com.siafi.managedbean;
 
 import br.com.guardiao.controler.ExercicioController;
+import br.com.guardiao.controler.SistemaConfiguracaoController;
 import br.com.guardiao.util.relatorio.AssistentedeRelatorio;
 import br.com.guardiao.util.relatorio.RelatorioSession;
 import br.com.guardiao.managedbean.BeanGenerico;
@@ -51,7 +52,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -110,6 +110,8 @@ public class SolicitacaoFinanceiraMB extends BeanGenerico<SolicitacaoFinanceira>
     private ConvenioController convenioController;
     @EJB
     private AditivoController aditivoControler;
+    @EJB
+    private SistemaConfiguracaoController sistemaConfiguracaoController;
     @Inject
     private BeanNavegacaoMB beanNavegacao;
     private List<Encaminhamento> listaEncaminhamentos;
@@ -151,6 +153,7 @@ public class SolicitacaoFinanceiraMB extends BeanGenerico<SolicitacaoFinanceira>
     private Integer anoConsulta;
     private String idUnidade;
     private BigDecimal saldoDotacao;
+    private Boolean mostraSaldoDotacao;
 
     /**
      *
@@ -163,6 +166,7 @@ public class SolicitacaoFinanceiraMB extends BeanGenerico<SolicitacaoFinanceira>
     @PostConstruct
     private void atualizaRegistrosIniciais() {
         try {
+            mostraSaldoDotacao = (Boolean) sistemaConfiguracaoController.pegarValorConfiguracaoDef(Boolean.TRUE, "CHECAR_SALDO_DOTACAO", "SAF");
             listaSituacaoSolicitacaos = new ArrayList<>();
             lista = new ArrayList<>();
             contratos = new ArrayList<>();
@@ -205,7 +209,8 @@ public class SolicitacaoFinanceiraMB extends BeanGenerico<SolicitacaoFinanceira>
                 } else if (solicitacaoFinanceira.getContrato() != null) {
 //                    aditivo = new Aditivo();
 //                    aditivo.setContrato(solicitacaoFinanceira.getContrato());
-                    aditivo = aditivoControler.ultimoAditivo(solicitacaoFinanceira.getContrato());
+//                    aditivo = aditivoControler.ultimoAditivo(solicitacaoFinanceira.getContrato());
+                    aditivo = solicitacaoFinanceira.getAditivo();
                     listarContratos();
                 }
                 if (solicitacaoFinanceira.getConvenio() != null) {
@@ -413,7 +418,6 @@ public class SolicitacaoFinanceiraMB extends BeanGenerico<SolicitacaoFinanceira>
 
     public void addSolicitacao() {
         try {
-
             controller.addSolicitacao(solicitacaoFinanceira, dotacao, ordemCompra, aditivo, convenio, usuarioMb.getUsuarioSelecionado());
             MenssagemUtil.addMessageInfo(solicitacaoFinanceira.getId() + "\r\nSolicitação financeira salva com sucesso.");
             String historico = solicitacaoFinanceira.getHistorico();
@@ -1125,6 +1129,14 @@ public class SolicitacaoFinanceiraMB extends BeanGenerico<SolicitacaoFinanceira>
 
     public void setSaldoDotacao(BigDecimal saldoDotacao) {
         this.saldoDotacao = saldoDotacao;
+    }
+
+    public Boolean getMostraSaldoDotacao() {
+        return mostraSaldoDotacao;
+    }
+
+    public void setMostraSaldoDotacao(Boolean mostraSaldoDotacao) {
+        this.mostraSaldoDotacao = mostraSaldoDotacao;
     }
 
 }

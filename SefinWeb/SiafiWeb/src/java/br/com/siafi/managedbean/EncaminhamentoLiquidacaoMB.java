@@ -11,7 +11,6 @@ import br.com.guardiao.managedbean.BeanGenerico;
 import br.com.guardiao.modelo.AreaAdministrativa;
 import br.com.guardiao.modelo.UnidadeOrcamentaria;
 import br.com.guardiao.util.MenssagemUtil;
-import br.com.guardiao.util.NavegacaoGenerico;
 import br.com.guardiao.util.relatorio.AssistentedeRelatorio;
 import br.com.guardiao.util.relatorio.RelatorioSession;
 import br.com.sefin.enumerated.StatusSolicitacaoLiquidacao;
@@ -20,6 +19,7 @@ import br.com.siafi.controller.EncaminhamentoController;
 import br.com.siafi.controller.EncaminhamentoLiquidacaoController;
 import br.com.siafi.controller.SolicitacaoLiquidacaoController;
 import br.com.siafi.dataiterativa.SolicitacaoLiquidacaoDataListDataList;
+import br.com.siafi.modelo.EmpenhoDetalhe;
 import br.com.siafi.modelo.EncaminhamentoLiquidacao;
 import br.com.siafi.modelo.SolicitacaoLiquidacao;
 import java.io.Serializable;
@@ -187,6 +187,7 @@ public class EncaminhamentoLiquidacaoMB extends BeanGenerico<EncaminhamentoLiqui
         try {
             for (SolicitacaoLiquidacao s : solicitacaoLiquidacaoSelecionadas) {
                 s.setStatusSolicitacaoLiquidacao(StatusSolicitacaoLiquidacao.Finalizado);
+                List<EmpenhoDetalhe> empenhoDet = empenhoDetalheController.importarDetalhesPagamento(s.getSolicitacaoFinanceira());
                 empenhoDetalheController.importarDetalhesPagamento(s.getSolicitacaoFinanceira());
                 //Encaminha para contabilidade
                 encaminhamentoLiquidacao.setDataEncaminhamento(new Date());

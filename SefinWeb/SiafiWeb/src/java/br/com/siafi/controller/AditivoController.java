@@ -14,7 +14,6 @@ import br.com.siafi.modelo.Credor;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -44,26 +43,18 @@ public class AditivoController extends Controller<Aditivo, Long> implements Seri
     }
 
     public void importar() throws SQLException, PersistenceException, EJBException, Exception {
-        Calendar cal = Calendar.getInstance();
 
         List<br.com.gestor.modelo.Aditivo> aditivosGestor = aditivoGestorDao.listarImportacao();
         for (br.com.gestor.modelo.Aditivo aditivo : aditivosGestor) {
             System.out.println(aditivo.toString());
             Aditivo aditivoSiafi;
-
             aditivoSiafi = aditivoDao.buscaUniqueAditivo(aditivo.getAditivoPK().getIdContrato(), aditivo.getAditivoPK().getId());
-
-            //Adiciona um mês na data final do aditivo
-            cal.setTime(aditivo.getFim());
-            cal.add(Calendar.MONTH, 1);
-
             if (aditivoSiafi == null) {
                 aditivoSiafi = new Aditivo();
-
                 aditivoSiafi.setCodigo(aditivo.getAditivoPK().getId());
                 aditivoSiafi.setContrato(contratoDao.carregar(aditivo.getAditivoPK().getIdContrato()));
                 aditivoSiafi.setDataInicio(aditivo.getInicio());
-                aditivoSiafi.setDataFim(cal.getTime());
+                aditivoSiafi.setDataFim(aditivo.getFim());
                 aditivoSiafi.setDataPublicacao(aditivo.getPublicacao());
                 aditivoSiafi.setObjetivo(aditivo.getObjetivo());
                 aditivoSiafi.setValor(aditivo.getValor());
@@ -72,7 +63,7 @@ public class AditivoController extends Controller<Aditivo, Long> implements Seri
                 aditivoSiafi.setCodigo(aditivo.getAditivoPK().getId());
                 aditivoSiafi.setContrato(contratoDao.carregar(aditivo.getAditivoPK().getIdContrato()));
                 aditivoSiafi.setDataInicio(aditivo.getInicio());
-                aditivoSiafi.setDataFim(cal.getTime());
+                aditivoSiafi.setDataFim(aditivo.getFim());
                 aditivoSiafi.setDataPublicacao(aditivo.getPublicacao());
                 aditivoSiafi.setObjetivo(aditivo.getObjetivo());
                 aditivoSiafi.setValor(aditivo.getValor());

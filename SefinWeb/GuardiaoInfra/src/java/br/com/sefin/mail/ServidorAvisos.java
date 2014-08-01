@@ -6,7 +6,6 @@
 package br.com.sefin.mail;
 
 import br.com.guardiao.controler.SistemaConfiguracaoController;
-import br.com.guardiao.controler.SistemaController;
 import br.com.guardiao.modelo.Sistema;
 import br.com.guardiao.util.MenssagemUtil;
 import java.io.Serializable;
@@ -30,8 +29,6 @@ public abstract class ServidorAvisos implements Serializable {
 
     @EJB
     private SistemaConfiguracaoController controler;
-    @EJB
-    private SistemaController sistemaControler;
 
     public ServidorAvisos(String mnemonico) {
         this.mnemonicoSis = mnemonico;
@@ -40,11 +37,10 @@ public abstract class ServidorAvisos implements Serializable {
     @PostConstruct
     private void iniciar() {
         try {
-            sistema = sistemaControler.buscarMnemonico(mnemonicoSis);
-            servidor = (String) controler.pegarValorConfiguracaoDef("", "SERVER_MAIL_HOST", sistema);
-            porta = (String) controler.pegarValorConfiguracaoDef("", "SERVER_MAIL_PORTA", sistema);
-            senha = (String) controler.pegarValorConfiguracaoDef("", "SERVER_MAIL_SENHA", sistema);
-            emailAviso = (String) controler.pegarValorConfiguracaoDef("", "SERVER_MAIL_EMAIL", sistema);
+            servidor = (String) controler.pegarValorConfiguracaoDef("", "SERVER_MAIL_HOST", mnemonicoSis);
+            porta = (String) controler.pegarValorConfiguracaoDef("", "SERVER_MAIL_PORTA", mnemonicoSis);
+            senha = (String) controler.pegarValorConfiguracaoDef("", "SERVER_MAIL_SENHA", mnemonicoSis);
+            emailAviso = (String) controler.pegarValorConfiguracaoDef("", "SERVER_MAIL_EMAIL", mnemonicoSis);
         } catch (Exception ex) {
             MenssagemUtil.addMessageErroLogger(ex, this.getClass().getName());
         }

@@ -9,7 +9,6 @@ import br.com.guardiao.controler.UsuarioController;
 import br.com.guardiao.modelo.Permissao;
 import br.com.guardiao.modelo.Usuario;
 import br.com.guardiao.enumerated.TipoAreaAdm;
-import br.com.guardiao.modelo.Sistema;
 import br.com.guardiao.util.MenssagemUtil;
 import java.io.IOException;
 import java.io.Serializable;
@@ -58,7 +57,7 @@ public class UsuarioMB implements Serializable {
     public void usuarioLogado() {
         String documento = null;
         try {
-            fechadoParaSIM = ((Boolean) sistemaConfiguracaoControler.pegarValorConfiguracaoDef(Boolean.FALSE, "ACESSO", new Sistema(2L)));
+            fechadoParaSIM = ((Boolean) sistemaConfiguracaoControler.pegarValorConfiguracaoDef(Boolean.FALSE, "ACESSO", "SAF"));
             if (usuarioSelecionado.getDocumento() == null) {
                 FacesContext context = FacesContext.getCurrentInstance();
                 ExternalContext external = context.getExternalContext();

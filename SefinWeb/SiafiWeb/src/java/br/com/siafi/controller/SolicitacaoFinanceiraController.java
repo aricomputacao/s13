@@ -11,6 +11,7 @@ import br.com.gestor.modelo.EmpenhoSolicitacaoItem;
 import br.com.gestor.modelo.EmpenhoSolicitacaoItemPk;
 import br.com.guardiao.modelo.UnidadeOrcamentaria;
 import br.com.guardiao.controler.Controller;
+import br.com.guardiao.controler.SistemaConfiguracaoController;
 import br.com.guardiao.dao.AreaAdministrativaDAO;
 import br.com.guardiao.enumerated.TipoAreaAdm;
 import br.com.guardiao.modelo.AreaAdministrativa;
@@ -96,9 +97,11 @@ public class SolicitacaoFinanceiraController extends Controller<SolicitacaoFinan
     private EncaminhamentoController encaminhamentoControler;
     @EJB
     private AreaAdministrativaDAO administrativaDao;
+    @EJB
+    private SistemaConfiguracaoController sistemaConfiguracaoController;
     private List<EmpenhoSolicitacaoItem> empenhoSolicitacaoItemGestorLista;
     private EmpenhoSolicitacao empenhoSolicitacao;
-    private BigDecimal saldoDisponivel = new BigDecimal(BigInteger.ZERO);
+    private BigDecimal saldoCotaDisponivel = new BigDecimal(BigInteger.ZERO);
 
     @Override
     @PostConstruct
@@ -244,6 +247,7 @@ public class SolicitacaoFinanceiraController extends Controller<SolicitacaoFinan
         if (checarSaldoContrato(aditivo, solicitacaoFinanceira.getValor())) {
             solicitacaoFinanceira.setContrato(aditivo.getContrato());
             solicitacaoFinanceira.setLicitacao(aditivo.getContrato().getLicitacao());
+            solicitacaoFinanceira.setAditivo(aditivo);
             solicitacaoFinanceira.setConvenio(null);
         } else {
             Exception e = new Exception("Contrato não tem saldo!");
@@ -309,12 +313,17 @@ public class SolicitacaoFinanceiraController extends Controller<SolicitacaoFinan
     }
 
     public boolean checarSaldoDotacao(SolicitacaoFinanceira solicitacaoFinanceira) throws Exception {
-        BigDecimal x = dotacaoDao.saldo(solicitacaoFinanceira.getDotacao());
-        if (x.compareTo(solicitacaoFinanceira.getValor()) >= 0) {
-            solicitacaoFinanceira.setDotacao(solicitacaoFinanceira.getDotacao());
-            return true;
+        // A configuração deve ser criada atraves do sistema Guadião como tipo boolean
+        if ((Boolean) sistemaConfiguracaoController.pegarValorConfiguracaoDef(Boolean.TRUE, "CHECAR_SALDO_DOTACAO", "SAF")) {
+            BigDecimal x = dotacaoDao.saldo(solicitacaoFinanceira.getDotacao());
+            if (x.compareTo(solicitacaoFinanceira.getValor()) >= 0) {
+                solicitacaoFinanceira.setDotacao(solicitacaoFinanceira.getDotacao());
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            return true;
         }
     }
 
@@ -406,7 +415,7 @@ public class SolicitacaoFinanceiraController extends Controller<SolicitacaoFinan
     public void salvar(SolicitacaoFinanceira solicitacaoFinanceira) throws Exception {
         verificaSaldoAntesDeSalvar(solicitacaoFinanceira);
         // saldo da cota
-        if (solicitacaoFinanceira.getValor().compareTo(saldoDisponivel) <= 0 && checarSaldoDotacao(solicitacaoFinanceira)) {
+        if (solicitacaoFinanceira.getValor().compareTo(saldoCotaDisponivel) <= 0 && checarSaldoDotacao(solicitacaoFinanceira)) {
             if (solicitacaoFinanceira.getId() == null) {
                 solicitacaoFinanceira.setId(gerarCodigo());
                 if (solicitacaoFinanceira.getCota().isAutorizadoAutomatico() && (solicitacaoFinanceira.getVinculo() != Vinculo.Compra_Direta) && (solicitacaoFinanceira.getVinculo() != Vinculo.Diária)) {
@@ -419,7 +428,7 @@ public class SolicitacaoFinanceiraController extends Controller<SolicitacaoFinan
                 dao.atualizar(solicitacaoFinanceira);
             }
             if (solicitacaoFinanceira.getOrdemCompra() != null) {
-                // Retirei do outro lado para nãocolocar a ordem compra como pendente cadode erro
+                // Retirei do outro lado para nãocolocar a ordem compra como pendente no caso de erro
                 ordemCompraControler.salvarouAtualizar(solicitacaoFinanceira.getOrdemCompra());
             }
 
@@ -446,22 +455,22 @@ public class SolicitacaoFinanceiraController extends Controller<SolicitacaoFinan
                 }
                 CotaControle cotaControle = cotaControleDao.valorAtualCota(solicitacaoFinanceira.getCota(), solicitacaoFinanceira.getMesCompetencia(), solicitacaoFinanceira.getExercicio());
                 if (cotaControle != null) {
-                    saldoDisponivel = cotaControle.getValor().add(valorAnterior).subtract(valorUtilizado);
+                    saldoCotaDisponivel = cotaControle.getValor().add(valorAnterior).subtract(valorUtilizado);
 
                 } else {
                     MenssagemUtil.addMessageWarn("Não há valor na cota para esse período");
-                    saldoDisponivel = new BigDecimal(0);
+                    saldoCotaDisponivel = new BigDecimal(0);
                 }
             } else {
-                saldoDisponivel = new BigDecimal(0);
+                saldoCotaDisponivel = new BigDecimal(0);
 
             }
         } catch (Exception ex) {
             Logger.getLogger(SolicitacaoFinanceiraMB.class
                     .getName()).log(Level.SEVERE, null, ex);
-            saldoDisponivel = new BigDecimal(0);
+            saldoCotaDisponivel = new BigDecimal(0);
         }
-        return saldoDisponivel;
+        return saldoCotaDisponivel;
     }
 
     /**
@@ -479,15 +488,15 @@ public class SolicitacaoFinanceiraController extends Controller<SolicitacaoFinan
                 if (solicitacaoFinanceira.getId() != null) {
                     valorAnterior = saldoAnterior(solicitacaoFinanceira);
                 }
-                saldoDisponivel = cotaControle.getValor().subtract(valorUtilizado).add(valorAnterior);
+                saldoCotaDisponivel = cotaControle.getValor().subtract(valorUtilizado).add(valorAnterior);
             } else {
-                saldoDisponivel = new BigDecimal(0);
+                saldoCotaDisponivel = new BigDecimal(0);
 
             }
         } catch (Exception ex) {
             Logger.getLogger(SolicitacaoFinanceiraMB.class
                     .getName()).log(Level.SEVERE, null, ex);
-            saldoDisponivel = new BigDecimal(0);
+            saldoCotaDisponivel = new BigDecimal(0);
         }
     }
 

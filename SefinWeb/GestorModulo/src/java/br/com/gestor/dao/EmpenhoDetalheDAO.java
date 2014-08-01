@@ -22,7 +22,7 @@ public class EmpenhoDetalheDAO extends GestorDAO<EmpenhoDetalhe> implements Seri
     }
 
     public List<EmpenhoDetalhe> listarDetalhesPagamento(String empenho) {
-        return getEm().createQuery("SELECT e FROM EmpenhoDetalhe e WHERE e.numeroEmpenho =:empenho").setParameter("empenho", empenho).getResultList();
+        return getEm().createQuery("SELECT e FROM EmpenhoDetalhe e WHERE e.numeroEmpenho =:empenho ORDER BY e.sequencia").setParameter("empenho", empenho).getResultList();
     }
 
     public List<EmpenhoDetalhe> listarDetalhesPagamentoAutorizado(String empenho) {

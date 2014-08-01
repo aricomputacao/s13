@@ -59,12 +59,18 @@ public class SolicitacaoLiquidacao implements Serializable {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "usu_documento", referencedColumnName = "usu_documento")
     private Usuario usuario;
-//    @Column(name = "sol_liq_status_data_liquidacao", nullable = true)
-//    @Temporal(TemporalType.DATE)
-//    private Date dataLiquidacao;
-//    @Column(name = "sol_liq_data_pagamento", nullable = true)
-//    @Temporal(TemporalType.DATE)
-//    private Date dataPagamento;
+    @Column(name = "sol_liq_data_liquidacao", nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date dataLiquidacao;
+    @Column(name = "sol_liq_data_pagamento", nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date dataPagamento;
+    @Column(name = "sol_liq_data_recebido_tesouraria", nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date dataRecebidoTesouraria;
+    @Column(name = "sol_liq_data_autorizacao", nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date dataAutorizacao;
 
     public Long getId() {
         return id;
@@ -122,21 +128,38 @@ public class SolicitacaoLiquidacao implements Serializable {
         this.areaAdministrativa = areaAdministrativa;
     }
 
-//    public Date getDataLiquidacao() {
-//        return dataLiquidacao;
-//    }
-//
-//    public void setDataLiquidacao(Date dataLiquidacao) {
-//        this.dataLiquidacao = dataLiquidacao;
-//    }
-//
-//    public Date getDataPagamento() {
-//        return dataPagamento;
-//    }
-//
-//    public void setDataPagamento(Date dataPagamento) {
-//        this.dataPagamento = dataPagamento;
-//    }
+    public Date getDataLiquidacao() {
+        return dataLiquidacao;
+    }
+
+    public void setDataLiquidacao(Date dataLiquidacao) {
+        this.dataLiquidacao = dataLiquidacao;
+    }
+
+    public Date getDataPagamento() {
+        return dataPagamento;
+    }
+
+    public void setDataPagamento(Date dataPagamento) {
+        this.dataPagamento = dataPagamento;
+    }
+
+    public Date getDataRecebidoTesouraria() {
+        return dataRecebidoTesouraria;
+    }
+
+    public void setDataRecebidoTesouraria(Date dataRecebidoTesouraria) {
+        this.dataRecebidoTesouraria = dataRecebidoTesouraria;
+    }
+
+    public Date getDataAutorizacao() {
+        return dataAutorizacao;
+    }
+
+    public void setDataAutorizacao(Date dataAutorizacao) {
+        this.dataAutorizacao = dataAutorizacao;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;

@@ -12,8 +12,6 @@ import br.com.siafi.controller.SolicitacaoFinanceiraController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -49,8 +47,6 @@ public class InformacaoMB implements Serializable {
         try {
             encaminhamentosNaoRecebidos = encaminhamentoControler.contarNRecebidos(usuarioMb.getUsuarioSelecionado().getAreaAdministrativa(), usuarioMb.getUsuarioSelecionado().getUnidadeOrcamentarias());
             encaminhamentosEncaminhados = encaminhamentoControler.contarEncaminhados(usuarioMb.getUsuarioSelecionado().getUnidadeOrcamentarias(), null, usuarioMb.getUsuarioSelecionado().getAreaAdministrativa(), null);
-//encaminhamentoAberto = new Long(solicitacaoFinanceiraControler.listarPorLocal(usuarioMb.getUsuarioSelecionado().getAreaAdministrativa(), usuarioMb.getUsuarioSelecionado().getUnidadeOrcamentarias(), null).size());
-            //encaminhamentoAberto = new Long(solicitacaoFinanceiraControler.listarInformacao(usuarioMb.getUsuarioSelecionado().getAreaAdministrativa(), usuarioMb.getUsuarioSelecionado().getUnidadeOrcamentarias()).size());
             ajustaDTO();
         } catch (Exception e) {
             MenssagemUtil.addMessageErro(e);

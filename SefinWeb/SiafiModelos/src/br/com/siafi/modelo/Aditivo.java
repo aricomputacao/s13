@@ -4,6 +4,7 @@
  */
 package br.com.siafi.modelo;
 
+import br.com.sefin.enumerated.ModalidadeAditivo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -11,6 +12,8 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -56,6 +59,9 @@ public class Aditivo implements Serializable {
     private Date dataFim;
     @Column(name = "adi_objetivo", length = 2000)
     private String objetivo;
+    @Column(name = "adi_modalidade", nullable = true)
+    @Enumerated(EnumType.ORDINAL)
+    private ModalidadeAditivo modalidade;
 
     public Long getId() {
         return id;
@@ -121,6 +127,14 @@ public class Aditivo implements Serializable {
         this.objetivo = objetivo;
     }
 
+    public ModalidadeAditivo getModalidade() {
+        return modalidade;
+    }
+
+    public void setModalidade(ModalidadeAditivo modalidade) {
+        this.modalidade = modalidade;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -137,9 +151,6 @@ public class Aditivo implements Serializable {
             return false;
         }
         final Aditivo other = (Aditivo) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 }

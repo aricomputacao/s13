@@ -75,7 +75,7 @@ and open the template in the editor.
                         <f:convertNumber type="currency"/>
                     </h:outputLabel>
                 </p:column>
-                <p:column>
+                <p:column rendered="#{solicitacaoFinanceiraMB.mostraSaldoDotacao}">
                     <f:facet name="header">
                         <h:outputText value="Saldo"/>
                     </f:facet>
@@ -87,7 +87,7 @@ and open the template in the editor.
                     <f:facet name="header">
                         <h:outputText value="Ações"/>
                     </f:facet>
-                    <p:commandButton oncomplete="listaNaturezaDespesa.hide()" styleClass="btnTabela" rendered="#{nat.calcularSaldo() > 0}"  icon="ui-icon-circle-check" update=":frmGeral:grdDot,:frmGeral:dotSaldo">
+                    <p:commandButton oncomplete="listaNaturezaDespesa.hide()" styleClass="btnTabela" rendered="#{solicitacaoFinanceiraMB.mostraSaldoDotacao?nat.calcularSaldo() > 0:true}"  icon="ui-icon-circle-check" update=":frmGeral:grdDot,:frmGeral:dotSaldo">
                         <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.dotacao}" value="#{nat.dotacao}"/>
                         <f:setPropertyActionListener target="#{solicitacaoFinanceiraMB.saldoDotacao}" value="#{nat.calcularSaldo()}"/>
                     </p:commandButton>

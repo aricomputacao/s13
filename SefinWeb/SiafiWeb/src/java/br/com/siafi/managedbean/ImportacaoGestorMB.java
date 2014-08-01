@@ -38,8 +38,7 @@ import javax.ejb.Startup;
 public class ImportacaoGestorMB implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EJB
-    private LicitacaoDotacaoController licitacaoDotacaoControler;
+
     @EJB
     private UnidadeMedidaController unidadeMedidaControler;
     @EJB
@@ -73,8 +72,10 @@ public class ImportacaoGestorMB implements Serializable {
     @Schedule(hour = "*", minute = "0,15,30,45", second = "30", persistent = false, info = "Teste de Importação")
     private void importacaoTimer() {
         try {
+            boolean logTeste = (Boolean) sistemaConfiguracaoControler.pegarValorConfiguracaoDef(Boolean.FALSE, "IMPORT_TESTE", "SAF");
+            boolean importar = (Boolean) sistemaConfiguracaoControler.pegarValorConfiguracaoDef(Boolean.FALSE, "IMPORT", "SAF");
             Logger.getLogger(ImportacaoGestorMB.class.getName()).log(Level.INFO, "Iniciando Importação", "Iniciando Importação");
-            if ((Boolean) sistemaConfiguracaoControler.pegarValorConfiguracaoDef(Boolean.FALSE, "IMPORT", new Sistema(2L))) {
+            if (importar) {
                 if (importando) {
                     Logger.getLogger(ImportacaoGestorMB.class.getName()).log(Level.INFO, "Ainda Importando", "Ainda Importando");
                 } else {
@@ -109,7 +110,7 @@ public class ImportacaoGestorMB implements Serializable {
                     creditoAdicionalDetalheController.importar();
                     Logger.getLogger(ImportacaoGestorMB.class.getName()).log(Level.INFO, "Credito Adicional Detalhe Importado", "Credito Adicional Detalhe Importado");
                     Logger.getLogger(ImportacaoGestorMB.class.getName()).log(Level.INFO, "Importação Concluida", "Importação Concluida");
-                    if ((Boolean) sistemaConfiguracaoControler.pegarValorConfiguracaoDef(Boolean.FALSE, "IMPORT_TESTE", new Sistema(2L))) {
+                    if (logTeste) {
                         MenssagemUtil.addMessageInfoLogger("A Importação foi concluida as " + new SimpleDateFormat("HH:mm:ss dd/MM/YYYY", new Locale("pt", "BR")).format(new Date()));
                     }
                     importando = false;

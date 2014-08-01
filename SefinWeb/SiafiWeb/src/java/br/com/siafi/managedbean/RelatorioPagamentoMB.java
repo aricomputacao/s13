@@ -9,15 +9,10 @@ import br.com.guardiao.modelo.UnidadeOrcamentaria;
 import br.com.guardiao.util.MenssagemUtil;
 import br.com.guardiao.util.relatorio.AssistentedeRelatorio;
 import br.com.guardiao.util.relatorio.RelatorioSession;
-import br.com.sefin.enumerated.SituacaoSolicitacao;
-import br.com.sefin.modelo.dto.SolicitacaoSaldoDto;
 import br.com.siafi.controller.EmpenhoDetalheController;
-import br.com.siafi.controller.EncaminhamentoController;
-import br.com.siafi.controller.SolicitacaoFinanceiraController;
 import br.com.siafi.modelo.Credor;
 import br.com.siafi.modelo.EmpenhoDetalhe;
-import br.com.siafi.modelo.Encaminhamento;
-import br.com.siafi.modelo.SolicitacaoFinanceira;
+import br.com.siafi.modelo.SolicitacaoLiquidacao;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,6 +36,7 @@ public class RelatorioPagamentoMB implements Serializable {
     private UsuarioMB usuarioMb;
     @EJB
     private EmpenhoDetalheController controller;
+    private List<SolicitacaoLiquidacao> listaSolicitacaoLiquidacao;
     private List<EmpenhoDetalhe> empenhoDetalhes;
     private Credor credor;
     private UnidadeOrcamentaria unidadeOrcamentaria;
@@ -55,6 +51,7 @@ public class RelatorioPagamentoMB implements Serializable {
     public void listar() {
         try {
             empenhoDetalhes = controller.listarPagamentos(unidadeOrcamentaria, credor, usuarioMb.getUsuarioSelecionado().getUnidadeOrcamentarias(), dataInicio, dataFinal, dataPagamentoInicio, dataPagamentoFinal);
+            //            listaSolicitacaoLiquidacao = solicitacaoLiquidacaoController.listarPagamentos(unidadeOrcamentaria, credor, usuarioMb.getUsuarioSelecionado().getUnidadeOrcamentarias(), dataPagamentoInicio, dataPagamentoFinal);
             if (empenhoDetalhes.isEmpty()) {
                 MenssagemUtil.addMessageInfo("Nenhum processo encontrado.");
             }
@@ -129,6 +126,14 @@ public class RelatorioPagamentoMB implements Serializable {
 
     public void setDataPagamentoFinal(Date dataPagamentoFinal) {
         this.dataPagamentoFinal = dataPagamentoFinal;
+    }
+
+    public List<SolicitacaoLiquidacao> getListaSolicitacaoLiquidacao() {
+        return listaSolicitacaoLiquidacao;
+    }
+
+    public void setListaSolicitacaoLiquidacao(List<SolicitacaoLiquidacao> listaSolicitacaoLiquidacao) {
+        this.listaSolicitacaoLiquidacao = listaSolicitacaoLiquidacao;
     }
 
 }

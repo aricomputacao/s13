@@ -43,6 +43,8 @@ public class Aditivo implements Serializable {
     private Date fim;
     @Column(name = "ADCOBJETO", length = 2000)
     private String objetivo;
+    @Column(name = "ADCMODALIDADE")
+    private String modalidade;
     @Column(name = "ADCEXPORTADO")
     private Boolean exportado;
 
@@ -73,10 +75,7 @@ public class Aditivo implements Serializable {
             return false;
         }
         final Aditivo other = (Aditivo) obj;
-        if (!Objects.equals(this.aditivoPK, other.aditivoPK)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.aditivoPK, other.aditivoPK);
     }
 
     public AditivoPK getAditivoPK() {
@@ -133,6 +132,14 @@ public class Aditivo implements Serializable {
 
     public void setObjetivo(String objetivo) {
         this.objetivo = objetivo;
+    }
+
+    public String getModalidade() {
+        return modalidade;
+    }
+
+    public void setModalidade(String modalidade) {
+        this.modalidade = modalidade;
     }
 
     @Override

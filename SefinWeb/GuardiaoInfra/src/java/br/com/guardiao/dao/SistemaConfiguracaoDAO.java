@@ -9,6 +9,8 @@ import br.com.guardiao.modelo.SistemaConfiguracao;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 /**
  * @Sistema GuardiaoInfra
@@ -27,6 +29,7 @@ public class SistemaConfiguracaoDAO extends DAO<SistemaConfiguracao, Integer> im
     }
 
     // Retorna o valor de uma configuração ou um valor default
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Serializable pegarValorConfiguracaoDef(Serializable def, String nome, Sistema sistema) throws Exception {
         try {
             return getEm().createQuery("SELECT a.valor FROM SistemaConfiguracao a WHERE a.sistema =:sis AND a.nome=:nome", Serializable.class).setParameter("sis", sistema).setParameter("nome", nome).getSingleResult();

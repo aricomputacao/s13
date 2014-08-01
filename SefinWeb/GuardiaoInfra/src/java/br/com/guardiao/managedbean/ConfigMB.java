@@ -5,7 +5,6 @@
 package br.com.guardiao.managedbean;
 
 import br.com.guardiao.controler.SistemaConfiguracaoController;
-import br.com.guardiao.modelo.Sistema;
 import br.com.guardiao.util.MenssagemUtil;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -34,9 +33,9 @@ public class ConfigMB implements Serializable {
     @PostConstruct
     private void init() {
         try {
-            tema = (String) configuracaoControler.pegarValorConfiguracaoDef("blitzer", "TEMA", new Sistema(1L));
-            temaSiafi = (String) configuracaoControler.pegarValorConfiguracaoDef("black-tie", "TEMA", new Sistema(2L));
-            tempoSessao = (Integer) configuracaoControler.pegarValorConfiguracaoDef(30, "TEMPO_SESSAO", new Sistema(1L));
+            tema = (String) configuracaoControler.pegarValorConfiguracaoDef("blitzer", "TEMA", "GRD");
+            temaSiafi = (String) configuracaoControler.pegarValorConfiguracaoDef("black-tie", "TEMA", "SAF");
+            tempoSessao = (Integer) configuracaoControler.pegarValorConfiguracaoDef(30, "TEMPO_SESSAO", "GRD");
         } catch (Exception ex) {
             MenssagemUtil.addMessageErroLogger(ex, this.getClass().getName());
         }

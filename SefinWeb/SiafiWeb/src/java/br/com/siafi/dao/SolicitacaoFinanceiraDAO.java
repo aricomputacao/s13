@@ -26,7 +26,6 @@ import br.com.sefin.enumerated.Vinculo;
 import br.com.sefin.modelo.dto.DTOInformacao;
 import br.com.siafi.modelo.Aditivo;
 import br.com.siafi.modelo.Contrato;
-import br.com.siafi.modelo.EmpenhoDetalhe;
 import br.com.siafi.modelo.OrdemCompra;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -35,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -259,9 +257,6 @@ public class SolicitacaoFinanceiraDAO extends DAO<SolicitacaoFinanceira, String>
             q.setParameter("dtIn", dtIn);
             q.setParameter("dtFi", dtFi);
         }
-//        if (!situacaoSolicitacao.isEmpty()) {
-//            q.setParameter("situacaoSolicitacao", situacaoSolicitacao);
-//        }
         if (credor != null) {
             q.setParameter("credor", credor);
         }
@@ -271,139 +266,6 @@ public class SolicitacaoFinanceiraDAO extends DAO<SolicitacaoFinanceira, String>
         }
 
         return q.getResultList();
-
-//        TypedQuery<SolicitacaoFinanceira> q;
-//        if (dtIn != null && dtFi != null && (numero != null && !"".equals(numero)) && situacaoSolicitacao != null) {
-//
-//            if (credor.getId() != null) {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.credor = :credor ANd s.id = :numero AND s.situacaoSolicitacao = :situacaoSolicitacao "
-//                        + " AND s.cota.unidadeOrcamentaria = :unidadeOrcamentaria AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//            } else {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.id = :numero AND s.situacaoSolicitacao = :situacaoSolicitacao "
-//                        + " AND s.cota.unidadeOrcamentaria = :unidadeOrcamentaria AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//            }
-//
-//            q.setParameter("dtIn", new Date(dtIn.getTime()));
-//            q.setParameter("dtFi", new Date(dtFi.getTime()));
-//            q.setParameter("numero", numero);
-//            q.setParameter("situacaoSolicitacao", situacaoSolicitacao);
-//            q.setParameter("unidadeOrcamentaria", unidadeOrcamentaria);
-//
-//            return q.getResultList();
-//
-//        } else if (dtIn != null && dtFi != null && (numero != null && !"".equals(numero)) && situacaoSolicitacao == null) {
-//
-//            if (credor.getId() != null) {
-//
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.id = :numero AND s.credor = :credor "
-//                        + "AND  s.cota.unidadeOrcamentaria = :unidadeOrcamentaria AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//                q.setParameter("credor", credor);
-//            } else {
-//
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.id = :numero "
-//                        + "AND  s.cota.unidadeOrcamentaria = :unidadeOrcamentaria AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//            }
-//            q.setParameter("dtIn", new Date(dtIn.getTime()));
-//            q.setParameter("dtFi", new Date(dtFi.getTime()));
-//            q.setParameter("numero", numero);
-//            q.setParameter("unidadeOrcamentaria", unidadeOrcamentaria);
-//
-//            return q.getResultList();
-//        } else if (dtIn != null && dtFi != null && (numero == null || numero.equals("")) && situacaoSolicitacao != null) {
-//
-//            if (credor.getId() != null) {
-//
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.situacaoSolicitacao = :situacaoSolicitacao  AND s.credor = :credor"
-//                        + "AND  s.cota.unidadeOrcamentaria = :unidadeOrcamentaria AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//            } else {
-//
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.situacaoSolicitacao = :situacaoSolicitacao "
-//                        + "AND  s.cota.unidadeOrcamentaria = :unidadeOrcamentaria AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//            }
-//            q.setParameter("dtIn", new Date(dtIn.getTime()));
-//            q.setParameter("dtFi", new Date(dtFi.getTime()));
-//            q.setParameter("situacaoSolicitacao", situacaoSolicitacao);
-//            q.setParameter("unidadeOrcamentaria", unidadeOrcamentaria);
-//
-//            return q.getResultList();
-//        } else if (dtIn == null && dtFi == null && (numero != null && !"".equals(numero)) && situacaoSolicitacao != null) {
-//
-//            if (credor.getId() != null) {
-//
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.situacaoSolicitacao = :situacaoSolicitacao AND s.id = :numero AND s.credor = :credor "
-//                        + " AND  s.cota.unidadeOrcamentaria = :unidadeOrcamentaria  order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//
-//            } else {
-//
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.situacaoSolicitacao = :situacaoSolicitacao AND s.id = :numero "
-//                        + " AND  s.cota.unidadeOrcamentaria = :unidadeOrcamentaria  order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//            }
-//            q.setParameter("numero", numero);
-//            q.setParameter("situacaoSolicitacao", situacaoSolicitacao);
-//            q.setParameter("unidadeOrcamentaria", unidadeOrcamentaria);
-//
-//            return q.getResultList();
-//        } else if (dtIn == null && dtFi == null && (numero == null || numero.equals("")) && situacaoSolicitacao != null) {
-//
-//            if (credor.getId() != null) {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.credor = :credor AND s.situacaoSolicitacao = :situacaoSolicitacao AND  s.cota.unidadeOrcamentaria = :unidadeOrcamentaria order by s.cota.unidadeOrcamentaria ", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//            } else {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.situacaoSolicitacao = :situacaoSolicitacao AND  s.cota.unidadeOrcamentaria = :unidadeOrcamentaria order by s.cota.unidadeOrcamentaria ", SolicitacaoFinanceira.class);
-//
-//            }
-//
-//            q.setParameter("situacaoSolicitacao", situacaoSolicitacao);
-//            q.setParameter("unidadeOrcamentaria", unidadeOrcamentaria);
-//
-//            return q.getResultList();
-//        } else if (dtIn == null && dtFi == null && (numero != null && !"".equals(numero)) && situacaoSolicitacao == null) {
-//
-//            if (credor.getId() != null) {
-//
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.credor = :credor AND s.cota.unidadeOrcamentaria = :unidadeOrcamentaria AND s.id LIKE :numero  order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//            } else {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE  s.cota.unidadeOrcamentaria = :unidadeOrcamentaria AND s.id LIKE :numero  order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//            }
-//            q.setParameter("numero", "%" + numero + "%");
-//            q.setParameter("unidadeOrcamentaria", unidadeOrcamentaria);
-//
-//            return q.getResultList();
-//        } else if (dtIn != null && dtFi != null && (numero == null || numero.equals("")) && situacaoSolicitacao == null) {
-//
-//            if (credor.getId() != null) {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.credor = :credor AND s.cota.unidadeOrcamentaria = :unidadeOrcamentaria AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//            } else {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE  s.cota.unidadeOrcamentaria = :unidadeOrcamentaria AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//            }
-//            q.setParameter("unidadeOrcamentaria", unidadeOrcamentaria);
-//            q.setParameter("dtIn", dtIn);
-//            q.setParameter("dtFi", dtFi);
-//
-//            return q.getResultList();
-//        } else {
-//            if (credor.getId() != null) {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.credor = :credor AND  s.cota.unidadeOrcamentaria = :unidadeOrcamentaria order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//            } else {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE  s.cota.unidadeOrcamentaria = :unidadeOrcamentaria order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//            }
-//            q.setParameter("unidadeOrcamentaria", unidadeOrcamentaria);
-//
-//            return q.getResultList();
-//        }
     }
 
     /**
@@ -462,9 +324,6 @@ public class SolicitacaoFinanceiraDAO extends DAO<SolicitacaoFinanceira, String>
             q.setParameter("dtIn", dtIn);
             q.setParameter("dtFi", dtFi);
         }
-//        if (!sits.isEmpty()) {
-//            q.setParameter("sits", sits.toString());
-//        }
         if (credor != null) {
             q.setParameter("credor", credor);
         }
@@ -473,128 +332,6 @@ public class SolicitacaoFinanceiraDAO extends DAO<SolicitacaoFinanceira, String>
             q.setParameter("ano", ano);
         }
         return q.getResultList();
-
-//        TypedQuery<SolicitacaoFinanceira> q;
-//        if (dtIn != null && dtFi != null && (numero != null && !"".equals(numero)) && situacaoSolicitacao != null) {
-//            if (credor.getId() != null) {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.credor = :credor ANd s.id = :numero AND s.situacaoSolicitacao = :situacaoSolicitacao "
-//                        + "  AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi AND s.cota.unidadeOrcamentaria IN (:unidade)  order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//            } else {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE  s.id = :numero AND s.situacaoSolicitacao = :situacaoSolicitacao "
-//                        + "  AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi AND s.cota.unidadeOrcamentaria IN (:unidade) order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//            }
-//            q.setParameter("dtIn", new Date(dtIn.getTime()));
-//            q.setParameter("dtFi", new Date(dtFi.getTime()));
-//            q.setParameter("numero", numero);
-//            q.setParameter("situacaoSolicitacao", situacaoSolicitacao);
-//            q.setParameter("unidade", unidadeOrcamentarias);
-//            return q.getResultList();
-//
-//        } else if (dtIn != null && dtFi != null && (numero != null || !"".equals(numero)) && situacaoSolicitacao == null) {
-//            if (credor.getId() != null) {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.id = :numero AND s.credor = :credor "
-//                        + " AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi AND s.cota.unidadeOrcamentaria IN (:unidade) order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//                q.setParameter("credor", credor);
-//            } else {
-//
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.id = :numero "
-//                        + " AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi AND s.cota.unidadeOrcamentaria IN (:unidade) order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//            }
-//            q.setParameter("dtIn", new Date(dtIn.getTime()));
-//            q.setParameter("dtFi", new Date(dtFi.getTime()));
-//            q.setParameter("numero", numero);
-//            q.setParameter("unidade", unidadeOrcamentarias);
-//
-//            return q.getResultList();
-//        } else if (dtIn != null && dtFi != null && (numero == null || numero.equals("")) && situacaoSolicitacao != null) {
-//            if (credor.getId() != null) {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.situacaoSolicitacao = :situacaoSolicitacao  AND s.credor = :credor"
-//                        + " AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi AND s.cota.unidadeOrcamentaria IN (:unidade) order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//            } else {
-//
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.situacaoSolicitacao = :situacaoSolicitacao "
-//                        + " AND s.dataSolicitacao BETWEEN :dtIn AND :dtFi AND s.cota.unidadeOrcamentaria IN (:unidade) order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//            }
-//            q.setParameter("dtIn", new Date(dtIn.getTime()));
-//            q.setParameter("dtFi", new Date(dtFi.getTime()));
-//            q.setParameter("situacaoSolicitacao", situacaoSolicitacao);
-//
-//            q.setParameter("unidade", unidadeOrcamentarias);
-//
-//            return q.getResultList();
-//        } else if (dtIn == null && dtFi == null && (numero != null && !"".equals(numero)) && situacaoSolicitacao != null) {
-//
-//            if (credor.getId() != null) {
-//
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.situacaoSolicitacao = :situacaoSolicitacao AND s.id = :numero AND s.credor = :credor"
-//                        + " s.cota.unidadeOrcamentaria AND IN (:unidade) order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//
-//            } else {
-//
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.situacaoSolicitacao = :situacaoSolicitacao AND s.id = :numero "
-//                        + " AND s.cota.unidadeOrcamentaria IN (:unidade) order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//            }
-//            q.setParameter("numero", numero);
-//            q.setParameter("situacaoSolicitacao", situacaoSolicitacao);
-//            q.setParameter("unidade", unidadeOrcamentarias);
-//
-//            return q.getResultList();
-//        } else if (dtIn == null && dtFi == null && (numero == null || numero.equals("")) && situacaoSolicitacao != null) {
-//
-//            if (credor.getId() != null) {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.credor = :credor AND s.situacaoSolicitacao = :situacaoSolicitacao AND s.cota.unidadeOrcamentaria IN (:unidade) order by s.cota.unidadeOrcamentaria ", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//            } else {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.situacaoSolicitacao = :situacaoSolicitacao AND s.cota.unidadeOrcamentaria IN (:unidade) order by s.cota.unidadeOrcamentaria ", SolicitacaoFinanceira.class);
-//
-//            }
-//            q.setParameter("situacaoSolicitacao", situacaoSolicitacao);
-//            q.setParameter("unidade", unidadeOrcamentarias);
-//            return q.getResultList();
-//        } else if (dtIn == null && dtFi == null && (numero != null && !"".equals(numero)) && situacaoSolicitacao == null) {
-//            if (credor.getId() != null) {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.credor = :credor  AND s.id LIKE :numero and s.cota.unidadeOrcamentaria IN (:unidade)  order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//            } else {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE   s.id LIKE :numero AND s.cota.unidadeOrcamentaria IN (:unidade)  order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//            }
-//            q.setParameter("numero", "%" + numero + "%");
-//            q.setParameter("unidade", unidadeOrcamentarias);
-//            return q.getResultList();
-//        } else if (dtIn != null && dtFi != null && (numero == null || numero.equals("")) && situacaoSolicitacao == null) {
-//
-//            if (credor.getId() != null) {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.credor = :credor AND  s.dataSolicitacao BETWEEN :dtIn AND :dtFi AND s.cota.unidadeOrcamentaria IN (:unidade) order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//            } else {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE   s.dataSolicitacao BETWEEN :dtIn AND :dtFi AND s.cota.unidadeOrcamentaria IN (:unidade) order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//            }
-//            q.setParameter("dtIn", dtIn);
-//            q.setParameter("dtFi", dtFi);
-//            q.setParameter("unidade", unidadeOrcamentarias);
-//
-//            return q.getResultList();
-//        } else {
-//            if (credor.getId() != null) {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.credor = :credor AND s.cota.unidadeOrcamentaria IN (:unidade) order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//                q.setParameter("credor", credor);
-//            } else {
-//                q = getEm().createQuery("SELECT s FROM SolicitacaoFinanceira s WHERE s.cota.unidadeOrcamentaria IN (:unidade)  order by s.cota.unidadeOrcamentaria", SolicitacaoFinanceira.class);
-//
-//            }
-//
-//            q.setParameter("unidade", unidadeOrcamentarias);
-//            return q.getResultList();
-//        }
     }
 
     public List<SolicitacaoFinanceira> listarPorLocal(AreaAdministrativa areaAdministrativa) throws Exception {
@@ -1230,6 +967,5 @@ public class SolicitacaoFinanceiraDAO extends DAO<SolicitacaoFinanceira, String>
         } else {
             return q.getResultList();
         }
-
     }
 }
