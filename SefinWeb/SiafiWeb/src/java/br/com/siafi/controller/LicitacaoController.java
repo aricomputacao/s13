@@ -49,11 +49,11 @@ public class LicitacaoController extends Controller<Licitacao, Integer> implemen
             if (licitacaoSiafi == null) {
                 licitacaoSiafi = new Licitacao();
                 licitacaoSiafi.setId(licitacao.getId());
-                licitacaoSiafi.setModalidadeLicitacao(modalidadeLicitacaoDao.carregar(licitacao.getModalidade()));
+                licitacaoSiafi.setModalidadeLicitacao(modalidadeLicitacaoDao.carregar(Integer.decode(licitacao.getModalidade())));
                 licitacaoSiafi.setData(licitacao.getDataLicitacao());
                 licitacaoSiafi.setNumero(licitacao.getNumero());
                 licitacaoSiafi.setObjetivo(licitacao.getObjetivo());
-                licitacaoSiafi.setTipoLicitacao(tipoLicitacaoDao.carregar(licitacao.getTipoLicitacao()));
+                licitacaoSiafi.setTipoLicitacao(tipoLicitacaoDao.carregar(Integer.decode(licitacao.getTipoLicitacao())));
                 licitacaoSiafi.setValorLimite(licitacao.getValorLimit());
                 licitacaoSiafi.setValorOrcado(licitacao.getValorOrcado());
                 licitacaoSiafi.setValorOriginal(licitacao.getValorOrcado());
