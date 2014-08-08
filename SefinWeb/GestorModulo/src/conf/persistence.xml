@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-    <persistence-unit name="GestorModuloPU" transaction-type="JTA">
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <jta-data-source>gestor</jta-data-source>
-        <class>br.com.gestor.modelo.Credor</class>
-        <class>br.com.gestor.modelo.GrupoItem</class>
-        <class>br.com.gestor.modelo.UnidadeMedida</class>
-        <class>br.com.gestor.modelo.Item</class>
-        <class>br.com.gestor.modelo.ItemLicitacao</class>
-        <class>br.com.gestor.modelo.Licitacao</class>
-        <class>br.com.gestor.modelo.Contrato</class>
-        <class>br.com.gestor.modelo.Aditivo</class>
-        <class>br.com.gestor.modelo.ItemLicitacao</class>
-        <class>br.com.gestor.modelo.CategoriaDespesa</class>
-        <class>br.com.gestor.modelo.Dotacao</class>
-        <class>br.com.gestor.modelo.ElementoDespesa</class>
-        <class>br.com.gestor.modelo.FonteRecurso</class>
-        <class>br.com.gestor.modelo.Funcao</class>
-        <class>br.com.gestor.modelo.GrupoNaturezaDespesa</class>
-        <class>br.com.gestor.modelo.ModalidadeAplicacaoDespesa</class>
-        <class>br.com.gestor.modelo.NaturezaDespesa</class>
-        <class>br.com.gestor.modelo.Programa</class>
-        <class>br.com.gestor.modelo.ProjetoAtividade</class>
-        <class>br.com.gestor.modelo.SubElementoDespesa</class>
-        <class>br.com.gestor.modelo.SubFuncao</class>
-        <class>br.com.gestor.modelo.TipoFonteRecurso</class>
-        <class>br.com.gestor.modelo.LicitacaoDotacao</class>
-        <class>br.com.gestor.modelo.EmpenhoSolicitacao</class>
-        <class>br.com.gestor.modelo.EmpenhoSolicitacaoItem</class>
-        <class>br.com.gestor.modelo.EmpenhoDetalhe</class>
-        <class>br.com.gestor.modelo.Conta</class>
-        <class>br.com.gestor.modelo.CentroCusto</class>
-        <class>br.com.gestor.modelo.RPEmpenho</class>
-        <class>br.com.gestor.modelo.RPEmpenhoAnulacao</class>
-        <class>br.com.gestor.modelo.RPEmpenhoItem</class>
-        <class>br.com.gestor.modelo.RPEmpenhoSaldo</class>
-        <class>br.com.gestor.modelo.RPLiquidacao</class>
-        <class>br.com.gestor.modelo.RPOrgao</class>
-        <class>br.com.gestor.modelo.RPPagamento</class>
-        <class>br.com.gestor.modelo.RPProjetoAtividade</class>
-        <class>br.com.gestor.modelo.RPUnidade</class>
-        <class>br.com.gestor.modelo.CreditoAdicional</class>
-        <class>br.com.gestor.modelo.CreditoAdicionalDetalhe</class>
-        <class>br.com.gestor.modelo.Cidade</class>
-        <class>br.com.gestor.modelo.OrdenadorUnidadeOrcamentaria</class>
-        <class>br.com.gestor.modelo.MovimentacaoBanco</class>
-        <exclude-unlisted-classes>true</exclude-unlisted-classes>
-        <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.FirebirdDialect"/>
-            <!--<property name="hibernate.show_sql" value="true"/>-->
-            <!--<property name="hibernate.format_sql" value="true"/>-->
-        </properties>
-    </persistence-unit>
+  <persistence-unit name="GestorModuloPU" transaction-type="JTA">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <jta-data-source>gestor_sqt</jta-data-source>
+    <class>br.com.gestor.modelo.Credor</class>
+    <class>br.com.gestor.modelo.GrupoItem</class>
+    <class>br.com.gestor.modelo.UnidadeMedida</class>
+    <class>br.com.gestor.modelo.Item</class>
+    <class>br.com.gestor.modelo.ItemLicitacao</class>
+    <class>br.com.gestor.modelo.Licitacao</class>
+    <class>br.com.gestor.modelo.Contrato</class>
+    <class>br.com.gestor.modelo.Aditivo</class>
+    <class>br.com.gestor.modelo.ItemLicitacao</class>
+    <class>br.com.gestor.modelo.CategoriaDespesa</class>
+    <class>br.com.gestor.modelo.Dotacao</class>
+    <class>br.com.gestor.modelo.ElementoDespesa</class>
+    <class>br.com.gestor.modelo.FonteRecurso</class>
+    <class>br.com.gestor.modelo.Funcao</class>
+    <class>br.com.gestor.modelo.GrupoNaturezaDespesa</class>
+    <class>br.com.gestor.modelo.ModalidadeAplicacaoDespesa</class>
+    <class>br.com.gestor.modelo.NaturezaDespesa</class>
+    <class>br.com.gestor.modelo.Programa</class>
+    <class>br.com.gestor.modelo.ProjetoAtividade</class>
+    <class>br.com.gestor.modelo.SubElementoDespesa</class>
+    <class>br.com.gestor.modelo.SubFuncao</class>
+    <class>br.com.gestor.modelo.TipoFonteRecurso</class>
+    <class>br.com.gestor.modelo.LicitacaoDotacao</class>
+    <class>br.com.gestor.modelo.EmpenhoSolicitacao</class>
+    <class>br.com.gestor.modelo.EmpenhoSolicitacaoItem</class>
+    <class>br.com.gestor.modelo.EmpenhoDetalhe</class>
+    <class>br.com.gestor.modelo.Conta</class>
+    <class>br.com.gestor.modelo.CentroCusto</class>
+    <class>br.com.gestor.modelo.RPEmpenho</class>
+    <class>br.com.gestor.modelo.RPEmpenhoAnulacao</class>
+    <class>br.com.gestor.modelo.RPEmpenhoItem</class>
+    <class>br.com.gestor.modelo.RPEmpenhoSaldo</class>
+    <class>br.com.gestor.modelo.RPLiquidacao</class>
+    <class>br.com.gestor.modelo.RPOrgao</class>
+    <class>br.com.gestor.modelo.RPPagamento</class>
+    <class>br.com.gestor.modelo.RPProjetoAtividade</class>
+    <class>br.com.gestor.modelo.RPUnidade</class>
+    <class>br.com.gestor.modelo.CreditoAdicional</class>
+    <class>br.com.gestor.modelo.CreditoAdicionalDetalhe</class>
+    <class>br.com.gestor.modelo.Cidade</class>
+    <class>br.com.gestor.modelo.OrdenadorUnidadeOrcamentaria</class>
+    <class>br.com.gestor.modelo.MovimentacaoBanco</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.FirebirdDialect"/>
+      <!--<property name="hibernate.show_sql" value="true"/>-->
+      <!--<property name="hibernate.format_sql" value="true"/>-->
+    </properties>
+  </persistence-unit>
 </persistence>

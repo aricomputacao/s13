@@ -40,9 +40,9 @@ public class Licitacao implements Serializable {
     @Column(name = "LICVALORLIMITE")
     private BigDecimal valorLimit;
     @Column(name = "LICTIPO")
-    private Integer tipoLicitacao;
+    private String tipoLicitacao;
     @Column(name = "LICMODALIDADE")
-    private Integer modalidade;
+    private String modalidade;
     @Column(name = "LICEXPORTADO")
     private Boolean exportado;
 
@@ -105,21 +105,23 @@ public class Licitacao implements Serializable {
         this.valorLimit = valorLimit;
     }
 
-    public Integer getTipoLicitacao() {
+    public String getTipoLicitacao() {
         return tipoLicitacao;
     }
 
-    public void setTipoLicitacao(Integer tipoLicitacao) {
+    public void setTipoLicitacao(String tipoLicitacao) {
         this.tipoLicitacao = tipoLicitacao;
     }
 
-    public Integer getModalidade() {
+    public String getModalidade() {
         return modalidade;
     }
 
-    public void setModalidade(Integer modalidade) {
+    public void setModalidade(String modalidade) {
         this.modalidade = modalidade;
     }
+
+   
 
     @Override
     public int hashCode() {
