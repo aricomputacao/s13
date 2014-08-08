@@ -89,13 +89,13 @@ public class AssistentedeRelatorio implements Serializable {
 //    }
     public byte[] relatorioemByte(List lista, Map<String, Object> parametros, String arquivo, String nomeRelatorio) throws JRException {
         byte[] b;
-        parametros.put("img", getDiretorioReal("WEB-INF//relatorios//imagens//sefinweb.png"));
+        parametros.put("img", getDiretorioReal("WEB-INF//relatorios//imagens//brasao_pref.png"));
         parametros.put("img1", getDiretorioReal("WEB-INF//relatorios//imagens//logo.png"));
         parametros.put("relatorio", nomeRelatorio);
         parametros.put("SUBREPORT_DIR", getDiretorioReal("WEB-INF/relatorios/sub_relatorios") + "/");
         parametros.put("REPORT_LOCALE", new Locale("pt", "BR"));
-        parametros.put("rodapeEmail", "suporte@sefin.caucaia.ce.gov.br");
-        parametros.put("rodapeFone", "(85) 3011-0661");
+        parametros.put("rodapeEmail", "xx@xx.xx.xx.xx.xx");
+        parametros.put("rodapeFone", "(xx) xxxx-xxxx");
         String rel = getDiretorioReal(arquivo);
         JRDataSource jrRS = new JRBeanCollectionDataSource(lista);
         JasperPrint print = JasperFillManager.fillReport(rel, parametros, jrRS);
