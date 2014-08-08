@@ -146,7 +146,7 @@ a:link:hover, a:visited:hover  {
 }
 
 .ui-datatable .ui-datatable-data .even-row td{
-    background-color:#ffe990;
+    background-color:#E8E8E8;
 }
 
 .ui-datatable .ui-datatable-data .odd-row td{
@@ -187,4 +187,19 @@ a:link:hover, a:visited:hover  {
 
 .dinheiro{
     text-align: right;
+}
+
+
+@font-face {
+    font-family: "Walkway";
+    src : url('/SiafiWeb/resources/fonts/Walkway Black RevOblique.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: "America Sans";
+    src : url('/SiafiWeb/resources/fonts/AMERSN__.ttf') format('truetype');
+}
+@font-face {
+    font-family: "Babel Sans";
+    src : url('/SiafiWeb/resources/fonts/BabelSans-Bold.ttf') format('truetype');
 }

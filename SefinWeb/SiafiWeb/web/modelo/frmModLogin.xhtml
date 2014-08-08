@@ -1,41 +1,125 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:sef="http://sefin.ce.gov.br">
-
-    <f:view contentType="text/html">
-        <h:head>
-            <f:facet name="first">
-                <meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
-                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-            </f:facet>
-            <link rel="icon" type="image/png" href="resources/imagens/logo.ico" />
-            <link rel="shortcut icon" type="image/png" href="resources/imagens/logo.ico" />
-            <h:outputStylesheet name="/estilo/default.css"/>
-            <title>${label['nome.sistema']}</title>
-          
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:scgb="http://sefin.ce.gov.br"
+                xmlns:sec="http://www.springframework.org/security/facelets/tags">
 
 
-        </h:head>
-        <h:body style="background: white;">
-            <p:layout fullPage="true">
-                <p:layoutUnit id="top" position="north" size="50">
-                    <sef:cabecalhoJsf/>
-                </p:layoutUnit>
-                <p:layoutUnit  position="center">
-                    <center>
-                        <p:panel style="border-color: white;" header="Sistema de Administração Financeira"  >
-                            <ui:insert name="corpo"></ui:insert>
-                        </p:panel>
-                    </center>
-                </p:layoutUnit>
-                <p:layoutUnit size="50" position="south" >
-                    <sef:rodape/>
-                </p:layoutUnit>
-            </p:layout>
-        </h:body>
-    </f:view>
-</html>
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+        </f:facet>
+        <link rel="icon" type="image/png" href="resources/imagens/logo.ico" />
+        <link rel="shortcut icon" type="image/png" href="resources/imagens/logo.ico" />
+        <link rel="stylesheet" type="text/css" href="resources/estilo/bootstrap.min.css"/>
+        <script  type="text/javascript" src="resources/script/bootstrap.min.js"/>
+        <script  type="text/javascript" src="resources/script/sonumero.js"/>
+
+
+
+        <h:outputStylesheet name="/estilo/default.css"/>
+        <h:outputScript library="script" name="funcaoCaptcha.js"/>
+
+        <title>${label['nome.sistema']}</title>
+    </h:head>
+
+    <h:body style="background: white;" >
+
+        <p:layout fullPage="true">               
+            <p:layoutUnit  position="center">
+
+
+
+                <div class="container center-block" style="padding-top: 50px;padding-bottom: 20px;background: #e6e6e6">
+                    <div class="row center-block" style="margin-left: 170px" >
+                        <div class="panel  col-lg-12" style="width: 400px;background: whitesmoke">
+
+                            <div class="panel-heading" >
+                                <h3 class="text-left panel-title" style="font-weight: bold;font-family: Aril,sans-serif">Seja bem-vindo(a)</h3>
+                                <h6>Identifique-se por favor para utilizar o sistema.</h6>
+                                <a   href="http://www.google.com/intl/pt-BR/chrome/" target="_blank"> <img src="resources/imagens/chrome.png" alt="Chrome" width="20" height="20" style="border-style:none;" title="Recomendamos Google Chrome" /></a>
+                                <a href="https://www.mozilla.org/pt-BR/firefox/new/" target="_blank"><img src="resources/imagens/firefox.png" alt="Firefox" width="20" height="20" style="border-style:none;" title="Recomendamos Mozilla Firefox" /></a>
+
+                                <hr/>
+
+
+                            </div>
+                            <form  style="margin-top: -30px " class="form enterapi" id="captcha-form" name="frm" role="form" method="POST" action="j_spring_security_check">
+
+                                <h:outputText value="Usuário ou senha incorretos!" rendered="#{param.erro}" style="color: darkred"/>
+
+                                <div class="panel-body">
+                                    <div class="form-group">
+
+                                        <div   >
+                                            <label  class="control-label" for="j_username">Documento </label>
+                                            <input class="form-control" name="j_username" onblur="ajustaNumero(this);" placeholder="Entre com o seu login" type="text"  id="j_username"  required="true"/>
+                                        </div>
+                                        <div  >
+                                            <label class="control-label" for="j_password">Senha</label>
+                                            <input class="form-control" type="password" id="j_password" name="j_password" placeholder="Entre com a sua senha." required="true"/>
+                                        </div>
+                                        <div >
+                                            <label class="control-label" for="captcha">Entre com as letras</label>
+                                            <div id="captcha-wrap" class="row" align="left">
+                                                <div class="col-lg-4" >
+                                                    <button class="  btn btn-default form-control" style="cursor: pointer;" type="button" onclick="atualizaCapcha();">
+                                                        <span class="glyphicon glyphicon-refresh"></span>
+                                                    </button>
+                                                </div>
+                                                <div  >
+                                                    <canvas id="txt" class="imgcod" width="100" height="30"></canvas>
+                                                </div>
+                                            </div>
+                                            <input class="form-control  text-uppercase" id="captcha" name="captcha" type="text"  placeholder="Código de verificação"/>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn btn-default form-control" type="button"  onclick="verificaCaptcha();"><span class=" glyphicon glyphicon-ok"><span style="font-size: 15px;font-weight: bolder"> Entrar</span></span></button>
+
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="panel panel-danger col-lg-5" style="width: 400px;height: 385px;background: whitesmoke">
+                            <div class="center-block"  style="margin-top: 130px;margin-left: 100px;">
+                                <img  src="resources/imagens/logo.png" width="50" height="45"  />
+                                <img  src="resources/imagens/brasao_pref.png"   />
+                            </div>
+                            <div class="text-center">
+                                <p class="text-info" style="font-weight: bold;font-size: 15px">Sistema de Administração Financeira</p>
+                                <p class="text-info" style="font-weight: bold;font-size: 15px">SIAFI</p>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <div class='alerta center-block' style="width: 1169px">
+
+                </div>
+                <div class="panel-footer row center-block" style="width: 1169px">
+                    <div class=" col-lg-1">                                
+                        <a   href="http://www.santaquiteria.ce.gov.br/" target="_blank"> <img   src="resources/imagens/brasao_pref.png"   /></a>
+
+                    </div>
+
+                </div>
+
+
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+
+</ui:composition>
+

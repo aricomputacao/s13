@@ -16,19 +16,21 @@
         <h:outputStylesheet  name="/estilo/default.css"/>
         <h:outputStylesheet name="/estilo/pgerro.css"/>
         <h:outputScript name="calendario_pt_BR.js" library="script" />
+        
+        <script  type="text/javascript" src="resources/script/sonumero.js"/>
 
         <title>#{label['nome.sistema']}</title>
     </h:head>
-    <h:body style="background: white;" >
+    <h:body style="background: #E8E8E8;" >
 
         <scgb:dialogLogout/>
-        <p:layout fullPage="true"  >
-<!--            <p:layoutUnit position="north" size="50"  id="top">
-                <scgb:cabecalhoJsf/>
-                
-            </p:layoutUnit>-->
+        <p:layout fullPage="true" style="background: #E8E8E8" >
+            <!--            <p:layoutUnit position="north" size="50"  id="top">
+                            <scgb:cabecalhoJsf/>
+                            
+                        </p:layoutUnit>-->
             <p:layoutUnit position="east" collapsed="true" collapsible="true" rendered="#{not usuarioMB.navegadorMobile}" header="Acesso Rapido" style="text-align: center;">
-               <h:form>
+                <h:form>
                     <p:growl showDetail="true" showSummary="true" autoUpdate="true" globalOnly="true"/>
                 </h:form>
                 <p:panel style="border-color: #AFAFAF">
@@ -39,7 +41,7 @@
             <center>
                 <p:layoutUnit id="center" position="center">
                     <scgb:menuJSF/>
-                    <p:panel style="min-height: 250px;border-color: #AFAFAF" footer="#{usuarioMB.usuarioSelecionado.pessoa.nome}">
+                    <p:panel style="min-height: 250px;border-color: #AFAFAF" >
                         <h:form id="frmGeral">
                             <p:blockUI block="@form"  widgetVar="block">
                                 <p:graphicImage value="/resources/imagens/carregar.gif"/>
@@ -56,11 +58,10 @@
                         </h:form>
 
                     </p:panel>
+                 
                 </p:layoutUnit>
             </center>
-<!--            <p:layoutUnit position="south" size="50" rendered="#{not usuarioMB.navegadorMobile}">
-                <scgb:rodape />
-            </p:layoutUnit>-->
+
         </p:layout>
         <ui:insert name="dialogs">
 
