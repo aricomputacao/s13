@@ -34,11 +34,11 @@
 
 
 
-                <div class="container center-block" style="padding-top: 50px;padding-bottom: 20px;background: #e6e6e6">
+                <div class="container panel  center-block" style="padding-top: 50px;padding-bottom: 20px;background: #e6e6e6">
                     <div class="row center-block" style="margin-left: 170px" >
-                        <div class="panel  col-lg-12" style="width: 400px;background: whitesmoke">
+                        <div class="panel panel-danger col-lg-12 gradiente" style="width: 400px;">
 
-                            <div class="panel-heading" >
+                            <div style="margin-top: 10px" >
                                 <h3 class="text-left panel-title" style="font-weight: bold;font-family: Aril,sans-serif">Seja bem-vindo(a)</h3>
                                 <h6>Identifique-se por favor para utilizar o sistema.</h6>
                                 <a   href="http://www.google.com/intl/pt-BR/chrome/" target="_blank"> <img src="resources/imagens/chrome.png" alt="Chrome" width="20" height="20" style="border-style:none;" title="Recomendamos Google Chrome" /></a>
@@ -63,17 +63,22 @@
                                             <label class="control-label" for="j_password">Senha</label>
                                             <input class="form-control" type="password" id="j_password" name="j_password" placeholder="Entre com a sua senha." required="true"/>
                                         </div>
-                                        <div >
+                                        <div  >
                                             <label class="control-label" for="captcha">Entre com as letras</label>
-                                            <div id="captcha-wrap" class="row" align="left">
-                                                <div class="col-lg-4" >
-                                                    <button class="  btn btn-default form-control" style="cursor: pointer;" type="button" onclick="atualizaCapcha();">
-                                                        <span class="glyphicon glyphicon-refresh"></span>
-                                                    </button>
+                                            <div id="captcha-wrap"  >
+
+                                                <div class="row "   >
+                                                    <div class="col-lg-5 " >
+                                                        <button class="btn btn-default form-control back" style="cursor: pointer;" type="button" onclick="atualizaCapcha();">
+                                                            <span class="glyphicon glyphicon-refresh"></span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-lg-5">
+                                                        <canvas id="txt" class="imgcod " width="100" height="30"></canvas>
+                                                    </div>
+
                                                 </div>
-                                                <div  >
-                                                    <canvas id="txt" class="imgcod" width="100" height="30"></canvas>
-                                                </div>
+
                                             </div>
                                             <input class="form-control  text-uppercase" id="captcha" name="captcha" type="text"  placeholder="Código de verificação"/>
                                         </div>
@@ -85,14 +90,14 @@
 
                             </form>
                         </div>
-                        <div class="panel panel-danger col-lg-5" style="width: 400px;height: 385px;background: whitesmoke">
+                        <div class="panel  gradiente col-lg-5" style="width: 400px;height: 374px">
                             <div class="center-block"  style="margin-top: 130px;margin-left: 100px;">
                                 <img  src="resources/imagens/logo.png" width="50" height="45"  />
                                 <img  src="resources/imagens/brasao_pref.png"   />
                             </div>
                             <div class="text-center">
-                                <p class="text-info" style="font-weight: bold;font-size: 15px">Sistema de Administração Financeira</p>
-                                <p class="text-info" style="font-weight: bold;font-size: 15px">SIAFI</p>
+                                <p  style="font-family:Verdana,sans-serif;font-weight: bold;font-size: 15px;color: #363636">Sistema de Administração Financeira</p>
+                                <p  style="font-family:Verdana,sans-serif;font-weight: bold;font-size: 15px;margin-top: -10px">SIAFI</p>
 
 
                             </div>
@@ -102,18 +107,21 @@
                     </div>
 
 
-                </div>
 
-                <div class='alerta center-block' style="width: 1169px">
+                    <div class='login center-block' >
 
-                </div>
-                <div class="panel-footer row center-block" style="width: 1169px">
+                    </div>
+                    <div class='alerta center-block' >
+
+                    </div>
+
                     <div class=" col-lg-1">                                
                         <a   href="http://www.santaquiteria.ce.gov.br/" target="_blank"> <img   src="resources/imagens/brasao_pref.png"   /></a>
 
                     </div>
 
                 </div>
+
 
 
             </p:layoutUnit>

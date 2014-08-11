@@ -36,33 +36,40 @@ criarCaptacha = (function(id, texto) {
 });
 
 verificaCaptcha = (function() {
-    
-    
+
+
     if ($("#j_username").val() == "") {
-        mensagem("Informe o login.",0);
+        mensagem("Informe o login.", 0);
         $("#j_username").focus();
+        return;
+    }
+    if ($("#j_password").val() == "") {
+        mensagem("Informe a senha.", 0);
+        $("#j_password").focus();
         return;
     }
 
     if ($("#captcha").val() == "") {
-        mensagem("Informe o código de verificação.",3);
+        mensagem("Informe o código de verificação.", 3);
         $("#txt").focus();
         return;
     }
 
     if (new String($("#captcha").val()).toUpperCase() == i) {
         document.frm.submit();
-       
-    }else{
-           
 
+    } else {
+            mensagem("Código de verificação não confere.", 2);
+            $("#txt").focus();
+            return;
+     
     }
 });
 
 mensagem = (function(mensagem, tipo) {
     switch (tipo) {
         case 0:
-            $(".login").html("<div class='alert alert-danger alerta'></span><button type='button' class='close' data-dismiss='alert'></button><span class='glyphicon glyphicon-remove-sign'></span>   " + mensagem + "</div>");
+            $(".login").html("<div class='alert alert-warning alerta'></span><button type='button' class='close' data-dismiss='alert'></button><span class='glyphicon glyphicon-remove-sign'></span>   " + mensagem + "</div>");
 //            setTimeout(ocultaMensagem, 3000);
             break;
         case 1:
