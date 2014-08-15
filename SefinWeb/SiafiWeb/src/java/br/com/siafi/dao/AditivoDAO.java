@@ -60,7 +60,9 @@ public class AditivoDAO extends DAO<Aditivo, Long> implements Serializable {
     }
 
     public Aditivo ultimoAditivo(Contrato contrato) throws Exception {
-        return (Aditivo) getEm().createQuery("SELECT a FROM Aditivo a WHERE a.contrato =:contrato ORDER BY a.dataFim ASC").setParameter("contrato", contrato).getResultList().get(0);
+        return (Aditivo) getEm().createQuery("SELECT a FROM Aditivo a WHERE a.contrato =:contrato ORDER BY a.dataFim ASC")
+                .setParameter("contrato", contrato)
+                .getResultList().get(0);
     }
 
     public BigDecimal valorContrato(Integer contrato) throws Exception {

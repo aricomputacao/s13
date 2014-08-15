@@ -12,8 +12,11 @@ import br.com.siafi.modelo.Aditivo;
 import br.com.siafi.modelo.Contrato;
 import br.com.siafi.modelo.Credor;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -98,6 +101,23 @@ public class AditivoController extends Controller<Aditivo, Long> implements Seri
 
     public List<Aditivo> listarAditivosValidosOrdemCompra(String numero, UnidadeOrcamentaria unidadeOrcamentaria, Credor credor) throws Exception {
         return aditivoDao.contratoNumeroUnidadeOrcamentariaCredorOrdemCompra(numero, unidadeOrcamentaria, credor);
+    }
+
+    public void atualizarSaldoAditivo() throws Exception {
+        Aditivo aditivo;
+        List<Contrato> contratos = contratoDao.listarTodos("id");
+        for (Contrato c : contratos) {
+            System.out.print(c.getId());
+            BigDecimal vl = aditivoGestorDao.calcularSaldoContratoEmpenhado(c.getId()).add(aditivoGestorDao.calcularSaldoContratoEmpenhadoAnulado(Integer.SIZE));
+            aditivo = aditivoDao.ultimoAditivo(c);
+            if (aditivo.getDataFim().after(new Date()) && vl.compareTo(BigDecimal.ZERO) > 0) {
+                System.out.print("Saldo anterior".concat(aditivo.getValor().toString()));
+                aditivo.setValor(vl);
+                aditivoDao.atualizar(aditivo);
+                System.out.print("Saldo atual".concat(aditivo.getValor().toString()));
+            }
+
+        }
     }
 
 }

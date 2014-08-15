@@ -43,8 +43,10 @@ import br.com.siafi.controller.RPUnidadeOrcamentariaController;
 import br.com.siafi.controller.RpEmpenhoController;
 import br.com.siafi.controller.RpLiquidacaoController;
 import br.com.siafi.controller.RpProjetoAtividadeController;
+import br.com.siafi.modelo.Contrato;
 import br.com.siafi.modelo.Orcamento;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -453,6 +455,13 @@ public class ImportarOrcamentoMB implements Serializable {
         } catch (Exception ex) {
             MenssagemUtil.addMessageErro("Erro ao importar", ex, this.getClass().getName());
         }
+    }
+    
+    /**
+     * Metodo para atualizar o saldo dos aditivos
+     */
+    public void atualizarSaldoAditivo() throws Exception{
+        aditivoControler.atualizarSaldoAditivo();
     }
 
     public Exercicio getExercicio() {

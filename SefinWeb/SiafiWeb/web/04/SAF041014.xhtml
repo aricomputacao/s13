@@ -84,6 +84,15 @@ and open the template in the editor.
                         <p:commandButton actionListener="#{importarOrcamentoMB.importarRpLiquidacao()}" value="importar Liquidação" />
                     </h:panelGrid>
                 </p:panel>
+                 <p:panel header="Importar Saldos Gestor" style="min-height: 450px;">
+                    <h:panelGrid>
+                        <p:commandButton actionListener="#{importarOrcamentoMB.atualizarSaldoAditivo()}" value="Atualizar contratos " >
+                            <p:confirmDialog message="Atualizar?"/>
+                        </p:commandButton>
+
+
+                    </h:panelGrid>
+                </p:panel>
 
             </h:panelGrid>
             <h:panelGrid width="100%" rendered="false">
